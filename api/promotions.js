@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
   const table = AIRTABLE_TABLE || 'Promotions';
   try {
-    const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(table)}?filterByFormula={Active}=1`;
+    const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(table)}`;
     const r = await fetch(url, { headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` } });
     if (!r.ok) throw new Error(`Airtable ${r.status}`);
     const data = await r.json();
