@@ -11,18 +11,30 @@ export default async function handler(req, res) {
     const json = JSON.parse(text.substring(47, text.length - 2));
     const rows = json.table.rows;
 
-    const promotions = rows.slice(1).map(row => ({
-      title: row.c[0]?.v || '',
-      partner: row.c[1]?.v || '',
-      category: (row.c[2]?.v || '').toLowerCase(),
-      miles: row.c[3]?.v || '',
-      description: row.c[4]?.v || '',
-      type: (row.c[5]?.v || 'always').toLowerCase(),
-      expires: row.c[6]?.v || null,
-      tier: (row.c[7]?.v || 'all').toLowerCase(),
-      hot: row.c[8]?.v === true || row.c[8]?.v === 'TRUE',
-      active: row.c[9]?.v === true || row.c[9]?.v === 'TRUE',
-    })).filter(p => p.active && p.title);
+    const promotions = rows.map(row => {
+      const expiresRaw = row.c[6]?.v;
+      let expires = null;
+      if (expiresRaw) {
+        if (typeof expiresRaw === 'string' && expiresRaw.startsWith('Date(')) {
+          const parts = expiresRaw.slice(5, -1).split(',');
+          expires = `${parts[0]}-${String(+parts[1]+1).padStart(2,'0')}-${String(parts[2]).padStart(2,'0')}`;
+        } else {
+          expires = expiresRaw;
+        }
+      }
+      return {
+        title: row.c[0]?.v || '',
+        partner: row.c[1]?.v || '',
+        category: (row.c[2]?.v || '').toLowerCase(),
+        miles: String(row.c[3]?.v || ''),
+        description: row.c[4]?.v || '',
+        type: (row.c[5]?.v || 'always').toLowerCase(),
+        expires,
+        tier: (row.c[7]?.v || 'all').toLowerCase(),
+        hot: row.c[8]?.v === true || row.c[8]?.v === 'TRUE',
+        active: row.c[9]?.v === true || row.c[9]?.v === 'TRUE',
+      };
+    }).filter(p => p.active && p.title);
 
     return res.status(200).json({ promotions, updatedAt: new Date().toISOString() });
   } catch(e) {
