@@ -3,227 +3,438 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Miles Optimizer — Flying Blue deals</title>
+<title>Miles Optimizer</title>
 <meta name="description" content="Vind de beste Flying Blue miles deals. Altijd actueel.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
-  --bg: #0a0c10;
-  --surface: #12151c;
-  --surface2: #1a1e28;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.13);
-  --text: #e8e6df;
-  --muted: #6b7280;
-  --accent: #00c2ff;
-  --hot: #ff4d4d;
-  --green: #22c55e;
-  --amber: #f59e0b;
+  --bg: #0d0f14;
+  --surface: #161920;
+  --surface2: #1e2230;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f0ede6;
+  --muted: #5a6270;
+  --muted2: #8a9099;
+  --accent: #00b4ff;
+  --accent-dim: rgba(0,180,255,0.12);
+  --hot: #ff3b3b;
+  --hot-dim: rgba(255,59,59,0.15);
+  --green: #1db954;
+  --green-dim: rgba(29,185,84,0.15);
+  --amber: #f5a623;
+  --amber-dim: rgba(245,166,35,0.15);
+  --purple: #8b5cf6;
+  --purple-dim: rgba(139,92,246,0.15);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; overflow-x: hidden; }
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background-image: linear-gradient(rgba(0,194,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,194,255,0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none; z-index: 0;
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.5;
 }
-.wrapper { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; padding: 0 24px 80px; }
 
-header { padding: 48px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 36px; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
-.logo-tag { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
-h1 { font-size: clamp(28px, 5vw, 44px); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: #fff; }
-h1 span { color: var(--accent); }
-.header-right { text-align: right; }
-.header-right p { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
-#status-text { color: var(--green); }
+/* Top nav */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.nav-logo svg { color: var(--accent); }
+.nav-meta {
+  font-size: 12px;
+  color: var(--muted);
+}
+.nav-meta span { color: var(--accent); }
 
-.stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 32px; }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
-.stat-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
-.stat-value { font-size: 22px; font-weight: 700; }
+/* Main */
+main { max-width: 1280px; margin: 0 auto; padding: 32px 32px 80px; }
+
+/* Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  transition: border-color 0.2s;
+}
+.stat-card:hover { border-color: var(--border2); }
+.stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
 .stat-value.blue { color: var(--accent); }
 .stat-value.red { color: var(--hot); }
 .stat-value.amber { color: var(--amber); }
 .stat-value.green { color: var(--green); }
 
-.controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
-.filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
-.filter-btn { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 500; padding: 7px 14px; border-radius: 6px; border: 1px solid var(--border2); background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-.filter-btn:hover { border-color: var(--accent); color: var(--text); }
-.filter-btn.active { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 700; }
+/* Controls */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.filter-pills { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+.pill {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 16px;
+  border-radius: 100px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--muted2);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.pill:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.pill.active { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 600; }
 
-.search-wrap { flex: 1; min-width: 180px; position: relative; }
-.search-wrap input { width: 100%; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 9px 14px 9px 36px; font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text); outline: none; transition: border-color 0.15s; }
-.search-wrap input:focus { border-color: var(--accent); }
+.controls-right { display: flex; gap: 10px; align-items: center; }
+.search-wrap { position: relative; }
+.search-wrap input {
+  width: 220px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 8px 14px 8px 36px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s, width 0.2s;
+}
+.search-wrap input:focus { border-color: var(--accent); width: 280px; }
 .search-wrap input::placeholder { color: var(--muted); }
-.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 15px; pointer-events: none; }
-.sort-select { background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 9px 12px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); outline: none; cursor: pointer; }
+.search-icon {
+  position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+  color: var(--muted); pointer-events: none;
+  width: 15px; height: 15px;
+}
+.sort-select {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--muted2);
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.sort-select:focus { border-color: var(--accent); }
 
-.results-meta { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 16px; }
-.results-meta span { color: var(--accent); }
+/* Results meta */
+.results-meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.results-meta b { color: var(--text); font-weight: 600; }
 
-.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: border-color 0.15s, transform 0.15s; position: relative; overflow: hidden; }
-.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: transparent; }
-.card:hover { border-color: var(--border2); transform: translateY(-1px); }
-.card.is-hot::before { background: var(--hot); }
-.card.is-hot { border-color: rgba(255,77,77,0.2); }
-.card.is-always::before { background: var(--green); }
+/* Cards grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
 
-.card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
-.card-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; background: var(--surface2); }
-.miles-pill { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; background: rgba(0,194,255,0.1); color: var(--accent); border: 1px solid rgba(0,194,255,0.2); border-radius: 20px; padding: 4px 10px; white-space: nowrap; flex-shrink: 0; }
-.card-title { font-size: 14px; font-weight: 700; line-height: 1.35; color: #fff; margin-bottom: 6px; }
-.card-desc { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 14px; }
-.card-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
-.tags { display: flex; gap: 5px; flex-wrap: wrap; }
-.tag { font-family: 'DM Mono', monospace; font-size: 10px; padding: 3px 8px; border-radius: 4px; }
-.tag-temp { background: rgba(255,77,77,0.1); color: #ff9999; border: 1px solid rgba(255,77,77,0.2); }
-.tag-always { background: rgba(34,197,94,0.1); color: #86efac; border: 1px solid rgba(34,197,94,0.2); }
-.tag-new { background: rgba(245,158,11,0.1); color: #fcd34d; border: 1px solid rgba(245,158,11,0.2); }
-.tag-partner { background: rgba(167,139,250,0.1); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.2); }
-.tag-tier { background: rgba(0,194,255,0.08); color: #7dd3fc; border: 1px solid rgba(0,194,255,0.15); }
-.expires-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
-.expires-label.urgent { color: var(--hot); }
+@media (max-width: 1024px) { .cards-grid { grid-template-columns: repeat(2, 1fr); } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .cards-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2, 1fr); } main { padding: 20px 16px 60px; } nav { padding: 14px 16px; } }
 
-.loading-state { text-align: center; padding: 64px 24px; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 13px; grid-column: 1/-1; }
-.spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  transition: border-color 0.2s, transform 0.15s;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.card:hover { border-color: var(--border2); transform: translateY(-2px); }
+.card.is-hot { border-left: 3px solid var(--hot); }
+.card.is-always { border-left: 3px solid var(--green); }
+.card.is-new { border-left: 3px solid var(--purple); }
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.card-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.miles-badge {
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid rgba(0,180,255,0.25);
+  border-radius: 100px;
+  padding: 4px 12px;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+.card-desc {
+  font-size: 13px;
+  color: var(--muted2);
+  line-height: 1.55;
+  flex: 1;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tags { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+.tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 5px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.tag-hot { background: var(--hot-dim); color: var(--hot); }
+.tag-temp { background: var(--hot-dim); color: var(--hot); }
+.tag-always { background: var(--green-dim); color: var(--green); }
+.tag-new { background: var(--purple-dim); color: var(--purple); }
+.tag-partner { background: var(--surface2); color: var(--muted2); }
+.tag-tier { background: var(--accent-dim); color: var(--accent); }
+
+.expires {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.expires.urgent { color: var(--hot); }
+
+/* Loading / error */
+.state-box {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.spinner {
+  width: 24px; height: 24px;
+  border: 2px solid var(--border2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 0 auto 16px;
+}
 @keyframes spin { to { transform: rotate(360deg); } }
-.error-state { text-align: center; padding: 48px 24px; color: var(--hot); font-family: 'DM Mono', monospace; font-size: 12px; grid-column: 1/-1; line-height: 1.8; }
 
-footer { border-top: 1px solid var(--border); margin-top: 60px; padding-top: 24px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); text-align: center; line-height: 1.8; }
+/* Footer */
+footer {
+  border-top: 1px solid var(--border);
+  margin-top: 64px;
+  padding-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 2;
+}
 footer a { color: var(--muted); text-decoration: underline; }
 </style>
 </head>
 <body>
-<div class="wrapper">
 
-  <header>
-    <div>
-      <div class="logo-tag">✦ Independent tool</div>
-      <h1>Miles <span>Optimizer</span></h1>
-    </div>
-    <div class="header-right">
-      <p>Bijgewerkt:</p>
-      <p id="status-text">laden...</p>
-    </div>
-  </header>
+<nav>
+  <div class="nav-logo">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21 4 19 2c-2-2-4-2-5.5-.5L10 5 1.8 6.2c-.5.1-.9.5-.9 1 0 .3.1.6.3.8l2.9 3-.9 4.4c-.1.5.1 1 .5 1.3.3.2.6.3.9.3.2 0 .4 0 .6-.1l3.9-1.7 2.9 3c.2.2.5.3.8.3.5 0 .9-.4 1-.9z"/></svg>
+    Miles Optimizer
+  </div>
+  <div class="nav-meta">Bijgewerkt: <span id="updated">laden...</span></div>
+</nav>
 
-  <div class="stats-bar">
-    <div class="stat-card"><div class="stat-label">Totaal deals</div><div class="stat-value blue" id="stat-total">—</div></div>
-    <div class="stat-card"><div class="stat-label">Hot nu</div><div class="stat-value red" id="stat-hot">—</div></div>
-    <div class="stat-card"><div class="stat-label">Verloopt binnenkort</div><div class="stat-value amber" id="stat-expiring">—</div></div>
-    <div class="stat-card"><div class="stat-label">Altijd actief</div><div class="stat-value green" id="stat-always">—</div></div>
+<main>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Total deals</div><div class="stat-value blue" id="s-total">—</div></div>
+    <div class="stat-card"><div class="stat-label">Hot right now</div><div class="stat-value red" id="s-hot">—</div></div>
+    <div class="stat-card"><div class="stat-label">Expiring soon</div><div class="stat-value amber" id="s-expiring">—</div></div>
+    <div class="stat-card"><div class="stat-label">Always on</div><div class="stat-value green" id="s-always">—</div></div>
   </div>
 
   <div class="controls">
-    <div class="filter-group">
-      <button class="filter-btn active" onclick="setCategory('all',this)">Alles</button>
-      <button class="filter-btn" onclick="setCategory('flight',this)">✈ Vluchten</button>
-      <button class="filter-btn" onclick="setCategory('hotel',this)">🏨 Hotels</button>
-      <button class="filter-btn" onclick="setCategory('car',this)">🚗 Auto</button>
-      <button class="filter-btn" onclick="setCategory('shopping',this)">🛍 Shopping</button>
-      <button class="filter-btn" onclick="setCategory('dining',this)">🍽 Dining</button>
-      <button class="filter-btn" onclick="setCategory('finance',this)">💳 Finance</button>
+    <div class="filter-pills">
+      <button class="pill active" onclick="setCategory('all',this)">All</button>
+      <button class="pill" onclick="setCategory('flight',this)">✈ Flights</button>
+      <button class="pill" onclick="setCategory('hotel',this)">🏨 Hotels</button>
+      <button class="pill" onclick="setCategory('car',this)">🚗 Car</button>
+      <button class="pill" onclick="setCategory('shopping',this)">🛍 Shopping</button>
+      <button class="pill" onclick="setCategory('dining',this)">🍽 Dining</button>
+      <button class="pill" onclick="setCategory('finance',this)">💳 Finance</button>
     </div>
-    <div class="search-wrap">
-      <span class="search-icon">⌕</span>
-      <input type="text" id="search-input" placeholder="Zoek partner of deal..." oninput="render()" />
+    <div class="controls-right">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="search" placeholder="Search deals..." oninput="render()">
+      </div>
+      <select class="sort-select" id="sort" onchange="render()">
+        <option value="hot">Newest</option>
+        <option value="expires">Expiring soon</option>
+        <option value="miles">Most miles</option>
+      </select>
     </div>
-    <select class="sort-select" id="sort-sel" onchange="render()">
-      <option value="hot">🔥 Hot eerst</option>
-      <option value="expires">⚠ Verloopt eerst</option>
-    </select>
   </div>
 
-  <div class="results-meta">Toont <span id="count">—</span> deals</div>
+  <div class="results-meta"><b id="count">—</b> deals found</div>
+
   <div class="cards-grid" id="cards">
-    <div class="loading-state"><div class="spinner"></div><br>Data ophalen...</div>
+    <div class="state-box"><div class="spinner"></div>Loading deals...</div>
   </div>
 
   <footer>
-    <p>Onafhankelijke tool. Niet gelieerd aan Air France-KLM of Flying Blue.</p>
-    <p>Controleer altijd de voorwaarden op <a href="https://flyingblue.com" target="_blank">flyingblue.com</a>.</p>
-    <p style="margin-top:8px">© 2026 Miles Optimizer</p>
+    <p>Independent tool — not affiliated with Air France-KLM or Flying Blue.</p>
+    <p>Always verify terms at <a href="https://flyingblue.com" target="_blank">flyingblue.com</a> before booking.</p>
+    <p style="margin-top:4px">© 2026 Miles Optimizer</p>
   </footer>
-
-</div>
+</main>
 
 <script>
 const ICONS = { flight:'✈️', hotel:'🏨', car:'🚗', shopping:'🛍️', dining:'🍽️', finance:'💳' };
 let DATA = [];
 let activeCategory = 'all';
 
-function daysUntil(dateStr) {
-  if (!dateStr) return null;
-  return Math.ceil((new Date(dateStr) - new Date()) / 86400000);
+function daysUntil(d) {
+  if (!d) return null;
+  return Math.ceil((new Date(d) - new Date()) / 86400000);
+}
+
+function fmtExpiry(d) {
+  const days = daysUntil(d);
+  if (days === null) return null;
+  if (days <= 0) return { label: 'Expired', urgent: true };
+  if (days < 1) return { label: 'Today', urgent: true };
+  const h = Math.floor((new Date(d) - new Date()) / 3600000);
+  if (h < 48) return { label: `${h}h`, urgent: true };
+  return { label: `${days}d`, urgent: days <= 7 };
 }
 
 function setCategory(cat, btn) {
   activeCategory = cat;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   render();
 }
 
 function render() {
-  const query = document.getElementById('search-input').value.toLowerCase();
-  const sort = document.getElementById('sort-sel').value;
+  const q = document.getElementById('search').value.toLowerCase();
+  const sort = document.getElementById('sort').value;
 
   let cards = DATA.filter(d => {
     const matchCat = activeCategory === 'all' || d.category === activeCategory;
-    const matchQ = !query || d.title.toLowerCase().includes(query) || d.partner.toLowerCase().includes(query);
+    const matchQ = !q || d.title.toLowerCase().includes(q) || d.partner.toLowerCase().includes(q);
     return matchCat && matchQ;
   });
 
   if (sort === 'expires') {
     cards.sort((a,b) => {
       const da = daysUntil(a.expires), db = daysUntil(b.expires);
-      if (da === null) return 1; if (db === null) return -1;
+      if (da===null) return 1; if (db===null) return -1;
       return da - db;
     });
-  } else {
-    cards.sort((a,b) => (b.hot?1:0) - (a.hot?1:0));
+  } else if (sort === 'hot') {
+    cards.sort((a,b) => (b.hot?1:0)-(a.hot?1:0));
   }
 
-  document.getElementById('stat-total').textContent = DATA.length;
-  document.getElementById('stat-hot').textContent = DATA.filter(d=>d.hot).length;
-  document.getElementById('stat-expiring').textContent = DATA.filter(d=>{ const days=daysUntil(d.expires); return days!==null && days<=14 && days>0; }).length;
-  document.getElementById('stat-always').textContent = DATA.filter(d=>d.type==='always').length;
+  document.getElementById('s-total').textContent = DATA.length;
+  document.getElementById('s-hot').textContent = DATA.filter(d=>d.hot).length;
+  document.getElementById('s-expiring').textContent = DATA.filter(d=>{ const x=daysUntil(d.expires); return x!==null&&x<=14&&x>0; }).length;
+  document.getElementById('s-always').textContent = DATA.filter(d=>d.type==='always').length;
   document.getElementById('count').textContent = cards.length;
 
-  const container = document.getElementById('cards');
+  const el = document.getElementById('cards');
   if (!cards.length) {
-    container.innerHTML = '<div class="loading-state">Geen deals gevonden.</div>';
+    el.innerHTML = '<div class="state-box">No deals found for this filter.</div>';
     return;
   }
 
-  container.innerHTML = cards.map(c => {
-    const days = daysUntil(c.expires);
-    const cardClass = c.hot ? 'card is-hot' : c.type === 'always' ? 'card is-always' : 'card';
-    const typeTag = c.type === 'temp' ? '<span class="tag tag-temp">beperkte tijd</span>'
-                  : c.type === 'new'  ? '<span class="tag tag-new">nieuw</span>'
-                  : '<span class="tag tag-always">altijd actief</span>';
-    const tierTag = c.tier && c.tier !== 'all' ? `<span class="tag tag-tier">${c.tier}+</span>` : '';
-    let expiresHtml = '';
-    if (days !== null) {
-      const urgent = days <= 7;
-      const label = days <= 0 ? 'verlopen' : days === 1 ? 'nog 1 dag' : `nog ${days} dagen`;
-      expiresHtml = `<span class="expires-label${urgent?' urgent':''}">⌛ ${label}</span>`;
-    }
+  el.innerHTML = cards.map(c => {
+    const exp = fmtExpiry(c.expires);
+    const cardClass = c.hot ? 'card is-hot' : c.type==='always' ? 'card is-always' : c.type==='new' ? 'card is-new' : 'card';
+
+    const typeTag = c.hot ? '<span class="tag tag-hot">HOT</span>' : '';
+    const statusTag = c.type==='temp' ? '<span class="tag tag-temp">Limited time</span>'
+                    : c.type==='new'  ? '<span class="tag tag-new">New</span>'
+                    : '<span class="tag tag-always">Always on</span>';
+    const tierTag = c.tier && c.tier!=='all' ? `<span class="tag tag-tier">${c.tier}+</span>` : '';
+    const expHtml = exp ? `<span class="expires${exp.urgent?' urgent':''}">⌛ ${exp.label}</span>` : '';
+
     return `<div class="${cardClass}">
-      <div class="card-header">
+      <div class="card-top">
         <div class="card-icon">${ICONS[c.category]||'⭐'}</div>
-        <div class="miles-pill">${c.miles}</div>
+        <div class="miles-badge">${c.miles}</div>
       </div>
       <div class="card-title">${c.title}</div>
       <div class="card-desc">${c.description}</div>
       <div class="card-footer">
-        <div class="tags">${typeTag}<span class="tag tag-partner">${c.partner}</span>${tierTag}</div>
-        ${expiresHtml}
+        <div class="tags">${typeTag}${statusTag}<span class="tag tag-partner">${c.partner}</span>${tierTag}</div>
+        ${expHtml}
       </div>
     </div>`;
   }).join('');
@@ -235,13 +446,12 @@ async function loadData() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = await res.json();
     DATA = json.promotions;
-    const updated = new Date(json.updatedAt).toLocaleString('nl-NL', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
-    document.getElementById('status-text').textContent = updated;
+    const d = new Date(json.updatedAt);
+    document.getElementById('updated').textContent = d.toLocaleString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
     render();
   } catch(e) {
-    document.getElementById('cards').innerHTML =
-      `<div class="error-state">⚠ Kon data niet laden: ${e.message}</div>`;
-    document.getElementById('status-text').textContent = 'fout';
+    document.getElementById('cards').innerHTML = `<div class="state-box" style="color:#ff3b3b">⚠ Could not load data: ${e.message}</div>`;
+    document.getElementById('updated').textContent = 'error';
   }
 }
 
