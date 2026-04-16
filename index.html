@@ -1,11 +1,522 @@
-{
-  "version": 2,
-  "builds": [
-    { "src": "api/*.js", "use": "@vercel/node" },
-    { "src": "public/**", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/(.*)", "dest": "/public/$1" }
-  ]
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flying Blue Miles Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #12151c;
+    --surface2: #1a1e28;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text: #e8e6df;
+    --muted: #6b7280;
+    --accent: #00c2ff;
+    --accent2: #0088cc;
+    --hot: #ff4d4d;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --purple: #a78bfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Subtle grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,194,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,194,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* Header */
+  header {
+    padding: 48px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .logo-block {}
+  .logo-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+  h1 span { color: var(--accent); }
+  .header-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: right;
+  }
+  #last-updated { color: var(--accent); }
+
+  /* Stats bar */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .stat-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+  .stat-value { font-size: 22px; font-weight: 700; color: #fff; }
+  .stat-value.accent { color: var(--accent); }
+  .stat-value.hot { color: var(--hot); }
+  .stat-value.green { color: var(--green); }
+
+  /* Controls */
+  .controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; align-items: center; }
+
+  .filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-btn {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover { border-color: var(--accent2); color: var(--text); }
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 700; }
+
+  .search-wrap { flex: 1; min-width: 200px; position: relative; }
+  .search-wrap input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 9px 14px 9px 36px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-wrap input:focus { border-color: var(--accent2); }
+  .search-wrap input::placeholder { color: var(--muted); }
+  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 14px; pointer-events: none; }
+
+  .sort-select {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* Results count */
+  .results-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .results-meta span { color: var(--accent); }
+
+  /* Cards grid */
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color 0.15s, transform 0.15s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: transparent;
+    transition: background 0.15s;
+  }
+  .card:hover { border-color: var(--border2); transform: translateY(-1px); }
+  .card.is-hot::before { background: var(--hot); }
+  .card.is-hot { border-color: rgba(255,77,77,0.25); }
+  .card.is-always::before { background: var(--green); }
+
+  .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+  .card-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0;
+    background: var(--surface2);
+  }
+  .miles-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(0,194,255,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(0,194,255,0.2);
+    border-radius: 20px;
+    padding: 4px 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .card-title { font-size: 14px; font-weight: 700; line-height: 1.35; color: #fff; margin-bottom: 6px; }
+  .card-desc { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 14px; }
+
+  .card-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .tags { display: flex; gap: 5px; flex-wrap: wrap; }
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.03em;
+  }
+  .tag-temp { background: rgba(255,77,77,0.1); color: #ff9999; border: 1px solid rgba(255,77,77,0.2); }
+  .tag-always { background: rgba(34,197,94,0.1); color: #86efac; border: 1px solid rgba(34,197,94,0.2); }
+  .tag-new { background: rgba(245,158,11,0.1); color: #fcd34d; border: 1px solid rgba(245,158,11,0.2); }
+  .tag-partner { background: rgba(167,139,250,0.1); color: #c4b5fd; border: 1px solid rgba(167,139,250,0.2); }
+  .tag-tier { background: rgba(0,194,255,0.08); color: #7dd3fc; border: 1px solid rgba(0,194,255,0.15); }
+
+  .expires-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .expires-label.urgent { color: var(--hot); }
+
+  /* Empty state */
+  .empty {
+    text-align: center;
+    padding: 64px 24px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    grid-column: 1/-1;
+  }
+
+  /* Airtable config panel */
+  .config-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .config-bar label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .config-bar input {
+    flex: 1;
+    min-width: 160px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    outline: none;
+  }
+  .config-bar input:focus { border-color: var(--accent2); }
+  .load-btn {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 6px;
+    border: none;
+    background: var(--accent);
+    color: #000;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+  }
+  .load-btn:hover { opacity: 0.85; }
+  .load-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .config-hint { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); width: 100%; }
+  .config-hint a { color: var(--accent2); text-decoration: none; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+  .status-dot.live { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .status-dot.error { background: var(--hot); }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="logo-block">
+      <div class="logo-tag">✦ Flying Blue</div>
+      <h1>Miles <span>Optimizer</span></h1>
+    </div>
+    <div class="header-meta">
+      Last updated:<br>
+      <span id="last-updated">—</span>
+    </div>
+  </header>
+
+  <!-- Airtable config -->
+  <div class="config-bar">
+    <div class="status-dot" id="status-dot"></div>
+    <label>Airtable API key</label>
+    <input type="password" id="api-key" placeholder="patXXXXXX..." />
+    <label>Base ID</label>
+    <input type="text" id="base-id" placeholder="appXXXXXXXX" style="max-width:160px" />
+    <label>Table</label>
+    <input type="text" id="table-name" placeholder="Promotions" value="Promotions" style="max-width:130px" />
+    <button class="load-btn" id="load-btn" onclick="loadAirtable()">Load data</button>
+    <div class="config-hint">
+      Get your API key at <a href="https://airtable.com/create/tokens" target="_blank">airtable.com/create/tokens</a> — needs <code>data.records:read</code> scope. Your Base ID is in the URL: airtable.com/<strong>appXXXXXX</strong>/...
+      <br>Keys are stored only in your browser (localStorage).
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-label">Total deals</div><div class="stat-value accent" id="stat-total">0</div></div>
+    <div class="stat-card"><div class="stat-label">Hot right now</div><div class="stat-value hot" id="stat-hot">0</div></div>
+    <div class="stat-card"><div class="stat-label">Expiring soon</div><div class="stat-value" style="color:var(--amber)" id="stat-expiring">0</div></div>
+    <div class="stat-card"><div class="stat-label">Always on</div><div class="stat-value green" id="stat-always">0</div></div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="filter-group" id="cat-filters">
+      <button class="filter-btn active" onclick="setCategory('all',this)">All</button>
+      <button class="filter-btn" onclick="setCategory('flight',this)">✈ Flights</button>
+      <button class="filter-btn" onclick="setCategory('hotel',this)">🏨 Hotels</button>
+      <button class="filter-btn" onclick="setCategory('car',this)">🚗 Car</button>
+      <button class="filter-btn" onclick="setCategory('shopping',this)">🛍 Shopping</button>
+      <button class="filter-btn" onclick="setCategory('dining',this)">🍽 Dining</button>
+      <button class="filter-btn" onclick="setCategory('finance',this)">💳 Finance</button>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="search-input" placeholder="Search partner, deal..." oninput="render()" />
+    </div>
+    <select class="sort-select" id="sort-sel" onchange="render()">
+      <option value="miles">↑ Miles</option>
+      <option value="expires">⚠ Expiry</option>
+      <option value="hot">🔥 Hot first</option>
+    </select>
+  </div>
+
+  <div class="results-meta">
+    <div>Showing <span id="count">0</span> opportunities</div>
+    <div id="source-label" style="font-size:10px"></div>
+  </div>
+
+  <div class="cards-grid" id="cards"></div>
+
+</div>
+
+<script>
+const DEMO_DATA = [
+  { id:1, Title:"KLM double miles on European routes", Partner:"KLM", Category:"flight", Miles:"2x miles", Description:"Double miles on European routes booked via the KLM app. Activate before flying.", Type:"temp", Expires:"2026-05-15", Tier:"all", Hot:true, Active:true },
+  { id:2, Title:"Zalando — up to 8 miles per euro", Partner:"Zalando", Category:"shopping", Miles:"8 miles/€", Description:"Go via the Flying Blue Shopping portal and link to Zalando. Applies on full-price items.", Type:"temp", Expires:"2026-04-30", Tier:"all", Hot:true, Active:true },
+  { id:3, Title:"Hertz 1,500 bonus miles on weekly rental", Partner:"Hertz", Category:"car", Miles:"+1,500", Description:"Book a weekly rental via Flying Blue with promo code FB25. Minimum 7-day rental.", Type:"temp", Expires:"2026-06-01", Tier:"all", Hot:false, Active:true },
+  { id:4, Title:"Marriott Bonvoy — earn on every stay", Partner:"Marriott", Category:"hotel", Miles:"3 miles/€", Description:"Link accounts once at flyingblue.com/partners. Miles credited automatically after checkout.", Type:"always", Expires:"", Tier:"all", Hot:false, Active:true },
+  { id:5, Title:"Air France credit card — triple miles first 3 months", Partner:"BNP Paribas", Category:"finance", Miles:"3x first 3mo", Description:"New cardholders earn 3x on all spend for first 3 months. Standard rate 1.5x after.", Type:"new", Expires:"", Tier:"all", Hot:false, Active:true },
+  { id:6, Title:"50% bonus on KLM Business Class — Silver+", Partner:"KLM", Category:"flight", Miles:"1.5x miles", Description:"Silver and above earn 50% bonus miles on Business Class bookings this month.", Type:"temp", Expires:"2026-05-31", Tier:"silver", Hot:false, Active:true },
+  { id:7, Title:"Flying Blue Dining — 3 miles per euro", Partner:"Dining Network", Category:"dining", Miles:"3 miles/€", Description:"Register your credit card at flyingbluedining.com. Auto-earn at 2,000+ partner restaurants.", Type:"always", Expires:"", Tier:"all", Hot:false, Active:true },
+  { id:8, Title:"Amazon via Flying Blue Shopping portal", Partner:"Amazon", Category:"shopping", Miles:"2 miles/€", Description:"Always-on. Access Amazon every time through the Flying Blue Shopping portal.", Type:"always", Expires:"", Tier:"all", Hot:false, Active:true },
+  { id:9, Title:"Accor points-to-miles conversion bonus", Partner:"Accor", Category:"hotel", Miles:"1.5x conversion", Description:"Convert Accor Live Limitless points to Flying Blue at a 50% bonus rate this month.", Type:"temp", Expires:"2026-05-10", Tier:"all", Hot:false, Active:true },
+  { id:10, Title:"Europcar — 500 miles + free upgrade Gold/Plat", Partner:"Europcar", Category:"car", Miles:"+500 miles", Description:"Gold and Platinum members receive a free car class upgrade plus bonus miles on weekend rentals.", Type:"temp", Expires:"2026-04-20", Tier:"gold", Hot:true, Active:true },
+];
+
+let DATA = [];
+let activeCategory = 'all';
+
+const ICONS = { flight:'✈️', hotel:'🏨', car:'🚗', shopping:'🛍️', dining:'🍽️', finance:'💳', default:'⭐' };
+
+function daysUntil(dateStr) {
+  if (!dateStr) return null;
+  const diff = new Date(dateStr) - new Date();
+  return Math.ceil(diff / 86400000);
 }
+
+function setCategory(cat, btn) {
+  activeCategory = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function render() {
+  const query = document.getElementById('search-input').value.toLowerCase();
+  const sort = document.getElementById('sort-sel').value;
+  const today = new Date();
+
+  let cards = DATA.filter(d => {
+    if (!d.Active) return false;
+    const matchCat = activeCategory === 'all' || (d.Category||'').toLowerCase() === activeCategory;
+    const matchQ = !query || (d.Title||'').toLowerCase().includes(query) || (d.Partner||'').toLowerCase().includes(query);
+    return matchCat && matchQ;
+  });
+
+  if (sort === 'expires') {
+    cards.sort((a,b) => {
+      const da = daysUntil(a.Expires), db = daysUntil(b.Expires);
+      if (da === null) return 1; if (db === null) return -1;
+      return da - db;
+    });
+  } else if (sort === 'hot') {
+    cards.sort((a,b) => (b.Hot?1:0) - (a.Hot?1:0));
+  }
+
+  // Stats
+  const active = DATA.filter(d=>d.Active);
+  document.getElementById('stat-total').textContent = active.length;
+  document.getElementById('stat-hot').textContent = active.filter(d=>d.Hot).length;
+  document.getElementById('stat-expiring').textContent = active.filter(d=>{ const days=daysUntil(d.Expires); return days!==null && days<=14 && days>0; }).length;
+  document.getElementById('stat-always').textContent = active.filter(d=>(d.Type||'').toLowerCase()==='always').length;
+
+  document.getElementById('count').textContent = cards.length;
+
+  const container = document.getElementById('cards');
+  if (!cards.length) {
+    container.innerHTML = '<div class="empty">// no results found</div>';
+    return;
+  }
+
+  container.innerHTML = cards.map(c => {
+    const type = (c.Type||'').toLowerCase();
+    const days = daysUntil(c.Expires);
+    const isHot = c.Hot;
+    const cardClass = isHot ? 'card is-hot' : type === 'always' ? 'card is-always' : 'card';
+
+    const typeTag = type === 'temp' ? '<span class="tag tag-temp">limited time</span>'
+                  : type === 'new' ? '<span class="tag tag-new">new</span>'
+                  : '<span class="tag tag-always">always on</span>';
+    const partnerTag = `<span class="tag tag-partner">${c.Partner||''}</span>`;
+    const tierTag = c.Tier && c.Tier !== 'all' ? `<span class="tag tag-tier">${c.Tier}+</span>` : '';
+
+    let expiresHtml = '';
+    if (days !== null) {
+      const urgent = days <= 7;
+      const label = days <= 0 ? 'expired' : days === 1 ? '1 day left' : `${days} days left`;
+      expiresHtml = `<span class="expires-label${urgent?' urgent':''}">⌛ ${label}</span>`;
+    }
+
+    const icon = ICONS[(c.Category||'').toLowerCase()] || ICONS.default;
+
+    return `<div class="${cardClass}">
+      <div class="card-header">
+        <div class="card-icon">${icon}</div>
+        <div class="miles-pill">${c.Miles||'—'}</div>
+      </div>
+      <div class="card-title">${c.Title||''}</div>
+      <div class="card-desc">${c.Description||''}</div>
+      <div class="card-footer">
+        <div class="tags">${typeTag}${partnerTag}${tierTag}</div>
+        ${expiresHtml}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function loadAirtable() {
+  const key = document.getElementById('api-key').value.trim();
+  const base = document.getElementById('base-id').value.trim();
+  const table = document.getElementById('table-name').value.trim() || 'Promotions';
+  if (!key || !base) { alert('Fill in your API key and Base ID.'); return; }
+
+  const btn = document.getElementById('load-btn');
+  const dot = document.getElementById('status-dot');
+  btn.disabled = true;
+  btn.textContent = 'Loading...';
+  dot.className = 'status-dot';
+
+  // Save to localStorage
+  localStorage.setItem('fb_key', key);
+  localStorage.setItem('fb_base', base);
+  localStorage.setItem('fb_table', table);
+
+  try {
+    const url = `https://api.airtable.com/v0/${base}/${encodeURIComponent(table)}?filterByFormula=Active%3D1`;
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${key}` } });
+    if (!res.ok) throw new Error(`Airtable error: ${res.status}`);
+    const json = await res.json();
+    DATA = json.records.map(r => ({ id: r.id, ...r.fields }));
+    dot.className = 'status-dot live';
+    document.getElementById('last-updated').textContent = new Date().toLocaleString('nl-NL');
+    document.getElementById('source-label').textContent = '● live from Airtable';
+    render();
+  } catch(e) {
+    dot.className = 'status-dot error';
+    alert('Could not load Airtable data: ' + e.message + '\n\nMake sure your API key has read access and the Base ID is correct.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Load data';
+  }
+}
+
+// On load: restore saved config + load demo data
+window.addEventListener('DOMContentLoaded', () => {
+  const savedKey = localStorage.getItem('fb_key');
+  const savedBase = localStorage.getItem('fb_base');
+  const savedTable = localStorage.getItem('fb_table');
+  if (savedKey) document.getElementById('api-key').value = savedKey;
+  if (savedBase) document.getElementById('base-id').value = savedBase;
+  if (savedTable) document.getElementById('table-name').value = savedTable;
+
+  // Load demo data by default
+  DATA = DEMO_DATA;
+  document.getElementById('last-updated').textContent = 'demo data';
+  document.getElementById('source-label').textContent = '○ demo — connect Airtable above';
+  render();
+
+  // Auto-load if config saved
+  if (savedKey && savedBase) loadAirtable();
+});
+</script>
+</body>
+</html>
