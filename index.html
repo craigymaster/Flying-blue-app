@@ -9,296 +9,109 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --bg: #0d0f14;
-  --surface: #161920;
-  --surface2: #1e2230;
-  --border: rgba(255,255,255,0.06);
-  --border2: rgba(255,255,255,0.12);
-  --text: #f0ede6;
-  --muted: #5a6270;
-  --muted2: #8a9099;
-  --accent: #00b4ff;
-  --accent-dim: rgba(0,180,255,0.12);
-  --hot: #ff3b3b;
-  --hot-dim: rgba(255,59,59,0.15);
-  --green: #1db954;
-  --green-dim: rgba(29,185,84,0.15);
-  --amber: #f5a623;
-  --amber-dim: rgba(245,166,35,0.15);
-  --purple: #8b5cf6;
-  --purple-dim: rgba(139,92,246,0.15);
+  --bg: #0d0f14; --surface: #161920; --surface2: #1e2230;
+  --border: rgba(255,255,255,0.06); --border2: rgba(255,255,255,0.12);
+  --text: #f0ede6; --muted: #5a6270; --muted2: #8a9099;
+  --accent: #00b4ff; --accent-dim: rgba(0,180,255,0.12);
+  --hot: #ff3b3b; --hot-dim: rgba(255,59,59,0.15);
+  --green: #1db954; --green-dim: rgba(29,185,84,0.15);
+  --amber: #f5a623; --amber-dim: rgba(245,166,35,0.15);
+  --purple: #8b5cf6; --purple-dim: rgba(139,92,246,0.15);
 }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Inter', sans-serif;
-  min-height: 100vh;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-/* Top nav */
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 32px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.02em;
-}
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; font-size: 14px; line-height: 1.5; }
+nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 32px; border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 100; }
+.nav-logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
 .nav-logo svg { color: var(--accent); }
-.nav-meta {
-  font-size: 12px;
-  color: var(--muted);
-}
+.nav-meta { font-size: 12px; color: var(--muted); }
 .nav-meta span { color: var(--accent); }
-
-/* Main */
 main { max-width: 1280px; margin: 0 auto; padding: 32px 32px 80px; }
-
-/* Stats */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 28px;
-}
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px 24px;
-  transition: border-color 0.2s;
-}
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; transition: border-color 0.2s; }
 .stat-card:hover { border-color: var(--border2); }
-.stat-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 10px;
-}
-.stat-value {
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--text);
-}
-.stat-value.blue { color: var(--accent); }
-.stat-value.red { color: var(--hot); }
-.stat-value.amber { color: var(--amber); }
-.stat-value.green { color: var(--green); }
-
-/* Controls */
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-}
+.stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.stat-value { font-size: 32px; font-weight: 700; letter-spacing: -0.03em; }
+.stat-value.blue { color: var(--accent); } .stat-value.red { color: var(--hot); } .stat-value.amber { color: var(--amber); } .stat-value.green { color: var(--green); }
+.controls { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
 .filter-pills { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
-.pill {
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 7px 16px;
-  border-radius: 100px;
-  border: 1px solid var(--border2);
-  background: transparent;
-  color: var(--muted2);
-  cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
+.pill { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; padding: 7px 16px; border-radius: 100px; border: 1px solid var(--border2); background: transparent; color: var(--muted2); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
 .pill:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
 .pill.active { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 600; }
-
 .controls-right { display: flex; gap: 10px; align-items: center; }
 .search-wrap { position: relative; }
-.search-wrap input {
-  width: 220px;
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  padding: 8px 14px 8px 36px;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  color: var(--text);
-  outline: none;
-  transition: border-color 0.15s, width 0.2s;
-}
+.search-wrap input { width: 220px; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 8px 14px 8px 36px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text); outline: none; transition: border-color 0.15s, width 0.2s; }
 .search-wrap input:focus { border-color: var(--accent); width: 280px; }
 .search-wrap input::placeholder { color: var(--muted); }
-.search-icon {
-  position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
-  color: var(--muted); pointer-events: none;
-  width: 15px; height: 15px;
-}
-.sort-select {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  color: var(--muted2);
-  outline: none;
-  cursor: pointer;
-  transition: border-color 0.15s;
-}
-.sort-select:focus { border-color: var(--accent); }
-
-/* Results meta */
-.results-meta {
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 16px;
-}
+.search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; width: 15px; height: 15px; }
+.sort-select { background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 8px 12px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--muted2); outline: none; cursor: pointer; }
+.results-meta { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
 .results-meta b { color: var(--text); font-weight: 600; }
-
-/* Cards grid */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
-
-@media (max-width: 1024px) { .cards-grid { grid-template-columns: repeat(2, 1fr); } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 640px) { .cards-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2, 1fr); } main { padding: 20px 16px 60px; } nav { padding: 14px 16px; } }
-
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px;
-  transition: border-color 0.2s, transform 0.15s;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.card:hover { border-color: var(--border2); transform: translateY(-2px); }
+.cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 1024px) { .cards-grid { grid-template-columns: repeat(2,1fr); } .stats-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 640px) { .cards-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2,1fr); } main { padding: 20px 16px 60px; } nav { padding: 14px 16px; } }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 12px; cursor: pointer; }
+.card:hover { border-color: rgba(0,180,255,0.35); transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(0,180,255,0.1); }
 .card.is-hot { border-left: 3px solid var(--hot); }
 .card.is-always { border-left: 3px solid var(--green); }
 .card.is-new { border-left: 3px solid var(--purple); }
-
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-.card-icon {
-  width: 36px; height: 36px;
-  border-radius: 10px;
-  background: var(--surface2);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-.miles-badge {
-  font-size: 12px;
-  font-weight: 700;
-  background: var(--accent-dim);
-  color: var(--accent);
-  border: 1px solid rgba(0,180,255,0.25);
-  border-radius: 100px;
-  padding: 4px 12px;
-  white-space: nowrap;
-  letter-spacing: -0.01em;
-}
-
-.card-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-}
-.card-desc {
-  font-size: 13px;
-  color: var(--muted2);
-  line-height: 1.55;
-  flex: 1;
-}
-
-.card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.card-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.miles-badge { font-size: 12px; font-weight: 700; background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(0,180,255,0.25); border-radius: 100px; padding: 4px 12px; white-space: nowrap; letter-spacing: -0.01em; }
+.card-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.3; letter-spacing: -0.01em; }
+.card-desc { font-size: 13px; color: var(--muted2); line-height: 1.55; flex: 1; }
+.card-footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
 .tags { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
-.tag {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 9px;
-  border-radius: 5px;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
+.tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 5px; letter-spacing: 0.02em; text-transform: uppercase; }
 .tag-hot { background: var(--hot-dim); color: var(--hot); }
 .tag-temp { background: var(--hot-dim); color: var(--hot); }
 .tag-always { background: var(--green-dim); color: var(--green); }
 .tag-new { background: var(--purple-dim); color: var(--purple); }
 .tag-partner { background: var(--surface2); color: var(--muted2); }
 .tag-tier { background: var(--accent-dim); color: var(--accent); }
-
-.expires {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--muted);
-  white-space: nowrap;
-}
+.expires { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
 .expires.urgent { color: var(--hot); }
-
-/* Loading / error */
-.state-box {
-  grid-column: 1/-1;
-  text-align: center;
-  padding: 80px 24px;
-  color: var(--muted);
-  font-size: 14px;
-}
-.spinner {
-  width: 24px; height: 24px;
-  border: 2px solid var(--border2);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  margin: 0 auto 16px;
-}
+.state-box { grid-column: 1/-1; text-align: center; padding: 80px 24px; color: var(--muted); font-size: 14px; }
+.spinner { width: 24px; height: 24px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 16px; }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* Footer */
-footer {
-  border-top: 1px solid var(--border);
-  margin-top: 64px;
-  padding-top: 24px;
-  text-align: center;
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 2;
-}
+footer { border-top: 1px solid var(--border); margin-top: 64px; padding-top: 24px; text-align: center; font-size: 12px; color: var(--muted); line-height: 2; }
 footer a { color: var(--muted); text-decoration: underline; }
+
+/* MODAL */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 20px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; padding: 28px; position: relative; transform: scale(0.95); transition: transform 0.2s ease-out; }
+.overlay.open .modal { transform: scale(1); }
+.modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border2); background: var(--surface2); color: var(--muted2); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.modal-close:hover { color: var(--text); border-color: var(--border2); background: var(--surface2); }
+.modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.modal-icon { width: 48px; height: 48px; border-radius: 14px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.modal-miles { font-size: 14px; font-weight: 700; background: var(--accent); color: #000; border-radius: 100px; padding: 6px 16px; letter-spacing: -0.01em; }
+.modal-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); margin-bottom: 16px; line-height: 1.2; }
+.modal-details { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--surface2); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
+.modal-detail { padding: 14px 16px; border-right: 1px solid var(--border); }
+.modal-detail:last-child { border-right: none; }
+.detail-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.detail-value { font-size: 14px; font-weight: 600; color: var(--text); }
+.detail-value.urgent { color: var(--hot); }
+.modal-section { margin-bottom: 20px; }
+.section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.section-text { font-size: 14px; color: var(--muted2); line-height: 1.7; }
+.modal-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+.modal-actions { display: flex; gap: 10px; }
+.btn-primary { flex: 1; background: var(--accent); color: #000; border: none; border-radius: 100px; padding: 14px 20px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.15s; text-decoration: none; }
+.btn-primary:hover { opacity: 0.88; }
+.btn-secondary { background: transparent; color: var(--muted2); border: 1px solid var(--border2); border-radius: 100px; padding: 14px 20px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.15s; white-space: nowrap; }
+.btn-secondary:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.btn-secondary.copied { color: var(--green); border-color: var(--green); }
+
+@media (max-width: 640px) {
+  .overlay { align-items: flex-end; padding: 0; }
+  .modal { border-radius: 20px 20px 0 0; max-height: 85vh; }
+  .modal-details { grid-template-columns: 1fr; }
+  .modal-detail { border-right: none; border-bottom: 1px solid var(--border); }
+  .modal-detail:last-child { border-bottom: none; }
+  .modal-actions { flex-direction: column; }
+}
 </style>
 </head>
 <body>
@@ -308,7 +121,7 @@ footer a { color: var(--muted); text-decoration: underline; }
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21 4 19 2c-2-2-4-2-5.5-.5L10 5 1.8 6.2c-.5.1-.9.5-.9 1 0 .3.1.6.3.8l2.9 3-.9 4.4c-.1.5.1 1 .5 1.3.3.2.6.3.9.3.2 0 .4 0 .6-.1l3.9-1.7 2.9 3c.2.2.5.3.8.3.5 0 .9-.4 1-.9z"/></svg>
     Miles Optimizer
   </div>
-  <div class="nav-meta">Bijgewerkt: <span id="updated">laden...</span></div>
+  <div class="nav-meta">Updated: <span id="updated">loading...</span></div>
 </nav>
 
 <main>
@@ -335,15 +148,13 @@ footer a { color: var(--muted); text-decoration: underline; }
         <input type="text" id="search" placeholder="Search deals..." oninput="render()">
       </div>
       <select class="sort-select" id="sort" onchange="render()">
-        <option value="hot">Newest</option>
+        <option value="hot">Hot first</option>
         <option value="expires">Expiring soon</option>
-        <option value="miles">Most miles</option>
       </select>
     </div>
   </div>
 
   <div class="results-meta"><b id="count">—</b> deals found</div>
-
   <div class="cards-grid" id="cards">
     <div class="state-box"><div class="spinner"></div>Loading deals...</div>
   </div>
@@ -355,10 +166,50 @@ footer a { color: var(--muted); text-decoration: underline; }
   </footer>
 </main>
 
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-header">
+      <div class="modal-icon" id="m-icon"></div>
+      <div class="modal-miles" id="m-miles"></div>
+    </div>
+    <div class="modal-title" id="m-title"></div>
+    <div class="modal-details">
+      <div class="modal-detail"><div class="detail-label">Partner</div><div class="detail-value" id="m-partner"></div></div>
+      <div class="modal-detail"><div class="detail-label">Expires</div><div class="detail-value" id="m-expires"></div></div>
+      <div class="modal-detail"><div class="detail-label">Tier</div><div class="detail-value" id="m-tier"></div></div>
+    </div>
+    <div class="modal-section">
+      <div class="section-label">About this deal</div>
+      <div class="section-text" id="m-desc"></div>
+    </div>
+    <div class="modal-section">
+      <div class="section-label">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        How to activate
+      </div>
+      <div class="section-text" id="m-activate"></div>
+    </div>
+    <div class="modal-tags" id="m-tags"></div>
+    <div class="modal-actions">
+      <a class="btn-primary" id="m-link" href="https://flyingblue.com" target="_blank">
+        Go to Flying Blue
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <button class="btn-secondary" id="m-copy" onclick="copyDeal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy deal info
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
 const ICONS = { flight:'✈️', hotel:'🏨', car:'🚗', shopping:'🛍️', dining:'🍽️', finance:'💳' };
 let DATA = [];
 let activeCategory = 'all';
+let currentDeal = null;
 
 function daysUntil(d) {
   if (!d) return null;
@@ -367,12 +218,16 @@ function daysUntil(d) {
 
 function fmtExpiry(d) {
   const days = daysUntil(d);
-  if (days === null) return null;
+  if (days === null) return { label: 'No expiry', urgent: false };
   if (days <= 0) return { label: 'Expired', urgent: true };
-  if (days < 1) return { label: 'Today', urgent: true };
   const h = Math.floor((new Date(d) - new Date()) / 3600000);
-  if (h < 48) return { label: `${h}h`, urgent: true };
-  return { label: `${days}d`, urgent: days <= 7 };
+  if (h < 48) return { label: `${h}h left`, urgent: true };
+  return { label: `${days} days left`, urgent: days <= 7 };
+}
+
+function fmtDate(d) {
+  if (!d) return 'No expiry';
+  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 function setCategory(cat, btn) {
@@ -381,6 +236,61 @@ function setCategory(cat, btn) {
   btn.classList.add('active');
   render();
 }
+
+function openModal(deal) {
+  currentDeal = deal;
+  const exp = fmtExpiry(deal.expires);
+  document.getElementById('m-icon').textContent = ICONS[deal.category] || '⭐';
+  document.getElementById('m-miles').textContent = deal.miles;
+  document.getElementById('m-title').textContent = deal.title;
+  document.getElementById('m-partner').textContent = deal.partner || '—';
+  const expiresEl = document.getElementById('m-expires');
+  expiresEl.textContent = fmtDate(deal.expires);
+  expiresEl.className = 'detail-value' + (exp.urgent ? ' urgent' : '');
+  document.getElementById('m-tier').textContent = deal.tier && deal.tier !== 'all' ? deal.tier.charAt(0).toUpperCase() + deal.tier.slice(1) + '+' : 'All tiers';
+  document.getElementById('m-desc').textContent = deal.description || '—';
+  document.getElementById('m-activate').textContent = deal.activate || 'Log in to your Flying Blue account and activate this offer from your dashboard. The miles will be credited within 48 hours after completing the required action.';
+
+  const tags = [];
+  if (deal.hot) tags.push('<span class="tag tag-hot">HOT</span>');
+  if (deal.type === 'temp') tags.push('<span class="tag tag-temp">Limited time</span>');
+  else if (deal.type === 'new') tags.push('<span class="tag tag-new">New</span>');
+  else tags.push('<span class="tag tag-always">Always on</span>');
+  if (deal.tier && deal.tier !== 'all') tags.push(`<span class="tag tag-tier">${deal.tier}+</span>`);
+  document.getElementById('m-tags').innerHTML = tags.join('');
+
+  document.getElementById('m-link').href = deal.url || 'https://flyingblue.com/nl/earn/promotions';
+  document.getElementById('m-copy').classList.remove('copied');
+  document.getElementById('m-copy').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy deal info';
+
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('overlay')) closeModal();
+}
+
+function copyDeal() {
+  if (!currentDeal) return;
+  const text = `${currentDeal.title}\n${currentDeal.miles} — ${currentDeal.partner}\n${currentDeal.description}\nflying blue.com/nl/earn/promotions`;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('m-copy');
+    btn.classList.add('copied');
+    btn.innerHTML = '✓ Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy deal info';
+    }, 2000);
+  });
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
 function render() {
   const q = document.getElementById('search').value.toLowerCase();
@@ -398,7 +308,7 @@ function render() {
       if (da===null) return 1; if (db===null) return -1;
       return da - db;
     });
-  } else if (sort === 'hot') {
+  } else {
     cards.sort((a,b) => (b.hot?1:0)-(a.hot?1:0));
   }
 
@@ -410,22 +320,21 @@ function render() {
 
   const el = document.getElementById('cards');
   if (!cards.length) {
-    el.innerHTML = '<div class="state-box">No deals found for this filter.</div>';
+    el.innerHTML = '<div class="state-box">No deals found.</div>';
     return;
   }
 
-  el.innerHTML = cards.map(c => {
+  el.innerHTML = cards.map((c, i) => {
     const exp = fmtExpiry(c.expires);
     const cardClass = c.hot ? 'card is-hot' : c.type==='always' ? 'card is-always' : c.type==='new' ? 'card is-new' : 'card';
-
     const typeTag = c.hot ? '<span class="tag tag-hot">HOT</span>' : '';
     const statusTag = c.type==='temp' ? '<span class="tag tag-temp">Limited time</span>'
-                    : c.type==='new'  ? '<span class="tag tag-new">New</span>'
+                    : c.type==='new' ? '<span class="tag tag-new">New</span>'
                     : '<span class="tag tag-always">Always on</span>';
     const tierTag = c.tier && c.tier!=='all' ? `<span class="tag tag-tier">${c.tier}+</span>` : '';
-    const expHtml = exp ? `<span class="expires${exp.urgent?' urgent':''}">⌛ ${exp.label}</span>` : '';
+    const expHtml = `<span class="expires${exp.urgent?' urgent':''}">${exp.label !== 'No expiry' ? '⌛ '+exp.label : ''}</span>`;
 
-    return `<div class="${cardClass}">
+    return `<div class="${cardClass}" onclick="openModal(DATA[${DATA.indexOf(c)}])">
       <div class="card-top">
         <div class="card-icon">${ICONS[c.category]||'⭐'}</div>
         <div class="miles-badge">${c.miles}</div>
