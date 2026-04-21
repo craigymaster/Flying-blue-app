@@ -1,17 +1,32 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-let cache = null;
-let cacheTime = null;
-const CACHE_DURATION = 60 * 60 * 1000; // 1 uur
+const CACHE_KEY = 'scrape-shops';
+const CACHE_TTL = 60 * 60 * 24; // 24 uur
+
+async function kvGet(key) {
+  const res = await fetch(`${process.env.KV_REST_API_URL}/get/${key}`, {
+    headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` }
+  });
+  const data = await res.json();
+  return data.result ? JSON.parse(data.result) : null;
+}
+
+async function kvSet(key, value, ttl) {
+  await fetch(`${process.env.KV_REST_API_URL}/set/${key}?ex=${ttl}`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(value)
+  });
+}
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-  // Geef cache terug als die nog vers is
-  if (cache && cacheTime && (Date.now() - cacheTime < CACHE_DURATION)) {
-    return res.status(200).json({ shops: cache, cached: true });
-  }
+  try {
+    const cached = await kvGet(CACHE_KEY);
+    if (cached) return res.status(200).json({ shops: cached, cached: true });
+  } catch(e) { console.warn('Cache read failed:', e.message); }
 
   try {
     const response = await axios.get('https://app.scrapingbee.com/api/v1/', {
@@ -41,22 +56,12 @@ module.exports = async (req, res) => {
       const miles = link.find('p').last().text().trim();
       const categoryMatch = url.match(/earnonline\.flyingblue\.com\/[^/]+\/([^/]+)\//);
       const category = categoryMatch ? categoryMatch[1] : 'overig';
-
-      if (name && miles) {
-        shops.push({ name, miles, url, logo, category });
-      }
+      if (name && miles) shops.push({ name, miles, url, logo, category });
     });
 
-    // Sla op in cache
-    cache = shops;
-    cacheTime = Date.now();
-
+    try { await kvSet(CACHE_KEY, shops, CACHE_TTL); } catch(e) { console.warn('Cache write failed:', e.message); }
     res.status(200).json({ shops, cached: false });
   } catch (error) {
-    // Als scrapen mislukt maar cache bestaat, geef oude cache terug
-    if (cache) {
-      return res.status(200).json({ shops: cache, cached: true, stale: true });
-    }
     res.status(500).json({ error: error.message });
   }
 };
