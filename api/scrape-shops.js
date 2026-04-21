@@ -1,9 +1,18 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
+let cache = null;
+let cacheTime = null;
+const CACHE_DURATION = 60 * 60 * 1000; // 1 uur
+
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  
+
+  // Geef cache terug als die nog vers is
+  if (cache && cacheTime && (Date.now() - cacheTime < CACHE_DURATION)) {
+    return res.status(200).json({ shops: cache, cached: true });
+  }
+
   try {
     const response = await axios.get('https://app.scrapingbee.com/api/v1/', {
       params: {
@@ -38,8 +47,16 @@ module.exports = async (req, res) => {
       }
     });
 
-    res.status(200).json({ shops });
+    // Sla op in cache
+    cache = shops;
+    cacheTime = Date.now();
+
+    res.status(200).json({ shops, cached: false });
   } catch (error) {
+    // Als scrapen mislukt maar cache bestaat, geef oude cache terug
+    if (cache) {
+      return res.status(200).json({ shops: cache, cached: true, stale: true });
+    }
     res.status(500).json({ error: error.message });
   }
 };
