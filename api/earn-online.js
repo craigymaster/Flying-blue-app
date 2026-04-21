@@ -1,7 +1,7 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-const BASE_URL = 'https://earnonline.flyingblue.com/en/';
+const BASE_URL = 'https://earnonline.flyingblue.com/en/?countryID[]=145';
 
 let cache = null;
 let cacheTime = null;
