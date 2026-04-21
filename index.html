@@ -372,27 +372,49 @@ function render() {
 
 async function loadShops() {
   try {
-    const res = await fetch('/api/scrape-shops');
-    if (!res.ok) return;
-    const { shops } = await res.json();
-    shops.forEach(shop => {
-      DATA.push({
-        title: shop.name,
-        miles: shop.miles,
-        description: `Verdien miles bij ${shop.name} via Shop for Miles. ${shop.miles} per aankoop.`,
-        partner: shop.name,
-        category: 'shop',
-        type: 'always',
-        hot: false,
-        expires: null,
-        tier: 'all',
-        url: shop.url,
-        logo: shop.logo,
-        activate: 'Klik op "Go to Flying Blue" om naar de Shop for Miles pagina te gaan. Doe je aankoop via de link en de miles worden automatisch bijgeschreven.'
+    const res1 = await fetch('/api/scrape-shops');
+    if (res1.ok) {
+      const { shops } = await res1.json();
+      shops.forEach(shop => {
+        DATA.push({
+          title: shop.name,
+          miles: shop.miles,
+          description: `Verdien miles bij ${shop.name} via Shop for Miles. ${shop.miles} per aankoop.`,
+          partner: shop.name,
+          category: 'shop',
+          type: 'always',
+          hot: false,
+          expires: null,
+          tier: 'all',
+          url: shop.url,
+          logo: shop.logo,
+          activate: 'Klik op "Go to Flying Blue" om naar de Shop for Miles pagina te gaan. Doe je aankoop via de link en de miles worden automatisch bijgeschreven.'
+        });
       });
-    });
+    }
+
+    const res2 = await fetch('/api/earn-online');
+    if (res2.ok) {
+      const { shops: earnShops } = await res2.json();
+      earnShops.forEach(shop => {
+        DATA.push({
+          title: shop.name,
+          miles: shop.miles,
+          description: shop.milesWas ? `Was: ${shop.milesWas} — nu ${shop.miles} per aankoop.` : `Verdien ${shop.miles} bij ${shop.name}.`,
+          partner: shop.name,
+          category: 'shop',
+          type: shop.isOffer ? 'temp' : 'always',
+          hot: shop.isOffer,
+          expires: null,
+          tier: 'all',
+          url: shop.url,
+          logo: shop.logo,
+          activate: 'Klik op "Go to Flying Blue" om naar de Earn Online pagina te gaan en je aankoop te doen.'
+        });
+      });
+    }
   } catch(e) {
-    console.warn('Shop for Miles laden mislukt:', e);
+    console.warn('Shops laden mislukt:', e);
   }
 }
 
