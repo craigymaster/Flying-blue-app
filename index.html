@@ -54,8 +54,10 @@ main { max-width: 1280px; margin: 0 auto; padding: 32px 32px 80px; }
 .card.is-hot { border-left: 3px solid var(--hot); }
 .card.is-always { border-left: 3px solid var(--green); }
 .card.is-new { border-left: 3px solid var(--purple); }
+.card.is-shop { border-left: 3px solid var(--amber); }
 .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
-.card-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.card-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; overflow: hidden; }
+.card-icon img { width: 100%; height: 100%; object-fit: contain; }
 .miles-badge { font-size: 12px; font-weight: 700; background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(0,180,255,0.25); border-radius: 100px; padding: 4px 12px; white-space: nowrap; letter-spacing: -0.01em; }
 .card-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.3; letter-spacing: -0.01em; }
 .card-desc { font-size: 13px; color: var(--muted2); line-height: 1.55; flex: 1; }
@@ -68,6 +70,7 @@ main { max-width: 1280px; margin: 0 auto; padding: 32px 32px 80px; }
 .tag-new { background: var(--purple-dim); color: var(--purple); }
 .tag-partner { background: var(--surface2); color: var(--muted2); }
 .tag-tier { background: var(--accent-dim); color: var(--accent); }
+.tag-shop { background: var(--amber-dim); color: var(--amber); }
 .expires { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
 .expires.urgent { color: var(--hot); }
 .state-box { grid-column: 1/-1; text-align: center; padding: 80px 24px; color: var(--muted); font-size: 14px; }
@@ -84,7 +87,8 @@ footer a { color: var(--muted); text-decoration: underline; }
 .modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border2); background: var(--surface2); color: var(--muted2); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
 .modal-close:hover { color: var(--text); border-color: var(--border2); background: var(--surface2); }
 .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-.modal-icon { width: 48px; height: 48px; border-radius: 14px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.modal-icon { width: 48px; height: 48px; border-radius: 14px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 22px; overflow: hidden; }
+.modal-icon img { width: 100%; height: 100%; object-fit: contain; }
 .modal-miles { font-size: 14px; font-weight: 700; background: var(--accent); color: #000; border-radius: 100px; padding: 6px 16px; letter-spacing: -0.01em; }
 .modal-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); margin-bottom: 16px; line-height: 1.2; }
 .modal-details { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--surface2); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
@@ -141,6 +145,7 @@ footer a { color: var(--muted); text-decoration: underline; }
       <button class="pill" onclick="setCategory('shopping',this)">🛍 Shopping</button>
       <button class="pill" onclick="setCategory('dining',this)">🍽 Dining</button>
       <button class="pill" onclick="setCategory('finance',this)">💳 Finance</button>
+      <button class="pill" onclick="setCategory('shop',this)">🛒 Shop for Miles</button>
     </div>
     <div class="controls-right">
       <div class="search-wrap">
@@ -206,7 +211,7 @@ footer a { color: var(--muted); text-decoration: underline; }
 </div>
 
 <script>
-const ICONS = { flight:'✈️', hotel:'🏨', car:'🚗', shopping:'🛍️', dining:'🍽️', finance:'💳' };
+const ICONS = { flight:'✈️', hotel:'🏨', car:'🚗', shopping:'🛍️', dining:'🍽️', finance:'💳', shop:'🛒' };
 let DATA = [];
 let activeCategory = 'all';
 let currentDeal = null;
@@ -240,7 +245,14 @@ function setCategory(cat, btn) {
 function openModal(deal) {
   currentDeal = deal;
   const exp = fmtExpiry(deal.expires);
-  document.getElementById('m-icon').textContent = ICONS[deal.category] || '⭐';
+
+  const iconEl = document.getElementById('m-icon');
+  if (deal.logo) {
+    iconEl.innerHTML = `<img src="${deal.logo}" alt="${deal.title}" onerror="this.parentElement.textContent='🛒'">`;
+  } else {
+    iconEl.textContent = ICONS[deal.category] || '⭐';
+  }
+
   document.getElementById('m-miles').textContent = deal.miles;
   document.getElementById('m-title').textContent = deal.title;
   document.getElementById('m-partner').textContent = deal.partner || '—';
@@ -253,7 +265,8 @@ function openModal(deal) {
 
   const tags = [];
   if (deal.hot) tags.push('<span class="tag tag-hot">HOT</span>');
-  if (deal.type === 'temp') tags.push('<span class="tag tag-temp">Limited time</span>');
+  if (deal.category === 'shop') tags.push('<span class="tag tag-shop">Shop for Miles</span>');
+  else if (deal.type === 'temp') tags.push('<span class="tag tag-temp">Limited time</span>');
   else if (deal.type === 'new') tags.push('<span class="tag tag-new">New</span>');
   else tags.push('<span class="tag tag-always">Always on</span>');
   if (deal.tier && deal.tier !== 'all') tags.push(`<span class="tag tag-tier">${deal.tier}+</span>`);
@@ -278,7 +291,7 @@ function handleOverlayClick(e) {
 
 function copyDeal() {
   if (!currentDeal) return;
-  const text = `${currentDeal.title}\n${currentDeal.miles} — ${currentDeal.partner}\n${currentDeal.description}\nflying blue.com/nl/earn/promotions`;
+  const text = `${currentDeal.title}\n${currentDeal.miles} — ${currentDeal.partner}\n${currentDeal.description}\nflyingblue.com/nl/earn/promotions`;
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.getElementById('m-copy');
     btn.classList.add('copied');
@@ -298,7 +311,7 @@ function render() {
 
   let cards = DATA.filter(d => {
     const matchCat = activeCategory === 'all' || d.category === activeCategory;
-    const matchQ = !q || d.title.toLowerCase().includes(q) || d.partner.toLowerCase().includes(q);
+    const matchQ = !q || d.title.toLowerCase().includes(q) || (d.partner && d.partner.toLowerCase().includes(q));
     return matchCat && matchQ;
   });
 
@@ -324,19 +337,27 @@ function render() {
     return;
   }
 
-  el.innerHTML = cards.map((c, i) => {
+  el.innerHTML = cards.map((c) => {
     const exp = fmtExpiry(c.expires);
-    const cardClass = c.hot ? 'card is-hot' : c.type==='always' ? 'card is-always' : c.type==='new' ? 'card is-new' : 'card';
+    const isShop = c.category === 'shop';
+    const cardClass = isShop ? 'card is-shop' : c.hot ? 'card is-hot' : c.type==='always' ? 'card is-always' : c.type==='new' ? 'card is-new' : 'card';
+
+    const iconHtml = c.logo
+      ? `<div class="card-icon"><img src="${c.logo}" alt="${c.title}" onerror="this.parentElement.textContent='🛒'"></div>`
+      : `<div class="card-icon">${ICONS[c.category]||'⭐'}</div>`;
+
     const typeTag = c.hot ? '<span class="tag tag-hot">HOT</span>' : '';
-    const statusTag = c.type==='temp' ? '<span class="tag tag-temp">Limited time</span>'
-                    : c.type==='new' ? '<span class="tag tag-new">New</span>'
-                    : '<span class="tag tag-always">Always on</span>';
+    const statusTag = isShop
+      ? '<span class="tag tag-shop">Shop for Miles</span>'
+      : c.type==='temp' ? '<span class="tag tag-temp">Limited time</span>'
+      : c.type==='new' ? '<span class="tag tag-new">New</span>'
+      : '<span class="tag tag-always">Always on</span>';
     const tierTag = c.tier && c.tier!=='all' ? `<span class="tag tag-tier">${c.tier}+</span>` : '';
     const expHtml = `<span class="expires${exp.urgent?' urgent':''}">${exp.label !== 'No expiry' ? '⌛ '+exp.label : ''}</span>`;
 
     return `<div class="${cardClass}" onclick="openModal(DATA[${DATA.indexOf(c)}])">
       <div class="card-top">
-        <div class="card-icon">${ICONS[c.category]||'⭐'}</div>
+        ${iconHtml}
         <div class="miles-badge">${c.miles}</div>
       </div>
       <div class="card-title">${c.title}</div>
@@ -349,6 +370,32 @@ function render() {
   }).join('');
 }
 
+async function loadShops() {
+  try {
+    const res = await fetch('/api/scrape-shops');
+    if (!res.ok) return;
+    const { shops } = await res.json();
+    shops.forEach(shop => {
+      DATA.push({
+        title: shop.name,
+        miles: shop.miles,
+        description: `Verdien miles bij ${shop.name} via Shop for Miles. ${shop.miles} per aankoop.`,
+        partner: shop.name,
+        category: 'shop',
+        type: 'always',
+        hot: false,
+        expires: null,
+        tier: 'all',
+        url: shop.url,
+        logo: shop.logo,
+        activate: 'Klik op "Go to Flying Blue" om naar de Shop for Miles pagina te gaan. Doe je aankoop via de link en de miles worden automatisch bijgeschreven.'
+      });
+    });
+  } catch(e) {
+    console.warn('Shop for Miles laden mislukt:', e);
+  }
+}
+
 async function loadData() {
   try {
     const res = await fetch('/api/promotions');
@@ -357,6 +404,7 @@ async function loadData() {
     DATA = json.promotions;
     const d = new Date(json.updatedAt);
     document.getElementById('updated').textContent = d.toLocaleString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+    await loadShops();
     render();
   } catch(e) {
     document.getElementById('cards').innerHTML = `<div class="state-box" style="color:#ff3b3b">⚠ Could not load data: ${e.message}</div>`;
