@@ -4,184 +4,502 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Miles Optimizer</title>
-<meta name="description" content="Find the best Flying Blue deals and maximize your miles value.">
-
+<meta name="description" content="Vind de beste Flying Blue miles deals. Altijd actueel.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 <style>
-/* KEEPING YOUR ORIGINAL STYLES (unchanged except small additions) */
-body { font-family: 'Inter', sans-serif; background:#f2f1ed; margin:0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f2f1ed;
+  --white: #ffffff;
+  --border: #e5e5e5;
+  --border2: #d0d0d0;
+  --text: #111111;
+  --muted: #666666;
+  --muted2: #999999;
+  --accent: #0070f3;
+  --accent-dim: #e8f0fe;
+  --hot: #e63946;
+  --hot-dim: #fdecea;
+  --green: #2d9c5f;
+  --green-dim: #e6f7ee;
+  --amber: #e8800a;
+  --amber-dim: #fef3e2;
+  --purple: #7c3aed;
+  --purple-dim: #f3effe;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
+}
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; font-size: 15px; line-height: 1.5; }
 
-.hero { text-align:center; padding:60px 20px 30px; }
-.hero-title { font-size:56px; font-weight:800; }
-.hero-sub { color:#666; margin-top:10px; }
+/* PAGE SWITCHER */
+.page { display: none; }
+.page.active { display: block; }
 
-.btn-primary {
-  background:#0070f3;
-  color:white;
-  border:none;
-  border-radius:999px;
-  padding:12px 22px;
-  font-weight:600;
-  cursor:pointer;
+/* TOPBAR */
+.topbar { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+.topbar-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; height: 64px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+.logo { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: var(--text); text-decoration: none; }
+.logo svg { color: var(--accent); }
+.topbar-nav { display: flex; align-items: center; gap: 4px; }
+.nav-link { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; padding: 6px 14px; border-radius: 8px; border: none; background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; text-decoration: none; display: inline-block; }
+.nav-link:hover { color: var(--text); background: var(--bg); }
+.nav-link.active { color: var(--accent); background: var(--accent-dim); }
+.topbar-right { display: flex; justify-content: flex-end; font-size: 13px; color: var(--muted2); }
+
+/* HERO TITLE */
+.hero { text-align: center; padding: 48px 32px 32px; }
+.hero-title { font-size: 64px; font-weight: 800; letter-spacing: -0.03em; color: var(--text); line-height: 1.1; }
+.hero-sub { font-size: 16px; color: var(--muted); margin-top: 10px; }
+
+/* MAIN WRAPPER */
+.main-wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px 80px; }
+
+/* STATS */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.stat-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 24px 28px; box-shadow: var(--shadow); }
+.stat-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.stat-value { font-size: 48px; font-weight: 700; letter-spacing: -0.03em; color: var(--accent); }
+.stat-value.red { color: var(--hot); }
+.stat-value.amber { color: var(--amber); }
+.stat-value.green { color: var(--green); }
+
+/* FILTERS + SEARCH */
+.controls { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; }
+.filter-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.pill { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; padding: 8px 18px; border-radius: 100px; border: 1.5px solid var(--border2); background: var(--white); color: var(--muted); cursor: pointer; transition: all 0.15s; box-shadow: var(--shadow); }
+.pill:hover { border-color: var(--accent); color: var(--accent); }
+.pill.active { background: var(--accent); border-color: var(--accent); color: var(--white); font-weight: 600; box-shadow: 0 2px 8px rgba(0,112,243,0.3); }
+.controls-right { display: flex; gap: 10px; align-items: center; }
+.search-wrap { position: relative; }
+.search-wrap input { width: 240px; background: var(--white); border: 1.5px solid var(--border2); border-radius: 100px; padding: 9px 18px 9px 40px; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text); outline: none; transition: all 0.15s; box-shadow: var(--shadow); }
+.search-wrap input:focus { border-color: var(--accent); width: 300px; box-shadow: 0 0 0 3px rgba(0,112,243,0.1); }
+.search-wrap input::placeholder { color: var(--muted2); }
+.search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted2); pointer-events: none; width: 16px; height: 16px; }
+.sort-select { background: var(--white); border: 1.5px solid var(--border2); border-radius: 100px; padding: 9px 16px; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--muted); outline: none; cursor: pointer; box-shadow: var(--shadow); }
+
+/* RESULTS META */
+.results-meta { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+
+/* CARDS */
+.cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 1100px) { .cards-grid { grid-template-columns: repeat(2,1fr); } .stats-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 680px) { .cards-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2,1fr); } .hero-title { font-size: 40px; } .main-wrap { padding: 0 16px 80px; } .topbar-inner { padding: 0 16px; } }
+
+.card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.18s; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 12px; border-left: 4px solid transparent; min-height: 200px; }
+.card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); border-color: var(--border2); }
+.card.is-hot { border-left-color: var(--hot); }
+.card.is-offer { border-left-color: var(--amber); }
+.card.is-new { border-left-color: var(--purple); }
+.card.is-always { border-left-color: var(--green); }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.card-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; overflow: hidden; border: 1px solid var(--border); }
+.card-icon img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+.miles-badge { font-size: 13px; font-weight: 700; background: var(--accent); color: var(--white); border-radius: 100px; padding: 5px 12px; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,112,243,0.3); }
+.hot-badge { font-size: 13px; font-weight: 700; background: var(--hot); color: var(--white); border-radius: 100px; padding: 5px 12px; box-shadow: 0 2px 6px rgba(230,57,70,0.3); }
+.card-name { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; line-height: 1.3; }
+.card-desc { font-size: 14px; color: var(--muted); line-height: 1.6; flex: 1; }
+.card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 6px; }
+.card-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.tag { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.03em; text-transform: uppercase; }
+.tag-hot { background: var(--hot-dim); color: var(--hot); }
+.tag-always { background: var(--green-dim); color: var(--green); }
+.tag-temp { background: var(--amber-dim); color: var(--amber); }
+.tag-new { background: var(--purple-dim); color: var(--purple); }
+.tag-shop { background: var(--amber-dim); color: var(--amber); }
+.tag-cat { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+.expires { font-size: 12px; color: var(--muted2); white-space: nowrap; font-weight: 500; }
+.expires.urgent { color: var(--hot); font-weight: 600; }
+
+/* LOADING STATE */
+.state-box { grid-column: 1/-1; text-align: center; padding: 80px 24px; color: var(--muted); }
+.spinner { width: 24px; height: 24px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* MODAL */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(6px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--white); border-radius: 24px; width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto; padding: 32px; position: relative; transform: scale(0.96) translateY(8px); transition: transform 0.2s; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+.overlay.open .modal { transform: scale(1) translateY(0); }
+.modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid var(--border2); background: var(--bg); color: var(--muted); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.modal-close:hover { background: var(--border); color: var(--text); }
+.modal-head { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+.modal-logo { width: 64px; height: 64px; border-radius: 16px; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 28px; overflow: hidden; flex-shrink: 0; border: 1px solid var(--border); }
+.modal-logo img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+.modal-title { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--text); margin-bottom: 4px; }
+.modal-miles-big { font-size: 14px; font-weight: 700; color: var(--accent); }
+.modal-grid { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--bg); border-radius: 12px; overflow: hidden; margin-bottom: 24px; border: 1px solid var(--border); }
+.modal-cell { padding: 14px 16px; border-right: 1px solid var(--border); }
+.modal-cell:last-child { border-right: none; }
+.modal-cell-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted2); margin-bottom: 6px; }
+.modal-cell-val { font-size: 14px; font-weight: 600; color: var(--text); }
+.modal-cell-val.urgent { color: var(--hot); }
+.modal-section { margin-bottom: 20px; }
+.modal-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted2); margin-bottom: 8px; }
+.modal-section-text { font-size: 14px; color: var(--muted); line-height: 1.7; }
+.modal-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
+.modal-actions { display: flex; gap: 10px; }
+.btn-primary { flex: 1; background: var(--accent); color: var(--white); border: none; border-radius: 100px; padding: 14px 20px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.15s; text-decoration: none; box-shadow: 0 2px 8px rgba(0,112,243,0.3); }
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-secondary { background: var(--white); color: var(--muted); border: 1.5px solid var(--border2); border-radius: 100px; padding: 14px 20px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.15s; white-space: nowrap; }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+.btn-secondary.copied { color: var(--green); border-color: var(--green); }
+@media (max-width: 640px) {
+  .overlay { align-items: flex-end; padding: 0; }
+  .modal { border-radius: 24px 24px 0 0; max-height: 88vh; }
+  .modal-grid { grid-template-columns: 1fr; }
+  .modal-cell { border-right: none; border-bottom: 1px solid var(--border); }
+  .modal-cell:last-child { border-bottom: none; }
+  .modal-actions { flex-direction: column; }
 }
 
-.main { max-width:1100px; margin:auto; padding:20px; }
+/* FAQ PAGE */
+.faq-wrap { max-width: 760px; margin: 0 auto; padding: 0 32px 80px; }
+.faq-hero { text-align: center; padding: 48px 0 40px; }
+.faq-hero h1 { font-size: 48px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 12px; }
+.faq-hero p { font-size: 16px; color: var(--muted); }
+.faq-item { background: var(--white); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 10px; overflow: hidden; box-shadow: var(--shadow); }
+.faq-q { width: 100%; text-align: left; padding: 18px 22px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; color: var(--text); background: transparent; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: background 0.15s; }
+.faq-q:hover { background: var(--bg); }
+.faq-q .arrow { font-size: 12px; color: var(--muted2); transition: transform 0.2s; flex-shrink: 0; }
+.faq-item.open .faq-q .arrow { transform: rotate(180deg); }
+.faq-a { display: none; padding: 0 22px 18px; font-size: 14px; color: var(--muted); line-height: 1.75; border-top: 1px solid var(--border); padding-top: 16px; }
+.faq-item.open .faq-a { display: block; }
+.faq-section-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted2); margin: 32px 0 12px; }
 
-.stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:30px; }
-.stat { background:white; padding:20px; border-radius:12px; }
-.stat-label { font-size:12px; color:#666; }
-.stat-value { font-size:28px; font-weight:700; }
-
-.cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-
-.card {
-  background:white;
-  padding:16px;
-  border-radius:12px;
-  cursor:pointer;
-  transition:0.2s;
-}
-.card:hover { transform:translateY(-3px); }
-
-.best-box {
-  background:white;
-  padding:20px;
-  border-radius:12px;
-  margin-bottom:20px;
-}
+/* FOOTER */
+footer { background: var(--white); border-top: 1px solid var(--border); padding: 48px 32px 32px; margin-top: 40px; }
+.footer-inner { max-width: 1280px; margin: 0 auto; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+@media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; } }
+.footer-brand .logo { margin-bottom: 12px; display: inline-flex; }
+.footer-brand p { font-size: 13px; color: var(--muted); line-height: 1.7; max-width: 260px; }
+.footer-col h4 { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted2); margin-bottom: 14px; }
+.footer-col a { display: block; font-size: 14px; color: var(--muted); text-decoration: none; margin-bottom: 8px; transition: color 0.15s; }
+.footer-col a:hover { color: var(--accent); }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted2); flex-wrap: wrap; gap: 8px; }
+.footer-bottom a { color: var(--muted2); text-decoration: none; }
+.footer-bottom a:hover { color: var(--accent); }
 </style>
 </head>
-
 <body>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-title">Maximize your Flying Blue miles</div>
-  <div class="hero-sub">Find the highest-value deals instantly. Stop wasting miles on low returns.</div>
-  <button class="btn-primary" onclick="window.scrollTo({top:600,behavior:'smooth'})">
-    View best deals
-  </button>
-</div>
-
-<div class="main">
-
-<!-- STATS -->
-<div class="stats">
-  <div class="stat">
-    <div class="stat-label">Best deal today</div>
-    <div class="stat-value" id="s-best">—</div>
-  </div>
-  <div class="stat">
-    <div class="stat-label">Avg miles</div>
-    <div class="stat-value" id="s-avg">—</div>
-  </div>
-  <div class="stat">
-    <div class="stat-label">Hot deals</div>
-    <div class="stat-value" id="s-hot">—</div>
-  </div>
-  <div class="stat" id="expiring-box">
-    <div class="stat-label">Ending soon</div>
-    <div class="stat-value" id="s-expiring">—</div>
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="#" onclick="showPage('home')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 1.5 1.5L6 19l1.5 1.5L9 19l1-1v-3l3-2 6.2 6.3c.4.4.9.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"/></svg>
+      Miles Optimizer
+    </a>
+    <nav class="topbar-nav">
+      <button class="nav-link active" onclick="showPage('home',this)">Deals</button>
+      <button class="nav-link" onclick="showPage('faq',this)">Help & FAQ</button>
+    </nav>
+    <div class="topbar-right">Bijgewerkt: <span id="updated" style="color:var(--accent);margin-left:4px">laden...</span></div>
   </div>
 </div>
 
-<!-- BEST PICKS -->
-<div id="best-picks"></div>
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <h1 class="hero-title">Miles Optimizer</h1>
+    <p class="hero-sub">Alle Flying Blue deals op één plek. Altijd actueel.</p>
+  </div>
 
-<!-- SORT -->
-<select id="sort" onchange="render()">
-  <option value="miles">Best value</option>
-  <option value="hot">Hot</option>
-  <option value="expires">Ending soon</option>
-</select>
+  <div class="main-wrap">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Total Deals</div><div class="stat-value" id="s-total">—</div></div>
+      <div class="stat-card"><div class="stat-label">Hot Right Now</div><div class="stat-value red" id="s-hot">—</div></div>
+      <div class="stat-card"><div class="stat-label">Expiring Soon</div><div class="stat-value amber" id="s-expiring">—</div></div>
+      <div class="stat-card"><div class="stat-label">Always On</div><div class="stat-value green" id="s-always">—</div></div>
+    </div>
 
-<!-- CARDS -->
-<div class="cards" id="cards"></div>
+    <div class="controls">
+      <div class="filter-pills">
+        <button class="pill active" onclick="setCategory('all',this)">All</button>
+        <button class="pill" onclick="setCategory('flight',this)">Flights</button>
+        <button class="pill" onclick="setCategory('hotel',this)">Hotels</button>
+        <button class="pill" onclick="setCategory('car',this)">Car</button>
+        <button class="pill" onclick="setCategory('shopping',this)">Shopping</button>
+        <button class="pill" onclick="setCategory('dining',this)">Dining</button>
+        <button class="pill" onclick="setCategory('finance',this)">Finance</button>
+        <button class="pill" onclick="setCategory('shop',this)">Shop for Miles</button>
+      </div>
+      <div class="controls-right">
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" id="search" placeholder="Search deals..." oninput="render()">
+        </div>
+        <select class="sort-select" id="sort" onchange="render()">
+          <option value="hot">Newest</option>
+          <option value="expires">Expiring soon</option>
+          <option value="miles">Most miles</option>
+        </select>
+      </div>
+    </div>
 
+    <div class="results-meta" id="results-meta"></div>
+    <div class="cards-grid" id="cards">
+      <div class="state-box"><div class="spinner"></div>Deals laden...</div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ PAGE -->
+<div class="page" id="page-faq">
+  <div class="faq-wrap">
+    <div class="faq-hero">
+      <h1>Help & FAQ</h1>
+      <p>Alles wat je moet weten over Miles Optimizer en Flying Blue deals.</p>
+    </div>
+
+    <div class="faq-section-title">Over Miles Optimizer</div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Wat is Miles Optimizer? <span class="arrow">▼</span></button>
+      <div class="faq-a">Miles Optimizer is een overzichtspagina die alle actuele Flying Blue deals verzamelt op één plek. Je vindt hier promoties, Shop for Miles aanbiedingen en Earn Online deals — allemaal gesorteerd en gefilterd zodat je nooit een deal mist.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Hoe vaak worden de deals bijgewerkt? <span class="arrow">▼</span></button>
+      <div class="faq-a">De Shop for Miles en Earn Online deals worden automatisch 1x per dag bijgewerkt. Handmatige promoties (vluchten, hotels, speciale acties) worden regelmatig handmatig toegevoegd vanuit de Flying Blue nieuwsbrief.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Is Miles Optimizer officieel van Flying Blue? <span class="arrow">▼</span></button>
+      <div class="faq-a">Nee, Miles Optimizer is een onafhankelijk project en heeft geen officiële band met Air France-KLM of Flying Blue. De informatie wordt verzameld van publiek beschikbare Flying Blue pagina's.</div>
+    </div>
+
+    <div class="faq-section-title">Flying Blue Miles</div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Wat zijn Flying Blue miles waard? <span class="arrow">▼</span></button>
+      <div class="faq-a">De waarde van Flying Blue miles varieert afhankelijk van hoe je ze inzet. Als vuistregel geldt: 1 mile ≈ €0.01, dus 1.000 miles ≈ €10. Bij premium vluchten of upgrades kan de waarde hoger liggen.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Hoe activeer ik een deal? <span class="arrow">▼</span></button>
+      <div class="faq-a">Klik op een deal om de details te zien. Vervolgens klik je op "Go to Flying Blue" om naar de juiste pagina te gaan. Log in met je Flying Blue account en doe je aankoop of boeking via de link — dan worden de miles automatisch bijgeschreven.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Wat is het verschil tussen Shop for Miles en Earn Online? <span class="arrow">▼</span></button>
+      <div class="faq-a">Shop for Miles is het officiële Flying Blue shopping portaal op flyingblue.com. Earn Online (earnonline.flyingblue.com) is een apart platform met meer retailers, voornamelijk voor online aankopen. Beide platforms geven je miles op aankopen bij deelnemende partners.</div>
+    </div>
+
+    <div class="faq-section-title">Technisch</div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Waarom zie ik sommige deals niet meer? <span class="arrow">▼</span></button>
+      <div class="faq-a">Deals kunnen verlopen zijn of zijn verwijderd door Flying Blue. De cache wordt 1x per dag ververst, dus het kan zijn dat een deal tot 24 uur zichtbaar blijft nadat deze officieel is verlopen.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Hoe meld ik een fout of ontbrekende deal? <span class="arrow">▼</span></button>
+      <div class="faq-a">Je kunt contact opnemen via het e-mailadres in de footer. Vermeld welke deal ontbreekt of incorrect is, en we kijken er zo snel mogelijk naar.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="logo" href="#" onclick="showPage('home')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21 4 19.5 2.5c-1.5-1.5-3.5-1.5-5 0L11 6 2.8 4.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 1.5 1.5L6 19l1.5 1.5L9 19l1-1v-3l3-2 6.2 6.3c.4.4.9.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"/></svg>
+          Miles Optimizer
+        </a>
+        <p>Alle Flying Blue deals op één plek. Onafhankelijk en altijd actueel.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Deals</h4>
+        <a href="#" onclick="setCategory('flight',null);showPage('home')">Vluchten</a>
+        <a href="#" onclick="setCategory('hotel',null);showPage('home')">Hotels</a>
+        <a href="#" onclick="setCategory('shopping',null);showPage('home')">Shopping</a>
+        <a href="#" onclick="setCategory('shop',null);showPage('home')">Shop for Miles</a>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <a href="#" onclick="showPage('faq')">Help & FAQ</a>
+        <a href="https://www.flyingblue.com" target="_blank">Flying Blue</a>
+        <a href="https://earnonline.flyingblue.com" target="_blank">Earn Online</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:info@milesoptimizer.nl">info@milesoptimizer.nl</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Miles Optimizer — Onafhankelijk project, niet gelieerd aan Flying Blue of Air France-KLM.</span>
+      <span><a href="#">Privacy</a> · <a href="#">Disclaimer</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-head">
+      <div class="modal-logo" id="m-icon"></div>
+      <div>
+        <div class="modal-title" id="m-title"></div>
+        <div class="modal-miles-big" id="m-miles"></div>
+      </div>
+    </div>
+    <div class="modal-grid">
+      <div class="modal-cell"><div class="modal-cell-label">Partner</div><div class="modal-cell-val" id="m-partner"></div></div>
+      <div class="modal-cell"><div class="modal-cell-label">Verloopt</div><div class="modal-cell-val" id="m-expires"></div></div>
+      <div class="modal-cell"><div class="modal-cell-label">Tier</div><div class="modal-cell-val" id="m-tier"></div></div>
+    </div>
+    <div class="modal-section"><div class="modal-section-label">Over deze deal</div><div class="modal-section-text" id="m-desc"></div></div>
+    <div class="modal-section"><div class="modal-section-label">Hoe activeren</div><div class="modal-section-text" id="m-activate"></div></div>
+    <div class="modal-tags" id="m-tags"></div>
+    <div class="modal-actions">
+      <a class="btn-primary" id="m-link" href="https://flyingblue.com" target="_blank">
+        Go to Flying Blue
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      <button class="btn-secondary" id="m-copy" onclick="copyDeal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Kopieer
+      </button>
+    </div>
+  </div>
 </div>
 
 <script>
+const ICONS={flight:'✈️',hotel:'🏨',car:'🚗',shopping:'🛍️',dining:'🍽️',finance:'💳',shop:'🛒'};
+let DATA=[],activeCategory='all',currentDeal=null;
 
-let DATA = [];
+function showPage(page, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  else {
+    const links = document.querySelectorAll('.nav-link');
+    if(page==='home') links[0].classList.add('active');
+    if(page==='faq') links[1].classList.add('active');
+  }
+  window.scrollTo(0,0);
+}
+
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  item.classList.toggle('open');
+}
+
+function daysUntil(d){if(!d)return null;return Math.ceil((new Date(d)-new Date())/86400000);}
+function fmtExpiry(d){const days=daysUntil(d);if(days===null)return{label:'Geen verloopdatum',urgent:false};if(days<=0)return{label:'Verlopen',urgent:true};const h=Math.floor((new Date(d)-new Date())/3600000);if(h<48)return{label:`${h}u over`,urgent:true};return{label:`${days} dagen`,urgent:days<=7};}
+function fmtDate(d){if(!d)return'Geen verloopdatum';return new Date(d).toLocaleDateString('nl-NL',{day:'numeric',month:'short',year:'numeric'});}
+
+function setCategory(cat, el) {
+  activeCategory = cat;
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  if(el) el.classList.add('active');
+  else {
+    const pills = document.querySelectorAll('.pill');
+    const cats = ['all','flight','hotel','car','shopping','dining','finance','shop'];
+    const idx = cats.indexOf(cat);
+    if(idx>=0) pills[idx].classList.add('active');
+  }
+  render();
+}
+
+function openModal(idx){
+  const deal=DATA[idx];currentDeal=deal;
+  const exp=fmtExpiry(deal.expires);
+  const iconEl=document.getElementById('m-icon');
+  if(deal.logo){iconEl.innerHTML=`<img src="${deal.logo}" alt="${deal.title}" onerror="this.parentElement.textContent='🛒'">`;}
+  else{iconEl.textContent=ICONS[deal.category]||'⭐';}
+  document.getElementById('m-miles').textContent=deal.miles;
+  document.getElementById('m-title').textContent=deal.title;
+  document.getElementById('m-partner').textContent=deal.partner||'—';
+  const exEl=document.getElementById('m-expires');exEl.textContent=fmtDate(deal.expires);exEl.className='modal-cell-val'+(exp.urgent?' urgent':'');
+  document.getElementById('m-tier').textContent=deal.tier&&deal.tier!=='all'?deal.tier.charAt(0).toUpperCase()+deal.tier.slice(1)+'+':'Alle tiers';
+  document.getElementById('m-desc').textContent=deal.description||'—';
+  document.getElementById('m-activate').textContent=deal.activate||'Log in op je Flying Blue account en activeer deze aanbieding vanuit je dashboard.';
+  const tags=[];
+  if(deal.hot)tags.push('<span class="tag tag-hot">HOT</span>');
+  if(deal.category==='shop')tags.push('<span class="tag tag-shop">Shop for Miles</span>');
+  else if(deal.type==='temp')tags.push('<span class="tag tag-temp">Tijdelijk</span>');
+  else if(deal.type==='new')tags.push('<span class="tag tag-new">Nieuw</span>');
+  else tags.push('<span class="tag tag-always">Altijd actief</span>');
+  if(deal.tier&&deal.tier!=='all')tags.push(`<span class="tag tag-cat">${deal.tier}+</span>`);
+  document.getElementById('m-tags').innerHTML=tags.join('');
+  document.getElementById('m-link').href=deal.url||'https://flyingblue.com/nl/earn/promotions';
+  const cb=document.getElementById('m-copy');cb.classList.remove('copied');cb.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kopieer';
+  document.getElementById('overlay').classList.add('open');document.body.style.overflow='hidden';
+}
+
+function closeModal(){document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
+function handleOverlayClick(e){if(e.target===document.getElementById('overlay'))closeModal();}
+function copyDeal(){
+  if(!currentDeal)return;
+  navigator.clipboard.writeText(`${currentDeal.title}\n${currentDeal.miles} — ${currentDeal.partner}\n${currentDeal.description}`).then(()=>{
+    const btn=document.getElementById('m-copy');btn.classList.add('copied');btn.innerHTML='✓ Gekopieerd!';
+    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kopieer';},2000);
+  });
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
 function render(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const sort=document.getElementById('sort').value;
+  document.getElementById('s-total').textContent=DATA.length;
+  document.getElementById('s-hot').textContent=DATA.filter(d=>d.hot).length;
+  document.getElementById('s-expiring').textContent=DATA.filter(d=>{const x=daysUntil(d.expires);return x!==null&&x<=14&&x>0;}).length;
+  document.getElementById('s-always').textContent=DATA.filter(d=>d.type==='always').length;
 
-  const sort = document.getElementById('sort').value;
+  let cards=DATA.filter(d=>{
+    const matchCat=activeCategory==='all'||d.category===activeCategory;
+    const matchQ=!q||d.title.toLowerCase().includes(q)||(d.partner&&d.partner.toLowerCase().includes(q));
+    return matchCat&&matchQ;
+  });
 
-  const milesValues = DATA.map(d => parseInt(d.miles)||0).filter(v=>v>0);
-  const best = Math.max(...milesValues,0);
-  const avg = milesValues.length ? Math.round(milesValues.reduce((a,b)=>a+b,0)/milesValues.length) : 0;
+  if(sort==='expires'){cards.sort((a,b)=>{const da=daysUntil(a.expires),db=daysUntil(b.expires);if(da===null)return 1;if(db===null)return -1;return da-db;});}
+  else if(sort==='miles'){cards.sort((a,b)=>(parseInt(b.miles)||0)-(parseInt(a.miles)||0));}
+  else{cards.sort((a,b)=>(b.hot?1:0)-(a.hot?1:0));}
 
-  const expiring = DATA.filter(d=>{
-    if(!d.expires) return false;
-    return (new Date(d.expires)-new Date())/86400000 < 14;
-  }).length;
+  document.getElementById('results-meta').textContent=`${cards.length} deal${cards.length!==1?'s':''} gevonden`;
+  const el=document.getElementById('cards');
+  if(!cards.length){el.innerHTML='<div class="state-box">Geen deals gevonden.</div>';return;}
 
-  document.getElementById('s-best').textContent = best + " miles";
-  document.getElementById('s-avg').textContent = avg + " miles";
-  document.getElementById('s-hot').textContent = DATA.filter(d=>d.hot).length;
-  document.getElementById('s-expiring').textContent = expiring;
-
-  document.getElementById('expiring-box').style.display = expiring ? 'block':'none';
-
-  let cards = [...DATA];
-
-  if(sort==="miles") cards.sort((a,b)=>(parseInt(b.miles)||0)-(parseInt(a.miles)||0));
-  if(sort==="hot") cards.sort((a,b)=>(b.hot?1:0)-(a.hot?1:0));
-  if(sort==="expires") cards.sort((a,b)=>new Date(a.expires)-new Date(b.expires));
-
-  renderBest();
-
-  document.getElementById('cards').innerHTML = cards.map(c=>{
-
-    const high = parseInt(c.miles) >= 50;
-
-    return `
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;">
-        <strong>${c.title}</strong>
-        <div style="text-align:right;">
-          <div style="font-size:20px;font-weight:800;color:${high?'red':'#0070f3'}">${c.miles}</div>
-          <div style="font-size:11px;color:#999">miles / €10</div>
-        </div>
-      </div>
-      <div style="color:#666;margin-top:6px;">
-        ${c.description}
-        ${high ? '<br><b style="color:green">High value deal</b>' : ''}
-      </div>
+  el.innerHTML=cards.map(c=>{
+    const idx=DATA.indexOf(c);
+    const exp=fmtExpiry(c.expires);
+    const cardClass=c.hot?'card is-hot':c.type==='temp'?'card is-offer':c.type==='new'?'card is-new':'card is-always';
+    const iconHtml=c.logo?`<div class="card-icon"><img src="${c.logo}" alt="${c.title}" onerror="this.parentElement.textContent='🛒'"></div>`:`<div class="card-icon">${ICONS[c.category]||'⭐'}</div>`;
+    const badgeHtml=c.hot?`<span class="hot-badge">HOT • ${c.miles}</span>`:`<span class="miles-badge">${c.miles}</span>`;
+    const typeTag=c.category==='shop'?'<span class="tag tag-shop">Shop</span>':c.type==='temp'?'<span class="tag tag-temp">Limited time</span>':c.type==='new'?'<span class="tag tag-new">New</span>':'<span class="tag tag-always">Always on</span>';
+    const expHtml=exp.label!=='Geen verloopdatum'?`<span class="expires${exp.urgent?' urgent':''}">⌛ ${exp.label}</span>`:'';
+    return `<div class="${cardClass}" onclick="openModal(${idx})">
+      <div class="card-top">${iconHtml}${badgeHtml}</div>
+      <div class="card-name">${c.title}</div>
+      <div class="card-desc">${c.description}</div>
+      <div class="card-footer"><div class="card-tags">${typeTag}<span class="tag tag-cat">${c.partner}</span></div>${expHtml}</div>
     </div>`;
   }).join('');
 }
 
-function renderBest(){
-  const best = [...DATA]
-    .sort((a,b)=>(parseInt(b.miles)||0)-(parseInt(a.miles)||0))
-    .slice(0,3);
-
-  document.getElementById('best-picks').innerHTML = `
-    <div class="best-box">
-      <strong>Best deals right now</strong>
-      ${best.map(d=>`
-        <div style="display:flex;justify-content:space-between;padding:6px 0;">
-          <span>${d.title}</span>
-          <strong>${d.miles}</strong>
-        </div>
-      `).join('')}
-    </div>
-  `;
+async function loadShops(){
+  try{
+    const r1=await fetch('/api/scrape-shops');
+    if(r1.ok){const{shops}=await r1.json();shops.forEach(s=>DATA.push({title:s.name,miles:s.miles,description:`Verdien miles bij ${s.name} via Shop for Miles. ${s.miles} per aankoop.`,partner:s.name,category:'shop',type:'always',hot:false,expires:null,tier:'all',url:s.url,logo:s.logo,source:'scrape',activate:'Klik op "Go to Flying Blue" om naar de Shop for Miles pagina te gaan. Doe je aankoop via de link en de miles worden automatisch bijgeschreven.'}));}
+    const r2=await fetch('/api/earn-online');
+    if(r2.ok){const{shops:es}=await r2.json();es.forEach(s=>DATA.push({title:s.name,miles:s.miles,description:s.milesWas?`Was: ${s.milesWas} — nu ${s.miles} per aankoop.`:`Verdien ${s.miles} bij ${s.name}.`,partner:s.name,category:'shop',type:s.isOffer?'temp':'always',hot:s.isOffer,expires:null,tier:'all',url:s.url,logo:s.logo,source:'earn',activate:'Klik op "Go to Flying Blue" om naar de Earn Online pagina te gaan en je aankoop te doen.'}));}
+  }catch(e){console.warn('Shops laden mislukt:',e);}
 }
 
-/* DEMO DATA */
-DATA = [
-  {title:"Tommy Hilfiger", miles:66, description:"Boosted deal", hot:true},
-  {title:"Agoda", miles:49, description:"Travel booking", hot:true},
-  {title:"Adidas", miles:44, description:"Clothing", hot:false}
-];
-
-render();
-
+async function loadData(){
+  try{
+    const res=await fetch('/api/promotions');
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);
+    const json=await res.json();
+    DATA=json.promotions.map(d=>({...d,source:'promotions'}));
+    const d=new Date(json.updatedAt);
+    document.getElementById('updated').textContent=d.toLocaleString('nl-NL',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    await loadShops();
+    render();
+  }catch(e){
+    document.getElementById('cards').innerHTML=`<div class="state-box" style="color:var(--hot)">⚠ Kon data niet laden: ${e.message}</div>`;
+    document.getElementById('updated').textContent='fout';
+  }
+}
+loadData();
 </script>
-
 </body>
 </html>
