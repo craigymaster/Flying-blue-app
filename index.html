@@ -10,430 +10,357 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #0d0f14; --surface: #161920; --surface2: #1e2230;
-  --border: rgba(255,255,255,0.06); --border2: rgba(255,255,255,0.12);
-  --text: #f0ede6; --muted: #5a6270; --muted2: #8a9099;
-  --accent: #00b4ff; --accent-dim: rgba(0,180,255,0.12);
-  --hot: #ff3b3b; --hot-dim: rgba(255,59,59,0.15);
-  --green: #1db954; --green-dim: rgba(29,185,84,0.15);
-  --amber: #f5a623; --amber-dim: rgba(245,166,35,0.15);
-  --purple: #8b5cf6; --purple-dim: rgba(139,92,246,0.15);
+  --bg: #0d0f14;
+  --surface: #161920;
+  --surface2: #1e2230;
+  --surface3: #252a3a;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text: #f0ede6;
+  --muted: #5a6270;
+  --muted2: #8a9099;
+  --accent: #00b4ff;
+  --accent-dim: rgba(0,180,255,0.1);
+  --accent-border: rgba(0,180,255,0.3);
+  --hot: #ff3b3b;
+  --hot-dim: rgba(255,59,59,0.12);
+  --green: #1db954;
+  --green-dim: rgba(29,185,84,0.12);
+  --amber: #f5a623;
+  --amber-dim: rgba(245,166,35,0.12);
+  --purple: #8b5cf6;
+  --purple-dim: rgba(139,92,246,0.12);
 }
 body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; font-size: 14px; line-height: 1.5; }
-nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 32px; border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 100; }
-.nav-logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
-.nav-logo svg { color: var(--accent); }
-.nav-meta { font-size: 12px; color: var(--muted); }
-.nav-meta span { color: var(--accent); }
-main { max-width: 1280px; margin: 0 auto; padding: 32px 32px 80px; }
-.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; transition: border-color 0.2s; }
-.stat-card:hover { border-color: var(--border2); }
-.stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-.stat-value { font-size: 32px; font-weight: 700; letter-spacing: -0.03em; }
-.stat-value.blue { color: var(--accent); } .stat-value.red { color: var(--hot); } .stat-value.amber { color: var(--amber); } .stat-value.green { color: var(--green); }
-.controls { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
-.filter-pills { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
-.pill { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; padding: 7px 16px; border-radius: 100px; border: 1px solid var(--border2); background: transparent; color: var(--muted2); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-.pill:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
-.pill.active { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 600; }
-.controls-right { display: flex; gap: 10px; align-items: center; }
-.search-wrap { position: relative; }
-.search-wrap input { width: 220px; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 8px 14px 8px 36px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text); outline: none; transition: border-color 0.15s, width 0.2s; }
-.search-wrap input:focus { border-color: var(--accent); width: 280px; }
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 28px; height: 56px; border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 100; }
+.logo { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+.logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.tabs { display: flex; gap: 2px; }
+.tab-btn { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; padding: 6px 14px; border-radius: 8px; border: none; background: transparent; color: var(--muted2); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+.tab-btn:hover { color: var(--text); background: var(--surface2); }
+.tab-btn.active { color: var(--text); background: var(--surface2); }
+.topbar-meta { font-size: 12px; color: var(--muted); }
+.topbar-meta span { color: var(--accent); }
+.layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 56px); }
+.sidebar { border-right: 1px solid var(--border); padding: 24px 16px; position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto; }
+.sidebar-section { margin-bottom: 28px; }
+.sidebar-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; padding: 0 8px; }
+.cat-item { display: flex; align-items: center; justify-content: space-between; padding: 7px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--muted2); margin-bottom: 1px; transition: all 0.12s; user-select: none; }
+.cat-item:hover { background: var(--surface2); color: var(--text); }
+.cat-item.active { background: var(--surface2); color: var(--text); font-weight: 500; }
+.cat-left { display: flex; align-items: center; gap: 8px; }
+.cat-icon { font-size: 13px; width: 18px; text-align: center; }
+.cat-count { font-size: 11px; color: var(--muted); background: var(--surface2); padding: 1px 7px; border-radius: 10px; }
+.cat-item.active .cat-count { background: var(--surface3); }
+.main { padding: 24px 28px; }
+.main-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.search-wrap { flex: 1; position: relative; max-width: 400px; }
+.search-wrap input { width: 100%; background: var(--surface); border: 1px solid var(--border2); border-radius: 9px; padding: 9px 14px 9px 36px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--text); outline: none; transition: border-color 0.15s; }
+.search-wrap input:focus { border-color: var(--accent-border); }
 .search-wrap input::placeholder { color: var(--muted); }
-.search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; width: 15px; height: 15px; }
-.sort-select { background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 8px 12px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--muted2); outline: none; cursor: pointer; }
-.results-meta { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
-.results-meta b { color: var(--text); font-weight: 600; }
-.cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-@media (max-width: 1024px) { .cards-grid { grid-template-columns: repeat(2,1fr); } .stats-grid { grid-template-columns: repeat(2,1fr); } }
-@media (max-width: 640px) { .cards-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2,1fr); } main { padding: 20px 16px 60px; } nav { padding: 14px 16px; } }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 12px; cursor: pointer; }
-.card:hover { border-color: rgba(0,180,255,0.35); transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(0,180,255,0.1); }
-.card.is-hot { border-left: 3px solid var(--hot); }
-.card.is-always { border-left: 3px solid var(--green); }
-.card.is-new { border-left: 3px solid var(--purple); }
-.card.is-shop { border-left: 3px solid var(--amber); }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 14px; height: 14px; pointer-events: none; }
+.sort-select { background: var(--surface); border: 1px solid var(--border2); border-radius: 9px; padding: 9px 12px; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--muted2); outline: none; cursor: pointer; }
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+.stat-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.stat-value { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; }
+.stat-value.blue { color: var(--accent); } .stat-value.red { color: var(--hot); } .stat-value.amber { color: var(--amber); } .stat-value.green { color: var(--green); }
+.results-meta { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+.results-meta b { color: var(--muted2); font-weight: 500; }
+.cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+@media (max-width: 1200px) { .cards-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .sidebar { display: none; } .stats-row { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 580px) { .cards-grid { grid-template-columns: 1fr; } .main { padding: 16px; } }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; transition: border-color 0.15s, transform 0.12s; display: flex; flex-direction: column; gap: 10px; }
+.card:hover { border-color: var(--border2); transform: translateY(-1px); }
+.card.is-hot { border-left: 2px solid var(--hot); }
+.card.is-offer { border-left: 2px solid var(--amber); }
+.card.is-new { border-left: 2px solid var(--purple); }
 .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
-.card-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; overflow: hidden; }
+.card-icon { width: 34px; height: 34px; border-radius: 9px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; overflow: hidden; }
 .card-icon img { width: 100%; height: 100%; object-fit: contain; }
-.miles-badge { font-size: 12px; font-weight: 700; background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(0,180,255,0.25); border-radius: 100px; padding: 4px 12px; white-space: nowrap; letter-spacing: -0.01em; }
-.card-title { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.3; letter-spacing: -0.01em; }
-.card-desc { font-size: 13px; color: var(--muted2); line-height: 1.55; flex: 1; }
-.card-footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
-.tags { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
-.tag { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 5px; letter-spacing: 0.02em; text-transform: uppercase; }
+.miles-badge { font-size: 11px; font-weight: 600; background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-border); border-radius: 100px; padding: 3px 10px; white-space: nowrap; }
+.hot-badge { font-size: 11px; font-weight: 600; background: var(--hot-dim); color: var(--hot); border: 1px solid rgba(255,59,59,0.25); border-radius: 100px; padding: 3px 10px; }
+.card-name { font-size: 14px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; line-height: 1.3; }
+.card-desc { font-size: 12px; color: var(--muted2); line-height: 1.55; flex: 1; }
+.card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 4px; }
+.card-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.02em; text-transform: uppercase; }
 .tag-hot { background: var(--hot-dim); color: var(--hot); }
-.tag-temp { background: var(--hot-dim); color: var(--hot); }
 .tag-always { background: var(--green-dim); color: var(--green); }
+.tag-temp { background: var(--amber-dim); color: var(--amber); }
 .tag-new { background: var(--purple-dim); color: var(--purple); }
-.tag-partner { background: var(--surface2); color: var(--muted2); }
-.tag-tier { background: var(--accent-dim); color: var(--accent); }
 .tag-shop { background: var(--amber-dim); color: var(--amber); }
-.expires { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.tag-cat { background: var(--surface2); color: var(--muted2); }
+.expires { font-size: 11px; color: var(--muted); white-space: nowrap; }
 .expires.urgent { color: var(--hot); }
-.state-box { grid-column: 1/-1; text-align: center; padding: 80px 24px; color: var(--muted); font-size: 14px; }
-.spinner { width: 24px; height: 24px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 16px; }
+.state-box { grid-column: 1/-1; text-align: center; padding: 60px 24px; color: var(--muted); }
+.spinner { width: 20px; height: 20px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 12px; }
 @keyframes spin { to { transform: rotate(360deg); } }
-footer { border-top: 1px solid var(--border); margin-top: 64px; padding-top: 24px; text-align: center; font-size: 12px; color: var(--muted); line-height: 2; }
-footer a { color: var(--muted); text-decoration: underline; }
-
-/* MODAL */
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
 .overlay.open { opacity: 1; pointer-events: all; }
-.modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 20px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; padding: 28px; position: relative; transform: scale(0.95); transition: transform 0.2s ease-out; }
-.overlay.open .modal { transform: scale(1); }
-.modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border2); background: var(--surface2); color: var(--muted2); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-.modal-close:hover { color: var(--text); border-color: var(--border2); background: var(--surface2); }
-.modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-.modal-icon { width: 48px; height: 48px; border-radius: 14px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 22px; overflow: hidden; }
-.modal-icon img { width: 100%; height: 100%; object-fit: contain; }
-.modal-miles { font-size: 14px; font-weight: 700; background: var(--accent); color: #000; border-radius: 100px; padding: 6px 16px; letter-spacing: -0.01em; }
-.modal-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); margin-bottom: 16px; line-height: 1.2; }
-.modal-details { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--surface2); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
-.modal-detail { padding: 14px 16px; border-right: 1px solid var(--border); }
-.modal-detail:last-child { border-right: none; }
-.detail-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-.detail-value { font-size: 14px; font-weight: 600; color: var(--text); }
-.detail-value.urgent { color: var(--hot); }
-.modal-section { margin-bottom: 20px; }
-.section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-.section-text { font-size: 14px; color: var(--muted2); line-height: 1.7; }
-.modal-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; }
-.modal-actions { display: flex; gap: 10px; }
-.btn-primary { flex: 1; background: var(--accent); color: #000; border: none; border-radius: 100px; padding: 14px 20px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: opacity 0.15s; text-decoration: none; }
+.modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 18px; width: 100%; max-width: 520px; max-height: 88vh; overflow-y: auto; padding: 26px; position: relative; transform: translateY(8px); transition: transform 0.2s; }
+.overlay.open .modal { transform: translateY(0); }
+.modal-close { position: absolute; top: 14px; right: 14px; width: 28px; height: 28px; border-radius: 7px; border: 1px solid var(--border2); background: var(--surface2); color: var(--muted2); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.modal-close:hover { color: var(--text); }
+.modal-head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.modal-logo { width: 48px; height: 48px; border-radius: 12px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 20px; overflow: hidden; flex-shrink: 0; }
+.modal-logo img { width: 100%; height: 100%; object-fit: contain; }
+.modal-head-info { flex: 1; }
+.modal-title { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); margin-bottom: 3px; }
+.modal-miles-big { font-size: 13px; font-weight: 600; color: var(--accent); }
+.modal-grid { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--surface2); border-radius: 10px; overflow: hidden; margin-bottom: 20px; }
+.modal-cell { padding: 12px 14px; border-right: 1px solid var(--border); }
+.modal-cell:last-child { border-right: none; }
+.modal-cell-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+.modal-cell-val { font-size: 13px; font-weight: 600; color: var(--text); }
+.modal-cell-val.urgent { color: var(--hot); }
+.modal-section { margin-bottom: 18px; }
+.modal-section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.modal-section-text { font-size: 13px; color: var(--muted2); line-height: 1.7; }
+.modal-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+.modal-actions { display: flex; gap: 8px; }
+.btn-primary { flex: 1; background: var(--accent); color: #000; border: none; border-radius: 100px; padding: 13px 18px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; transition: opacity 0.15s; text-decoration: none; }
 .btn-primary:hover { opacity: 0.88; }
-.btn-secondary { background: transparent; color: var(--muted2); border: 1px solid var(--border2); border-radius: 100px; padding: 14px 20px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.15s; white-space: nowrap; }
-.btn-secondary:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.btn-secondary { background: transparent; color: var(--muted2); border: 1px solid var(--border2); border-radius: 100px; padding: 13px 18px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: all 0.15s; white-space: nowrap; }
+.btn-secondary:hover { color: var(--text); }
 .btn-secondary.copied { color: var(--green); border-color: var(--green); }
-
 @media (max-width: 640px) {
   .overlay { align-items: flex-end; padding: 0; }
-  .modal { border-radius: 20px 20px 0 0; max-height: 85vh; }
-  .modal-details { grid-template-columns: 1fr; }
-  .modal-detail { border-right: none; border-bottom: 1px solid var(--border); }
-  .modal-detail:last-child { border-bottom: none; }
+  .modal { border-radius: 18px 18px 0 0; max-height: 88vh; }
+  .modal-grid { grid-template-columns: 1fr; }
+  .modal-cell { border-right: none; border-bottom: 1px solid var(--border); }
+  .modal-cell:last-child { border-bottom: none; }
   .modal-actions { flex-direction: column; }
 }
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-logo">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21 4 19 2c-2-2-4-2-5.5-.5L10 5 1.8 6.2c-.5.1-.9.5-.9 1 0 .3.1.6.3.8l2.9 3-.9 4.4c-.1.5.1 1 .5 1.3.3.2.6.3.9.3.2 0 .4 0 .6-.1l3.9-1.7 2.9 3c.2.2.5.3.8.3.5 0 .9-.4 1-.9z"/></svg>
-    Miles Optimizer
+<div class="topbar">
+  <div class="logo"><div class="logo-dot"></div>Miles Optimizer</div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('all',this)">Alle deals</button>
+    <button class="tab-btn" onclick="switchTab('shop',this)">Shop for Miles</button>
+    <button class="tab-btn" onclick="switchTab('earn',this)">Earn Online</button>
   </div>
-  <div class="nav-meta">Updated: <span id="updated">loading...</span></div>
-</nav>
+  <div class="topbar-meta">Bijgewerkt: <span id="updated">laden...</span></div>
+</div>
 
-<main>
-  <div class="stats-grid">
-    <div class="stat-card"><div class="stat-label">Total deals</div><div class="stat-value blue" id="s-total">—</div></div>
-    <div class="stat-card"><div class="stat-label">Hot right now</div><div class="stat-value red" id="s-hot">—</div></div>
-    <div class="stat-card"><div class="stat-label">Expiring soon</div><div class="stat-value amber" id="s-expiring">—</div></div>
-    <div class="stat-card"><div class="stat-label">Always on</div><div class="stat-value green" id="s-always">—</div></div>
-  </div>
-
-  <div class="controls">
-    <div class="filter-pills">
-      <button class="pill active" onclick="setCategory('all',this)">All</button>
-      <button class="pill" onclick="setCategory('flight',this)">✈ Flights</button>
-      <button class="pill" onclick="setCategory('hotel',this)">🏨 Hotels</button>
-      <button class="pill" onclick="setCategory('car',this)">🚗 Car</button>
-      <button class="pill" onclick="setCategory('shopping',this)">🛍 Shopping</button>
-      <button class="pill" onclick="setCategory('dining',this)">🍽 Dining</button>
-      <button class="pill" onclick="setCategory('finance',this)">💳 Finance</button>
-      <button class="pill" onclick="setCategory('shop',this)">🛒 Shop for Miles</button>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Categorie</div>
+      <div class="cat-item active" onclick="setFilter('category','all',this)"><div class="cat-left"><span class="cat-icon">✦</span>Alles</div><span class="cat-count" id="cnt-all">—</span></div>
+      <div class="cat-item" onclick="setFilter('category','flight',this)"><div class="cat-left"><span class="cat-icon">✈</span>Vluchten</div><span class="cat-count" id="cnt-flight">—</span></div>
+      <div class="cat-item" onclick="setFilter('category','hotel',this)"><div class="cat-left"><span class="cat-icon">🏨</span>Hotels</div><span class="cat-count" id="cnt-hotel">—</span></div>
+      <div class="cat-item" onclick="setFilter('category','shopping',this)"><div class="cat-left"><span class="cat-icon">🛍</span>Shopping</div><span class="cat-count" id="cnt-shopping">—</span></div>
+      <div class="cat-item" onclick="setFilter('category','dining',this)"><div class="cat-left"><span class="cat-icon">🍽</span>Dining</div><span class="cat-count" id="cnt-dining">—</span></div>
+      <div class="cat-item" onclick="setFilter('category','car',this)"><div class="cat-left"><span class="cat-icon">🚗</span>Auto</div><span class="cat-count" id="cnt-car">—</span></div>
+      <div class="cat-item" onclick="setFilter('category','finance',this)"><div class="cat-left"><span class="cat-icon">💳</span>Finance</div><span class="cat-count" id="cnt-finance">—</span></div>
+      <div class="cat-item" onclick="setFilter('category','shop',this)"><div class="cat-left"><span class="cat-icon">🛒</span>Shop for Miles</div><span class="cat-count" id="cnt-shop">—</span></div>
     </div>
-    <div class="controls-right">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Filter</div>
+      <div class="cat-item" onclick="setFilter('type','hot',this)"><div class="cat-left"><span class="cat-icon">🔥</span>Hot deals</div><span class="cat-count" id="cnt-hot">—</span></div>
+      <div class="cat-item" onclick="setFilter('type','expiring',this)"><div class="cat-left"><span class="cat-icon">⌛</span>Verloopt binnenkort</div><span class="cat-count" id="cnt-expiring">—</span></div>
+      <div class="cat-item" onclick="setFilter('type','new',this)"><div class="cat-left"><span class="cat-icon">✨</span>Nieuw</div><span class="cat-count" id="cnt-new">—</span></div>
+      <div class="cat-item" onclick="setFilter('type','always',this)"><div class="cat-left"><span class="cat-icon">♾</span>Altijd actief</div><span class="cat-count" id="cnt-always">—</span></div>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Totaal deals</div><div class="stat-value blue" id="s-total">—</div></div>
+      <div class="stat-card"><div class="stat-label">Hot right now</div><div class="stat-value red" id="s-hot">—</div></div>
+      <div class="stat-card"><div class="stat-label">Verloopt binnenkort</div><div class="stat-value amber" id="s-expiring">—</div></div>
+      <div class="stat-card"><div class="stat-label">Altijd actief</div><div class="stat-value green" id="s-always">—</div></div>
+    </div>
+    <div class="main-header">
       <div class="search-wrap">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" id="search" placeholder="Search deals..." oninput="render()">
+        <input type="text" id="search" placeholder="Zoek op partner of deal..." oninput="render()">
       </div>
       <select class="sort-select" id="sort" onchange="render()">
-        <option value="hot">Hot first</option>
-        <option value="expires">Expiring soon</option>
+        <option value="hot">Hot eerst</option>
+        <option value="expires">Verloopt binnenkort</option>
+        <option value="miles">Meeste miles</option>
       </select>
     </div>
-  </div>
+    <div class="results-meta"><b id="count">—</b> deals gevonden</div>
+    <div class="cards-grid" id="cards">
+      <div class="state-box"><div class="spinner"></div>Deals laden...</div>
+    </div>
+  </main>
+</div>
 
-  <div class="results-meta"><b id="count">—</b> deals found</div>
-  <div class="cards-grid" id="cards">
-    <div class="state-box"><div class="spinner"></div>Loading deals...</div>
-  </div>
-
-  <footer>
-    <p>Independent tool — not affiliated with Air France-KLM or Flying Blue.</p>
-    <p>Always verify terms at <a href="https://flyingblue.com" target="_blank">flyingblue.com</a> before booking.</p>
-    <p style="margin-top:4px">© 2026 Miles Optimizer</p>
-  </footer>
-</main>
-
-<!-- MODAL -->
 <div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
   <div class="modal" id="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-header">
-      <div class="modal-icon" id="m-icon"></div>
-      <div class="modal-miles" id="m-miles"></div>
-    </div>
-    <div class="modal-title" id="m-title"></div>
-    <div class="modal-details">
-      <div class="modal-detail"><div class="detail-label">Partner</div><div class="detail-value" id="m-partner"></div></div>
-      <div class="modal-detail"><div class="detail-label">Expires</div><div class="detail-value" id="m-expires"></div></div>
-      <div class="modal-detail"><div class="detail-label">Tier</div><div class="detail-value" id="m-tier"></div></div>
-    </div>
-    <div class="modal-section">
-      <div class="section-label">About this deal</div>
-      <div class="section-text" id="m-desc"></div>
-    </div>
-    <div class="modal-section">
-      <div class="section-label">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-        How to activate
+    <div class="modal-head">
+      <div class="modal-logo" id="m-icon"></div>
+      <div class="modal-head-info">
+        <div class="modal-title" id="m-title"></div>
+        <div class="modal-miles-big" id="m-miles"></div>
       </div>
-      <div class="section-text" id="m-activate"></div>
     </div>
+    <div class="modal-grid">
+      <div class="modal-cell"><div class="modal-cell-label">Partner</div><div class="modal-cell-val" id="m-partner"></div></div>
+      <div class="modal-cell"><div class="modal-cell-label">Verloopt</div><div class="modal-cell-val" id="m-expires"></div></div>
+      <div class="modal-cell"><div class="modal-cell-label">Tier</div><div class="modal-cell-val" id="m-tier"></div></div>
+    </div>
+    <div class="modal-section"><div class="modal-section-label">Over deze deal</div><div class="modal-section-text" id="m-desc"></div></div>
+    <div class="modal-section"><div class="modal-section-label">Hoe activeren</div><div class="modal-section-text" id="m-activate"></div></div>
     <div class="modal-tags" id="m-tags"></div>
     <div class="modal-actions">
-      <a class="btn-primary" id="m-link" href="https://flyingblue.com" target="_blank">
-        Go to Flying Blue
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      </a>
-      <button class="btn-secondary" id="m-copy" onclick="copyDeal()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        Copy deal info
-      </button>
+      <a class="btn-primary" id="m-link" href="https://flyingblue.com" target="_blank">Go to Flying Blue <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
+      <button class="btn-secondary" id="m-copy" onclick="copyDeal()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kopieer</button>
     </div>
   </div>
 </div>
 
 <script>
-const ICONS = { flight:'✈️', hotel:'🏨', car:'🚗', shopping:'🛍️', dining:'🍽️', finance:'💳', shop:'🛒' };
-let DATA = [];
-let activeCategory = 'all';
-let currentDeal = null;
+const ICONS={flight:'✈️',hotel:'🏨',car:'🚗',shopping:'🛍️',dining:'🍽️',finance:'💳',shop:'🛒'};
+let DATA=[],activeCategory='all',activeTypeFilter=null,activeTab='all',currentDeal=null;
 
-function daysUntil(d) {
-  if (!d) return null;
-  return Math.ceil((new Date(d) - new Date()) / 86400000);
-}
+function daysUntil(d){if(!d)return null;return Math.ceil((new Date(d)-new Date())/86400000);}
+function fmtExpiry(d){const days=daysUntil(d);if(days===null)return{label:'Geen verloopdatum',urgent:false};if(days<=0)return{label:'Verlopen',urgent:true};const h=Math.floor((new Date(d)-new Date())/3600000);if(h<48)return{label:`${h}u over`,urgent:true};return{label:`${days} dagen`,urgent:days<=7};}
+function fmtDate(d){if(!d)return'Geen verloopdatum';return new Date(d).toLocaleDateString('nl-NL',{day:'numeric',month:'short',year:'numeric'});}
 
-function fmtExpiry(d) {
-  const days = daysUntil(d);
-  if (days === null) return { label: 'No expiry', urgent: false };
-  if (days <= 0) return { label: 'Expired', urgent: true };
-  const h = Math.floor((new Date(d) - new Date()) / 3600000);
-  if (h < 48) return { label: `${h}h left`, urgent: true };
-  return { label: `${days} days left`, urgent: days <= 7 };
-}
-
-function fmtDate(d) {
-  if (!d) return 'No expiry';
-  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-}
-
-function setCategory(cat, btn) {
-  activeCategory = cat;
-  document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
+function switchTab(tab,btn){
+  activeTab=tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+  activeCategory='all';activeTypeFilter=null;
+  document.querySelectorAll('.cat-item').forEach(i=>i.classList.remove('active'));
+  document.querySelector('.cat-item').classList.add('active');
   render();
 }
 
-function openModal(deal) {
-  currentDeal = deal;
-  const exp = fmtExpiry(deal.expires);
-
-  const iconEl = document.getElementById('m-icon');
-  if (deal.logo) {
-    iconEl.innerHTML = `<img src="${deal.logo}" alt="${deal.title}" onerror="this.parentElement.textContent='🛒'">`;
-  } else {
-    iconEl.textContent = ICONS[deal.category] || '⭐';
-  }
-
-  document.getElementById('m-miles').textContent = deal.miles;
-  document.getElementById('m-title').textContent = deal.title;
-  document.getElementById('m-partner').textContent = deal.partner || '—';
-  const expiresEl = document.getElementById('m-expires');
-  expiresEl.textContent = fmtDate(deal.expires);
-  expiresEl.className = 'detail-value' + (exp.urgent ? ' urgent' : '');
-  document.getElementById('m-tier').textContent = deal.tier && deal.tier !== 'all' ? deal.tier.charAt(0).toUpperCase() + deal.tier.slice(1) + '+' : 'All tiers';
-  document.getElementById('m-desc').textContent = deal.description || '—';
-  document.getElementById('m-activate').textContent = deal.activate || 'Log in to your Flying Blue account and activate this offer from your dashboard. The miles will be credited within 48 hours after completing the required action.';
-
-  const tags = [];
-  if (deal.hot) tags.push('<span class="tag tag-hot">HOT</span>');
-  if (deal.category === 'shop') tags.push('<span class="tag tag-shop">Shop for Miles</span>');
-  else if (deal.type === 'temp') tags.push('<span class="tag tag-temp">Limited time</span>');
-  else if (deal.type === 'new') tags.push('<span class="tag tag-new">New</span>');
-  else tags.push('<span class="tag tag-always">Always on</span>');
-  if (deal.tier && deal.tier !== 'all') tags.push(`<span class="tag tag-tier">${deal.tier}+</span>`);
-  document.getElementById('m-tags').innerHTML = tags.join('');
-
-  document.getElementById('m-link').href = deal.url || 'https://flyingblue.com/nl/earn/promotions';
-  document.getElementById('m-copy').classList.remove('copied');
-  document.getElementById('m-copy').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy deal info';
-
-  document.getElementById('overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+function setFilter(type,val,el){
+  document.querySelectorAll('.cat-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  if(type==='category'){activeCategory=val;activeTypeFilter=null;}
+  else{activeTypeFilter=val;activeCategory='all';}
+  render();
 }
 
-function closeModal() {
-  document.getElementById('overlay').classList.remove('open');
-  document.body.style.overflow = '';
+function getTabData(){
+  if(activeTab==='shop')return DATA.filter(d=>d.category==='shop'&&d.source==='scrape');
+  if(activeTab==='earn')return DATA.filter(d=>d.category==='shop'&&d.source==='earn');
+  return DATA;
 }
 
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('overlay')) closeModal();
+function updateCounts(source){
+  const cats=['all','flight','hotel','shopping','dining','car','finance','shop'];
+  cats.forEach(cat=>{const el=document.getElementById('cnt-'+cat);if(el)el.textContent=cat==='all'?source.length:source.filter(d=>d.category===cat).length;});
+  const els={hot:source.filter(d=>d.hot).length,expiring:source.filter(d=>{const x=daysUntil(d.expires);return x!==null&&x<=14&&x>0;}).length,new:source.filter(d=>d.type==='new').length,always:source.filter(d=>d.type==='always').length};
+  Object.entries(els).forEach(([k,v])=>{const el=document.getElementById('cnt-'+k);if(el)el.textContent=v;});
 }
 
-function copyDeal() {
-  if (!currentDeal) return;
-  const text = `${currentDeal.title}\n${currentDeal.miles} — ${currentDeal.partner}\n${currentDeal.description}\nflyingblue.com/nl/earn/promotions`;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.getElementById('m-copy');
-    btn.classList.add('copied');
-    btn.innerHTML = '✓ Copied!';
-    setTimeout(() => {
-      btn.classList.remove('copied');
-      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy deal info';
-    }, 2000);
+function openModal(idx){
+  const deal=DATA[idx];currentDeal=deal;
+  const exp=fmtExpiry(deal.expires);
+  const iconEl=document.getElementById('m-icon');
+  if(deal.logo){iconEl.innerHTML=`<img src="${deal.logo}" alt="${deal.title}" onerror="this.parentElement.textContent='🛒'">`;}
+  else{iconEl.textContent=ICONS[deal.category]||'⭐';}
+  document.getElementById('m-miles').textContent=deal.miles;
+  document.getElementById('m-title').textContent=deal.title;
+  document.getElementById('m-partner').textContent=deal.partner||'—';
+  const exEl=document.getElementById('m-expires');exEl.textContent=fmtDate(deal.expires);exEl.className='modal-cell-val'+(exp.urgent?' urgent':'');
+  document.getElementById('m-tier').textContent=deal.tier&&deal.tier!=='all'?deal.tier.charAt(0).toUpperCase()+deal.tier.slice(1)+'+':'Alle tiers';
+  document.getElementById('m-desc').textContent=deal.description||'—';
+  document.getElementById('m-activate').textContent=deal.activate||'Log in op je Flying Blue account en activeer deze aanbieding vanuit je dashboard.';
+  const tags=[];
+  if(deal.hot)tags.push('<span class="tag tag-hot">HOT</span>');
+  if(deal.category==='shop')tags.push('<span class="tag tag-shop">Shop for Miles</span>');
+  else if(deal.type==='temp')tags.push('<span class="tag tag-temp">Tijdelijk</span>');
+  else if(deal.type==='new')tags.push('<span class="tag tag-new">Nieuw</span>');
+  else tags.push('<span class="tag tag-always">Altijd actief</span>');
+  if(deal.tier&&deal.tier!=='all')tags.push(`<span class="tag tag-cat">${deal.tier}+</span>`);
+  document.getElementById('m-tags').innerHTML=tags.join('');
+  document.getElementById('m-link').href=deal.url||'https://flyingblue.com/nl/earn/promotions';
+  const cb=document.getElementById('m-copy');cb.classList.remove('copied');cb.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kopieer';
+  document.getElementById('overlay').classList.add('open');document.body.style.overflow='hidden';
+}
+
+function closeModal(){document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
+function handleOverlayClick(e){if(e.target===document.getElementById('overlay'))closeModal();}
+function copyDeal(){
+  if(!currentDeal)return;
+  navigator.clipboard.writeText(`${currentDeal.title}\n${currentDeal.miles} — ${currentDeal.partner}\n${currentDeal.description}`).then(()=>{
+    const btn=document.getElementById('m-copy');btn.classList.add('copied');btn.innerHTML='✓ Gekopieerd!';
+    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kopieer';},2000);
   });
 }
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+function render(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const sort=document.getElementById('sort').value;
+  const source=getTabData();
+  updateCounts(source);
+  document.getElementById('s-total').textContent=DATA.length;
+  document.getElementById('s-hot').textContent=DATA.filter(d=>d.hot).length;
+  document.getElementById('s-expiring').textContent=DATA.filter(d=>{const x=daysUntil(d.expires);return x!==null&&x<=14&&x>0;}).length;
+  document.getElementById('s-always').textContent=DATA.filter(d=>d.type==='always').length;
 
-function render() {
-  const q = document.getElementById('search').value.toLowerCase();
-  const sort = document.getElementById('sort').value;
-
-  let cards = DATA.filter(d => {
-    const matchCat = activeCategory === 'all' || d.category === activeCategory;
-    const matchQ = !q || d.title.toLowerCase().includes(q) || (d.partner && d.partner.toLowerCase().includes(q));
-    return matchCat && matchQ;
+  let cards=source.filter(d=>{
+    const matchCat=activeCategory==='all'||d.category===activeCategory;
+    const matchType=!activeTypeFilter||(activeTypeFilter==='hot'&&d.hot)||(activeTypeFilter==='expiring'&&daysUntil(d.expires)!==null&&daysUntil(d.expires)<=14&&daysUntil(d.expires)>0)||(activeTypeFilter==='new'&&d.type==='new')||(activeTypeFilter==='always'&&d.type==='always');
+    const matchQ=!q||d.title.toLowerCase().includes(q)||(d.partner&&d.partner.toLowerCase().includes(q));
+    return matchCat&&matchType&&matchQ;
   });
 
-  if (sort === 'expires') {
-    cards.sort((a,b) => {
-      const da = daysUntil(a.expires), db = daysUntil(b.expires);
-      if (da===null) return 1; if (db===null) return -1;
-      return da - db;
-    });
-  } else {
-    cards.sort((a,b) => (b.hot?1:0)-(a.hot?1:0));
-  }
+  if(sort==='expires'){cards.sort((a,b)=>{const da=daysUntil(a.expires),db=daysUntil(b.expires);if(da===null)return 1;if(db===null)return -1;return da-db;});}
+  else if(sort==='miles'){cards.sort((a,b)=>(parseInt(b.miles)||0)-(parseInt(a.miles)||0));}
+  else{cards.sort((a,b)=>(b.hot?1:0)-(a.hot?1:0));}
 
-  document.getElementById('s-total').textContent = DATA.length;
-  document.getElementById('s-hot').textContent = DATA.filter(d=>d.hot).length;
-  document.getElementById('s-expiring').textContent = DATA.filter(d=>{ const x=daysUntil(d.expires); return x!==null&&x<=14&&x>0; }).length;
-  document.getElementById('s-always').textContent = DATA.filter(d=>d.type==='always').length;
-  document.getElementById('count').textContent = cards.length;
+  document.getElementById('count').textContent=cards.length;
+  const el=document.getElementById('cards');
+  if(!cards.length){el.innerHTML='<div class="state-box">Geen deals gevonden.</div>';return;}
 
-  const el = document.getElementById('cards');
-  if (!cards.length) {
-    el.innerHTML = '<div class="state-box">No deals found.</div>';
-    return;
-  }
-
-  el.innerHTML = cards.map((c) => {
-    const exp = fmtExpiry(c.expires);
-    const isShop = c.category === 'shop';
-    const cardClass = isShop ? 'card is-shop' : c.hot ? 'card is-hot' : c.type==='always' ? 'card is-always' : c.type==='new' ? 'card is-new' : 'card';
-
-    const iconHtml = c.logo
-      ? `<div class="card-icon"><img src="${c.logo}" alt="${c.title}" onerror="this.parentElement.textContent='🛒'"></div>`
-      : `<div class="card-icon">${ICONS[c.category]||'⭐'}</div>`;
-
-    const typeTag = c.hot ? '<span class="tag tag-hot">HOT</span>' : '';
-    const statusTag = isShop
-      ? '<span class="tag tag-shop">Shop for Miles</span>'
-      : c.type==='temp' ? '<span class="tag tag-temp">Limited time</span>'
-      : c.type==='new' ? '<span class="tag tag-new">New</span>'
-      : '<span class="tag tag-always">Always on</span>';
-    const tierTag = c.tier && c.tier!=='all' ? `<span class="tag tag-tier">${c.tier}+</span>` : '';
-    const expHtml = `<span class="expires${exp.urgent?' urgent':''}">${exp.label !== 'No expiry' ? '⌛ '+exp.label : ''}</span>`;
-
-    return `<div class="${cardClass}" onclick="openModal(DATA[${DATA.indexOf(c)}])">
-      <div class="card-top">
-        ${iconHtml}
-        <div class="miles-badge">${c.miles}</div>
-      </div>
-      <div class="card-title">${c.title}</div>
+  el.innerHTML=cards.map(c=>{
+    const idx=DATA.indexOf(c);
+    const exp=fmtExpiry(c.expires);
+    const cardClass=c.hot?'card is-hot':c.type==='temp'?'card is-offer':c.type==='new'?'card is-new':'card';
+    const iconHtml=c.logo?`<div class="card-icon"><img src="${c.logo}" alt="${c.title}" onerror="this.parentElement.textContent='🛒'"></div>`:`<div class="card-icon">${ICONS[c.category]||'⭐'}</div>`;
+    const badgeHtml=c.hot?`<span class="hot-badge">HOT • ${c.miles}</span>`:`<span class="miles-badge">${c.miles}</span>`;
+    const typeTag=c.category==='shop'?'<span class="tag tag-shop">Shop</span>':c.type==='temp'?'<span class="tag tag-temp">Tijdelijk</span>':c.type==='new'?'<span class="tag tag-new">Nieuw</span>':'<span class="tag tag-always">Altijd</span>';
+    const expHtml=exp.label!=='Geen verloopdatum'?`<span class="expires${exp.urgent?' urgent':''}">⌛ ${exp.label}</span>`:'';
+    return `<div class="${cardClass}" onclick="openModal(${idx})">
+      <div class="card-top">${iconHtml}${badgeHtml}</div>
+      <div class="card-name">${c.title}</div>
       <div class="card-desc">${c.description}</div>
-      <div class="card-footer">
-        <div class="tags">${typeTag}${statusTag}<span class="tag tag-partner">${c.partner}</span>${tierTag}</div>
-        ${expHtml}
-      </div>
+      <div class="card-footer"><div class="card-tags">${typeTag}<span class="tag tag-cat">${c.partner}</span></div>${expHtml}</div>
     </div>`;
   }).join('');
 }
 
-async function loadShops() {
-  try {
-    const res1 = await fetch('/api/scrape-shops');
-    if (res1.ok) {
-      const { shops } = await res1.json();
-      shops.forEach(shop => {
-        DATA.push({
-          title: shop.name,
-          miles: shop.miles,
-          description: `Verdien miles bij ${shop.name} via Shop for Miles. ${shop.miles} per aankoop.`,
-          partner: shop.name,
-          category: 'shop',
-          type: 'always',
-          hot: false,
-          expires: null,
-          tier: 'all',
-          url: shop.url,
-          logo: shop.logo,
-          activate: 'Klik op "Go to Flying Blue" om naar de Shop for Miles pagina te gaan. Doe je aankoop via de link en de miles worden automatisch bijgeschreven.'
-        });
-      });
-    }
-
-    const res2 = await fetch('/api/earn-online');
-    if (res2.ok) {
-      const { shops: earnShops } = await res2.json();
-      earnShops.forEach(shop => {
-        DATA.push({
-          title: shop.name,
-          miles: shop.miles,
-          description: shop.milesWas ? `Was: ${shop.milesWas} — nu ${shop.miles} per aankoop.` : `Verdien ${shop.miles} bij ${shop.name}.`,
-          partner: shop.name,
-          category: 'shop',
-          type: shop.isOffer ? 'temp' : 'always',
-          hot: shop.isOffer,
-          expires: null,
-          tier: 'all',
-          url: shop.url,
-          logo: shop.logo,
-          activate: 'Klik op "Go to Flying Blue" om naar de Earn Online pagina te gaan en je aankoop te doen.'
-        });
-      });
-    }
-  } catch(e) {
-    console.warn('Shops laden mislukt:', e);
-  }
+async function loadShops(){
+  try{
+    const r1=await fetch('/api/scrape-shops');
+    if(r1.ok){const{shops}=await r1.json();shops.forEach(s=>DATA.push({title:s.name,miles:s.miles,description:`Verdien miles bij ${s.name} via Shop for Miles. ${s.miles} per aankoop.`,partner:s.name,category:'shop',type:'always',hot:false,expires:null,tier:'all',url:s.url,logo:s.logo,source:'scrape',activate:'Klik op "Go to Flying Blue" om naar de Shop for Miles pagina te gaan. Doe je aankoop via de link en de miles worden automatisch bijgeschreven.'}));}
+    const r2=await fetch('/api/earn-online');
+    if(r2.ok){const{shops:es}=await r2.json();es.forEach(s=>DATA.push({title:s.name,miles:s.miles,description:s.milesWas?`Was: ${s.milesWas} — nu ${s.miles} per aankoop.`:`Verdien ${s.miles} bij ${s.name}.`,partner:s.name,category:'shop',type:s.isOffer?'temp':'always',hot:s.isOffer,expires:null,tier:'all',url:s.url,logo:s.logo,source:'earn',activate:'Klik op "Go to Flying Blue" om naar de Earn Online pagina te gaan en je aankoop te doen.'}));}
+  }catch(e){console.warn('Shops laden mislukt:',e);}
 }
 
-async function loadData() {
-  try {
-    const res = await fetch('/api/promotions');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-    DATA = json.promotions;
-    const d = new Date(json.updatedAt);
-    document.getElementById('updated').textContent = d.toLocaleString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+async function loadData(){
+  try{
+    const res=await fetch('/api/promotions');
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);
+    const json=await res.json();
+    DATA=json.promotions.map(d=>({...d,source:'promotions'}));
+    const d=new Date(json.updatedAt);
+    document.getElementById('updated').textContent=d.toLocaleString('nl-NL',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
     await loadShops();
     render();
-  } catch(e) {
-    document.getElementById('cards').innerHTML = `<div class="state-box" style="color:#ff3b3b">⚠ Could not load data: ${e.message}</div>`;
-    document.getElementById('updated').textContent = 'error';
+  }catch(e){
+    document.getElementById('cards').innerHTML=`<div class="state-box" style="color:var(--hot)">⚠ Kon data niet laden: ${e.message}</div>`;
+    document.getElementById('updated').textContent='fout';
   }
 }
-
 loadData();
 </script>
 </body>
