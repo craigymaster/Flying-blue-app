@@ -608,6 +608,23 @@
     .hero h1      { animation: fadeUp .5s ease .1s both; }
     .hero-sub     { animation: fadeUp .5s ease .2s both; }
     .hero-actions { animation: fadeUp .5s ease .3s both; }
+
+    /* ─── BACK TO TOP ──────────────────────────────────────── */
+    .back-to-top {
+      position: fixed; bottom: 28px; right: 28px; z-index: 150;
+      width: 44px; height: 44px;
+      background: var(--text);
+      color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      opacity: 0; pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity .25s, transform .25s;
+      cursor: pointer;
+    }
+    .back-to-top.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .back-to-top:hover { background: var(--accent); box-shadow: 0 4px 16px rgba(0,87,217,0.3); }
   </style>
 </head>
 <body>
@@ -684,12 +701,13 @@
 
   <div class="filters">
     <button class="filter-btn active" data-cat="all">Alles</button>
-    <button class="filter-btn" data-cat="Flights">✈ Vluchten</button>
-    <button class="filter-btn" data-cat="Hotels">🏨 Hotels</button>
-    <button class="filter-btn" data-cat="Car">🚗 Auto</button>
-    <button class="filter-btn" data-cat="Shopping">🛍 Shopping</button>
-    <button class="filter-btn" data-cat="Dining">🍽 Dining</button>
-    <button class="filter-btn" data-cat="Finance">💳 Finance</button>
+    <button class="filter-btn" data-cat="flight">✈ Vluchten</button>
+    <button class="filter-btn" data-cat="hotel">🏨 Hotels</button>
+    <button class="filter-btn" data-cat="car">🚗 Auto</button>
+    <button class="filter-btn" data-cat="shopping">🛍 Shopping</button>
+    <button class="filter-btn" data-cat="dining">🍽 Dining</button>
+    <button class="filter-btn" data-cat="finance">💳 Finance</button>
+    <button class="filter-btn" data-cat="shop">🛒 Earn Online</button>
     <span class="filter-sep"></span>
     <select class="sort-select" id="sort-select">
       <option value="newest">Nieuwste eerst</option>
@@ -919,11 +937,31 @@
     }).join('');
   }
 
+  function normalizeCategory(cat) {
+    if (!cat) return '';
+    const s = cat.toLowerCase();
+    // Map earn-online / sheet categories to filter keys
+    if (s.includes('flight') || s.includes('aviation') || s === 'flights') return 'flight';
+    if (s.includes('hotel') || s.includes('travel') || s === 'hotels') return 'hotel';
+    if (s.includes('car') || s.includes('auto') || s === 'car rental') return 'car';
+    if (s.includes('shop') || s.includes('clothes') || s.includes('fashion') ||
+        s.includes('department') || s.includes('children') || s.includes('gifts') ||
+        s.includes('health') || s.includes('beauty') || s.includes('toys') ||
+        s.includes('sport') || s.includes('fitness') || s.includes('electrical') ||
+        s.includes('home') || s.includes('garden') || s.includes('office') ||
+        s.includes('entertainment') || s.includes('leisure') || s.includes('food') ||
+        s.includes('drink') || s === 'shopping') return 'shop';
+    if (s.includes('dining') || s.includes('restaurant')) return 'dining';
+    if (s.includes('finance') || s.includes('bank') || s.includes('insurance')) return 'finance';
+    return s;
+  }
+
   function applyFiltersAndSort() {
     const q = activeSearch.toLowerCase();
     let filtered = allDeals.filter(d => {
-      const catMatch = activeCategory === 'all' || d.category === activeCategory;
-      const searchMatch = !q || (d.title || '').toLowerCase().includes(q);
+      const normCat = normalizeCategory(d.category);
+      const catMatch = activeCategory === 'all' || normCat === activeCategory;
+      const searchMatch = !q || (d.title || '').toLowerCase().includes(q) || (d.partner || '').toLowerCase().includes(q);
       return catMatch && searchMatch;
     });
 
@@ -1100,8 +1138,18 @@
     if (e.key === 'Escape') closeModal({ target: document.getElementById('modal-overlay') });
   });
 
+  /* ── Back to top ───────────────────────── */
+  const bttBtn = document.getElementById('back-to-top');
+  window.addEventListener('scroll', () => {
+    bttBtn.classList.toggle('visible', window.scrollY > 400);
+  });
+
   /* ── Boot ──────────────────────────────── */
   loadDeals();
 </script>
+<!-- ──── BACK TO TOP ──── -->
+<button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Terug naar boven">
+  <svg viewBox="0 0 16 16" fill="none" width="16" height="16"><path d="M8 12V4M4 8l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
 </body>
 </html>
