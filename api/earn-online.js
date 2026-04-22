@@ -35,9 +35,28 @@ module.exports = async (req, res) => {
         url: 'https://earnonline.flyingblue.com/en/?countryID[]=145',
         render_js: true,
         js_scenario: JSON.stringify({
-          instructions: [{ wait: 3000 }]
+          instructions: [
+            { wait: 3000 },
+            { scroll_y: 2000 },
+            { wait: 2000 },
+            { scroll_y: 4000 },
+            { wait: 2000 },
+            { scroll_y: 6000 },
+            { wait: 2000 },
+            { scroll_y: 8000 },
+            { wait: 2000 },
+            { scroll_y: 10000 },
+            { wait: 2000 },
+            { scroll_y: 14000 },
+            { wait: 2000 },
+            { scroll_y: 18000 },
+            { wait: 2000 },
+            { scroll_y: 22000 },
+            { wait: 3000 }
+          ]
         })
-      }
+      },
+      timeout: 120000
     });
 
     const $ = cheerio.load(response.data);
