@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(node -e ':*)",
-      "Bash(powershell -Command ':*)"
+      "Bash(powershell -Command ':*)",
+      "Bash(python3)",
+      "Bash(python -c ' *)"
     ]
   }
 }
