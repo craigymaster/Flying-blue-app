@@ -711,12 +711,12 @@
 
   <div class="filters">
     <button class="filter-btn active" data-cat="all">Alles</button>
-    <button class="filter-btn" data-cat="Flights">✈ Vluchten</button>
-    <button class="filter-btn" data-cat="Hotels">🏨 Hotels</button>
-    <button class="filter-btn" data-cat="Car">🚗 Auto</button>
-    <button class="filter-btn" data-cat="Shopping">🛍 Shopping</button>
-    <button class="filter-btn" data-cat="Dining">🍽 Dining</button>
-    <button class="filter-btn" data-cat="Finance">💳 Finance</button>
+    <button class="filter-btn" data-cat="flight">✈ Vluchten</button>
+    <button class="filter-btn" data-cat="hotel">🏨 Hotels</button>
+    <button class="filter-btn" data-cat="car">🚗 Auto</button>
+    <button class="filter-btn" data-cat="shop">🛍 Shopping</button>
+    <button class="filter-btn" data-cat="dining">🍽 Dining</button>
+    <button class="filter-btn" data-cat="finance">💳 Finance</button>
     <span class="filter-sep"></span>
     <select class="sort-select" id="sort-select">
       <option value="newest">Nieuwste eerst</option>
@@ -897,6 +897,18 @@
     return !deal.expires;
   }
 
+  function normalizeCategory(cat) {
+    if (!cat) return '';
+    const s = cat.toLowerCase().trim();
+    if (s === 'flights' || s === 'flight' || s.includes('aviation')) return 'flight';
+    if (s === 'hotels' || s === 'hotel' || s.includes('travel') || s.includes('hotel')) return 'hotel';
+    if (s === 'car' || s === 'cars') return 'car';
+    if (s === 'shopping' || s === 'shop') return 'shop';
+    if (s === 'dining' || s.includes('restaurant') || s.includes('food') || s.includes('drink')) return 'dining';
+    if (s === 'finance' || s.includes('bank') || s.includes('insurance')) return 'finance';
+    return s;
+  }
+
   function milesLabel(miles) {
     if (!miles) return null;
     const n = parseInt(miles);
@@ -979,7 +991,7 @@
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
       // API returns { promotions: [...], updatedAt: '...' }
-      const promos = (json.promotions || []).map(d => ({ ...d, source: 'promotions' }));
+      const promos = (json.promotions || []).map(d => ({ ...d, category: normalizeCategory(d.category), source: 'promotions' }));
       allDeals = promos;
 
       // Updated timestamp from API
