@@ -635,6 +635,24 @@
       transform: translateY(0);
     }
     .back-to-top:hover { background: var(--accent2); }
+
+    /* ─── LOAD MORE ────────────────────────────────────────── */
+    .load-more-btn {
+      padding: 12px 32px;
+      border: 1.5px solid var(--border-md);
+      border-radius: 10px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      font-family: var(--font-display);
+      transition: border-color .15s, background .15s, box-shadow .15s;
+    }
+    .load-more-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 2px 8px rgba(0,87,217,0.12);
+    }
   </style>
 </head>
 <body>
@@ -730,6 +748,10 @@
     <div class="skel-card"><div class="skeleton skel-line" style="width:40%"></div><div class="skeleton skel-line" style="width:80%;height:18px;margin-top:4px"></div><div class="skeleton skel-line" style="width:95%;margin-top:4px"></div><div class="skeleton skel-line" style="width:60%;margin-top:4px"></div></div>
     <div class="skel-card"><div class="skeleton skel-line" style="width:40%"></div><div class="skeleton skel-line" style="width:70%;height:18px;margin-top:4px"></div><div class="skeleton skel-line" style="width:90%;margin-top:4px"></div><div class="skeleton skel-line" style="width:55%;margin-top:4px"></div></div>
     <div class="skel-card"><div class="skeleton skel-line" style="width:35%"></div><div class="skeleton skel-line" style="width:75%;height:18px;margin-top:4px"></div><div class="skeleton skel-line" style="width:85%;margin-top:4px"></div><div class="skeleton skel-line" style="width:50%;margin-top:4px"></div></div>
+  </div>
+  <div id="load-more-wrap" style="display:none;text-align:center;margin-top:32px">
+    <button class="load-more-btn" id="load-more-btn" onclick="loadMore()">Meer laden</button>
+    <p id="load-more-count" style="margin-top:10px;font-size:13px;color:var(--muted)"></p>
   </div>
 </section>
 
@@ -880,6 +902,8 @@
 <script>
   /* ── State ─────────────────────────────── */
   let allDeals = [];
+  let currentFiltered = [];
+  let visibleCount = 35;
   let activeCategory = 'all';
   let activeSort = 'newest';
   let activeSearch = '';
@@ -964,24 +988,44 @@
   }
 
   function applyFiltersAndSort() {
+    visibleCount = 35;
     const q = activeSearch.toLowerCase();
-    let filtered = allDeals.filter(d => {
+    currentFiltered = allDeals.filter(d => {
       const catMatch = activeCategory === 'all' || d.category === activeCategory;
       const searchMatch = !q || (d.title || '').toLowerCase().includes(q);
       return catMatch && searchMatch;
     });
 
     if (activeSort === 'expiring') {
-      filtered.sort((a, b) => {
+      currentFiltered.sort((a, b) => {
         const da = daysUntil(a.expires) ?? 9999;
         const db = daysUntil(b.expires) ?? 9999;
         return da - db;
       });
     } else if (activeSort === 'miles') {
-      filtered.sort((a, b) => (parseInt(b.miles) || 0) - (parseInt(a.miles) || 0));
+      currentFiltered.sort((a, b) => (parseInt(b.miles) || 0) - (parseInt(a.miles) || 0));
     }
     // default: server order (newest)
-    renderDeals(filtered);
+    renderDeals(currentFiltered.slice(0, visibleCount));
+    updateLoadMore();
+  }
+
+  function updateLoadMore() {
+    const wrap = document.getElementById('load-more-wrap');
+    const count = document.getElementById('load-more-count');
+    const remaining = currentFiltered.length - visibleCount;
+    if (remaining > 0) {
+      wrap.style.display = 'block';
+      count.textContent = `${visibleCount} van ${currentFiltered.length} deals zichtbaar`;
+    } else {
+      wrap.style.display = 'none';
+    }
+  }
+
+  function loadMore() {
+    visibleCount += 35;
+    renderDeals(currentFiltered.slice(0, visibleCount));
+    updateLoadMore();
   }
 
   /* ── Load promotions ───────────────────── */
