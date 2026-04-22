@@ -653,6 +653,18 @@
       color: var(--accent);
       box-shadow: 0 2px 8px rgba(0,87,217,0.12);
     }
+
+    /* ─── LANG TOGGLE ──────────────────────────────────────── */
+    .lang-toggle {
+      display: flex; align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 8px; overflow: hidden;
+      font-size: 12px; font-weight: 600;
+      margin-left: 4px; flex-shrink: 0;
+    }
+    .lang-toggle button { padding: 5px 10px; color: var(--muted); transition: background .15s, color .15s; }
+    .lang-toggle button.active { background: var(--accent); color: #fff; }
+    .lang-toggle button:hover:not(.active) { background: var(--surface2); color: var(--text); }
   </style>
 </head>
 <body>
@@ -663,34 +675,38 @@
   <div class="nav-search-wrap">
     <div class="nav-search">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M10.5 10.5l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-      <input type="search" id="nav-search-input" placeholder="Zoek deals…" autocomplete="off" />
+      <input type="search" id="nav-search-input" data-i18n-placeholder="search.placeholder" placeholder="Zoek deals…" autocomplete="off" />
     </div>
   </div>
   <div class="nav-links">
     <span class="nav-updated" id="nav-updated">Bijgewerkt: laden…</span>
     <span class="nav-badge" id="nav-badge">Live</span>
-    <a href="#deals">Deals</a>
-    <a href="/extension.html">Extension</a>
-    <a href="#faq">FAQ</a>
+    <a href="#deals" data-i18n="nav.deals">Deals</a>
+    <a href="/extension.html" data-i18n="nav.extension">Extensie</a>
+    <a href="#faq" data-i18n="nav.faq">FAQ</a>
     <a href="https://github.com/craigymaster/Flying-blue-app" target="_blank" rel="noopener">GitHub ↗</a>
+    <div class="lang-toggle" id="lang-toggle">
+      <button data-lang="nl">NL</button>
+      <button data-lang="en">EN</button>
+    </div>
   </div>
 </nav>
 
 <!-- ──── HERO ──── -->
 <div class="hero">
-  <div class="hero-eyebrow">Voor Flying Blue leden</div>
-  <h1>Nooit meer <em>miles</em> laten verlopen</h1>
-  <p class="hero-sub">
+  <div class="hero-eyebrow" data-i18n="hero.eyebrow">Voor Flying Blue leden</div>
+  <h1 data-i18n-html="hero.h1">Nooit meer <em>miles</em> laten verlopen</h1>
+  <p class="hero-sub" data-i18n="hero.sub">
     Alle Flying Blue deals op één plek — promoties, Shop for Miles en Earn Online. Altijd actueel, altijd gratis.
   </p>
   <div class="hero-actions">
     <a href="#deals" class="btn-primary">
-      Bekijk deals
+      <span data-i18n="hero.cta">Bekijk deals</span>
       <svg viewBox="0 0 16 16" fill="none" style="width:14px;height:14px"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
     <a href="https://github.com/craigymaster/Flying-blue-app" target="_blank" rel="noopener" class="btn-ghost">
       <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 000 16c4.418 0 8-3.582 8-8a8 8 0 00-8-8zm0 14.5A6.5 6.5 0 018 1.5a6.5 6.5 0 110 13z" opacity=".3"/><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-      Open source
+      <span data-i18n="hero.oss">Open source</span>
     </a>
   </div>
 </div>
@@ -698,24 +714,24 @@
 <!-- ──── STATS ──── -->
 <div class="stats">
   <div class="stat-card">
-    <div class="stat-label">Totaal deals</div>
+    <div class="stat-label" data-i18n="stat.total.label">Totaal deals</div>
     <div class="stat-value accent" id="stat-total">—</div>
-    <div class="stat-sub">actieve promoties</div>
+    <div class="stat-sub" data-i18n="stat.total.sub">actieve promoties</div>
   </div>
   <div class="stat-card">
-    <div class="stat-label">Hot right now</div>
+    <div class="stat-label" data-i18n="stat.hot.label">Hot right now</div>
     <div class="stat-value gold" id="stat-hot">—</div>
-    <div class="stat-sub">uitgelichte deals</div>
+    <div class="stat-sub" data-i18n="stat.hot.sub">uitgelichte deals</div>
   </div>
   <div class="stat-card">
-    <div class="stat-label">Verloopt snel</div>
+    <div class="stat-label" data-i18n="stat.expiring.label">Verloopt snel</div>
     <div class="stat-value" style="color:var(--red)" id="stat-expiring">—</div>
-    <div class="stat-sub">binnen 7 dagen</div>
+    <div class="stat-sub" data-i18n="stat.expiring.sub">binnen 7 dagen</div>
   </div>
   <div class="stat-card">
-    <div class="stat-label">Altijd actief</div>
+    <div class="stat-label" data-i18n="stat.always.label">Altijd actief</div>
     <div class="stat-value green" id="stat-always">—</div>
-    <div class="stat-sub">blijvende deals</div>
+    <div class="stat-sub" data-i18n="stat.always.sub">blijvende deals</div>
   </div>
 </div>
 
@@ -723,24 +739,24 @@
 <section id="deals">
   <div class="section-header">
     <div class="section-title">
-      Promoties
-      <small>Handgeselecteerd uit de Flying Blue nieuwsbrief</small>
+      <span data-i18n="deals.title">Promoties</span>
+      <small data-i18n="deals.sub">Handgeselecteerd uit de Flying Blue nieuwsbrief</small>
     </div>
   </div>
 
   <div class="filters">
-    <button class="filter-btn active" data-cat="all">Alles</button>
-    <button class="filter-btn" data-cat="flight">✈ Vluchten</button>
-    <button class="filter-btn" data-cat="hotel">🏨 Hotels</button>
-    <button class="filter-btn" data-cat="car">🚗 Auto</button>
-    <button class="filter-btn" data-cat="shop">🛍 Shopping</button>
-    <button class="filter-btn" data-cat="dining">🍽 Dining</button>
-    <button class="filter-btn" data-cat="finance">💳 Finance</button>
+    <button class="filter-btn active" data-cat="all" data-i18n="filter.all">Alles</button>
+    <button class="filter-btn" data-cat="flight" data-i18n="filter.flight">✈ Vluchten</button>
+    <button class="filter-btn" data-cat="hotel" data-i18n="filter.hotel">🏨 Hotels</button>
+    <button class="filter-btn" data-cat="car" data-i18n="filter.car">🚗 Auto</button>
+    <button class="filter-btn" data-cat="shop" data-i18n="filter.shop">🛍 Shopping</button>
+    <button class="filter-btn" data-cat="dining" data-i18n="filter.dining">🍽 Dining</button>
+    <button class="filter-btn" data-cat="finance" data-i18n="filter.finance">💳 Finance</button>
     <span class="filter-sep"></span>
     <select class="sort-select" id="sort-select">
-      <option value="newest">Nieuwste eerst</option>
-      <option value="expiring">Verloopt snel</option>
-      <option value="miles">Meeste miles</option>
+      <option value="newest" data-i18n="sort.newest">Nieuwste eerst</option>
+      <option value="expiring" data-i18n="sort.expiring">Verloopt snel</option>
+      <option value="miles" data-i18n="sort.miles">Meeste miles</option>
     </select>
   </div>
 
@@ -751,7 +767,7 @@
     <div class="skel-card"><div class="skeleton skel-line" style="width:35%"></div><div class="skeleton skel-line" style="width:75%;height:18px;margin-top:4px"></div><div class="skeleton skel-line" style="width:85%;margin-top:4px"></div><div class="skeleton skel-line" style="width:50%;margin-top:4px"></div></div>
   </div>
   <div id="load-more-wrap" style="display:none;text-align:center;margin-top:32px">
-    <button class="load-more-btn" id="load-more-btn" onclick="loadMore()">Meer laden</button>
+    <button class="load-more-btn" id="load-more-btn" onclick="loadMore()" data-i18n="loadmore.btn">Meer laden</button>
     <p id="load-more-count" style="margin-top:10px;font-size:13px;color:var(--muted)"></p>
   </div>
 </section>
@@ -761,9 +777,9 @@
   <div class="section-header">
     <div class="section-title">
       Shop for Miles
-      <small>Verdien miles bij online winkelen</small>
+      <small data-i18n="shops.sub">Verdien miles bij online winkelen</small>
     </div>
-    <a href="https://www.flyingblue.com/nl/earn/shop-for-miles?country=NL" target="_blank" rel="noopener" class="btn-ghost" style="font-size:12px;padding:10px 18px">Alle shops ↗</a>
+    <a href="https://www.flyingblue.com/nl/earn/shop-for-miles?country=NL" target="_blank" rel="noopener" class="btn-ghost" style="font-size:12px;padding:10px 18px" data-i18n="shops.all">Alle shops ↗</a>
   </div>
   <div class="shop-grid" id="shop-grid">
     <div class="skel-card" style="height:140px"></div>
@@ -776,36 +792,36 @@
 <!-- ──── TRUST ──── -->
 <section id="trust">
   <div class="section-title" style="margin-bottom:24px">
-    Hoe het werkt
-    <small>Transparant en eenvoudig</small>
+    <span data-i18n="trust.title">Hoe het werkt</span>
+    <small data-i18n="trust.sub">Transparant en eenvoudig</small>
   </div>
   <div class="trust-row">
     <div class="trust-card">
       <div class="trust-icon">🔒</div>
       <div>
-        <h4>Geen login vereist</h4>
-        <p>We slaan geen accountgegevens op. Je klikt door naar Flying Blue om te activeren.</p>
+        <h4 data-i18n="trust.1.title">Geen login vereist</h4>
+        <p data-i18n="trust.1.body">We slaan geen accountgegevens op. Je klikt door naar Flying Blue om te activeren.</p>
       </div>
     </div>
     <div class="trust-card">
       <div class="trust-icon">📡</div>
       <div>
-        <h4>Altijd actueel</h4>
-        <p>Data wordt dagelijks automatisch bijgewerkt vanuit officiële Flying Blue bronnen.</p>
+        <h4 data-i18n="trust.2.title">Altijd actueel</h4>
+        <p data-i18n="trust.2.body">Data wordt dagelijks automatisch bijgewerkt vanuit officiële Flying Blue bronnen.</p>
       </div>
     </div>
     <div class="trust-card">
       <div class="trust-icon">🔓</div>
       <div>
-        <h4>Open source</h4>
-        <p>De code staat op GitHub. Volledig transparant, gebouwd door een Flying Blue gebruiker.</p>
+        <h4 data-i18n="trust.3.title">Open source</h4>
+        <p data-i18n="trust.3.body">De code staat op GitHub. Volledig transparant, gebouwd door een Flying Blue gebruiker.</p>
       </div>
     </div>
     <div class="trust-card">
       <div class="trust-icon">⚠️</div>
       <div>
-        <h4>Onafhankelijk</h4>
-        <p>Niet gelieerd aan Air France-KLM of Flying Blue. Altijd even verifiëren op flyingblue.com.</p>
+        <h4 data-i18n="trust.4.title">Onafhankelijk</h4>
+        <p data-i18n="trust.4.body">Niet gelieerd aan Air France-KLM of Flying Blue. Altijd even verifiëren op flyingblue.com.</p>
       </div>
     </div>
   </div>
@@ -813,31 +829,31 @@
 
 <!-- ──── FAQ ──── -->
 <section id="faq">
-  <div class="section-title" style="margin-bottom:24px">Veelgestelde vragen</div>
+  <div class="section-title" style="margin-bottom:24px" data-i18n="faq.title">Veelgestelde vragen</div>
   <div class="faq-list">
     <details>
-      <summary>Wat is Miles Optimizer?</summary>
-      <p>Miles Optimizer verzamelt alle actuele Flying Blue deals op één plek: promoties uit de nieuwsbrief, Shop for Miles aanbiedingen en Earn Online partners. Zo mis je nooit meer een deal en kun je je miles optimaal benutten.</p>
+      <summary data-i18n="faq.1.q">Wat is Miles Optimizer?</summary>
+      <p data-i18n="faq.1.a">Miles Optimizer verzamelt alle actuele Flying Blue deals op één plek: promoties uit de nieuwsbrief, Shop for Miles aanbiedingen en Earn Online partners. Zo mis je nooit meer een deal en kun je je miles optimaal benutten.</p>
     </details>
     <details>
-      <summary>Hoe activeer ik een deal?</summary>
-      <p>Klik op een deal, lees de details en klik op "Go to Flying Blue". Je gaat dan direct naar de juiste pagina. Log in met je Flying Blue account en doe je aankoop of boeking via die link — de miles worden automatisch bijgeschreven.</p>
+      <summary data-i18n="faq.2.q">Hoe activeer ik een deal?</summary>
+      <p data-i18n="faq.2.a">Klik op een deal, lees de details en klik op "Go to Flying Blue". Je gaat dan direct naar de juiste pagina. Log in met je Flying Blue account en doe je aankoop of boeking via die link — de miles worden automatisch bijgeschreven.</p>
     </details>
     <details>
-      <summary>Hoe vaak worden deals bijgewerkt?</summary>
-      <p>Shop for Miles en Earn Online worden 1× per dag automatisch bijgewerkt. Handmatige promoties (vluchten, hotels, speciale acties) worden toegevoegd vanuit de Flying Blue nieuwsbrief zodra ze binnenkomen.</p>
+      <summary data-i18n="faq.3.q">Hoe vaak worden deals bijgewerkt?</summary>
+      <p data-i18n="faq.3.a">Shop for Miles en Earn Online worden 1× per dag automatisch bijgewerkt. Handmatige promoties (vluchten, hotels, speciale acties) worden toegevoegd vanuit de Flying Blue nieuwsbrief zodra ze binnenkomen.</p>
     </details>
     <details>
-      <summary>Wat zijn Flying Blue miles waard?</summary>
-      <p>Als vuistregel: 1 mile ≈ €0,01, dus 1.000 miles ≈ €10. Bij premium vluchten of upgrades kan de waarde aanzienlijk hoger liggen — soms tot €0,03–0,05 per mile.</p>
+      <summary data-i18n="faq.4.q">Wat zijn Flying Blue miles waard?</summary>
+      <p data-i18n="faq.4.a">Als vuistregel: 1 mile ≈ €0,01, dus 1.000 miles ≈ €10. Bij premium vluchten of upgrades kan de waarde aanzienlijk hoger liggen — soms tot €0,03–0,05 per mile.</p>
     </details>
     <details>
-      <summary>Is Miles Optimizer officieel van Flying Blue?</summary>
-      <p>Nee. Dit is een onafhankelijk project zonder band met Air France-KLM of Flying Blue. Controleer deals altijd op flyingblue.com voor de meest actuele voorwaarden.</p>
+      <summary data-i18n="faq.5.q">Is Miles Optimizer officieel van Flying Blue?</summary>
+      <p data-i18n="faq.5.a">Nee. Dit is een onafhankelijk project zonder band met Air France-KLM of Flying Blue. Controleer deals altijd op flyingblue.com voor de meest actuele voorwaarden.</p>
     </details>
     <details>
-      <summary>Een deal ontbreekt of klopt niet — wat nu?</summary>
-      <p>Stuur een mail naar <a href="mailto:info@milesoptimizer.nl" style="color:var(--accent)">info@milesoptimizer.nl</a> met de details. We kijken er zo snel mogelijk naar.</p>
+      <summary data-i18n="faq.6.q">Een deal ontbreekt of klopt niet — wat nu?</summary>
+      <p data-i18n-html="faq.6.a">Stuur een mail naar <a href="mailto:info@milesoptimizer.nl" style="color:var(--accent)">info@milesoptimizer.nl</a> met de details. We kijken er zo snel mogelijk naar.</p>
     </details>
   </div>
 </section>
@@ -846,17 +862,17 @@
 <footer>
   <div class="footer-brand">
     <div class="nav-logo">Miles<span style="color:var(--accent)">Optimizer</span></div>
-    <p>Alle Flying Blue deals op één plek. Onafhankelijk, altijd actueel en gratis.</p>
+    <p data-i18n="footer.brand">Alle Flying Blue deals op één plek. Onafhankelijk, altijd actueel en gratis.</p>
   </div>
   <div class="footer-col">
-    <h5>Deals</h5>
-    <a href="#" onclick="filterCat('flight')">Vluchten</a>
-    <a href="#" onclick="filterCat('hotel')">Hotels</a>
-    <a href="#" onclick="filterCat('shop')">Shopping</a>
+    <h5 data-i18n="footer.deals.h">Deals</h5>
+    <a href="#" onclick="filterCat('flight')" data-i18n="footer.flights">Vluchten</a>
+    <a href="#" onclick="filterCat('hotel')" data-i18n="footer.hotels">Hotels</a>
+    <a href="#" onclick="filterCat('shop')" data-i18n="footer.shopping">Shopping</a>
     <a href="#shops">Shop for Miles</a>
   </div>
   <div class="footer-col">
-    <h5>Info</h5>
+    <h5 data-i18n="footer.info.h">Info</h5>
     <a href="#faq">FAQ</a>
     <a href="https://www.flyingblue.com" target="_blank" rel="noopener">Flying Blue ↗</a>
     <a href="https://earnonline.flyingblue.com" target="_blank" rel="noopener">Earn Online ↗</a>
@@ -864,10 +880,10 @@
   </div>
 </footer>
 <div class="footer-bottom">
-  <p>© 2026 Miles Optimizer — Niet gelieerd aan Flying Blue of Air France-KLM · <a href="#" style="color:var(--muted)">Privacy</a> · <a href="#" style="color:var(--muted)">Disclaimer</a></p>
+  <p data-i18n-html="footer.bottom">© 2026 Miles Optimizer — Niet gelieerd aan Flying Blue of Air France-KLM · <a href="#" style="color:var(--muted)">Privacy</a> · <a href="#" style="color:var(--muted)">Disclaimer</a></p>
   <a href="https://github.com/craigymaster/Flying-blue-app" target="_blank" rel="noopener" class="open-source-badge">
     <svg viewBox="0 0 16 16" fill="currentColor" style="width:12px;height:12px"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-    Open source op GitHub
+    <span data-i18n="footer.oss">Open source op GitHub</span>
   </a>
 </div>
 
@@ -880,16 +896,16 @@
     <div class="modal-meta" id="m-meta"></div>
     <div class="modal-desc" id="m-desc"></div>
     <div class="modal-how">
-      <h4>Hoe activeer je deze deal?</h4>
+      <h4 data-i18n="modal.how.title">Hoe activeer je deze deal?</h4>
       <ol>
-        <li>Klik op de knop hieronder</li>
-        <li>Log in met je Flying Blue account</li>
-        <li>Doe je aankoop of boeking via de link</li>
-        <li>Miles worden automatisch bijgeschreven</li>
+        <li data-i18n="modal.how.1">Klik op de knop hieronder</li>
+        <li data-i18n="modal.how.2">Log in met je Flying Blue account</li>
+        <li data-i18n="modal.how.3">Doe je aankoop of boeking via de link</li>
+        <li data-i18n="modal.how.4">Miles worden automatisch bijgeschreven</li>
       </ol>
     </div>
     <a class="modal-cta" id="m-cta" href="#" target="_blank" rel="noopener">
-      Go to Flying Blue
+      <span data-i18n="modal.cta">Go to Flying Blue</span>
       <svg viewBox="0 0 16 16" fill="none" style="width:14px;height:14px"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
   </div>
@@ -908,6 +924,142 @@
   let activeCategory = 'all';
   let activeSort = 'newest';
   let activeSearch = '';
+  let lastUpdatedDate = null;
+
+  /* ── i18n ───────────────────────────────── */
+  let LANG = localStorage.getItem('mo-lang') || 'nl';
+
+  const TR = {
+    nl: {
+      'search.placeholder': 'Zoek deals…',
+      'nav.deals': 'Deals', 'nav.extension': 'Extensie', 'nav.faq': 'FAQ',
+      'hero.eyebrow': 'Voor Flying Blue leden',
+      'hero.h1': 'Nooit meer <em>miles</em> laten verlopen',
+      'hero.sub': 'Alle Flying Blue deals op één plek — promoties, Shop for Miles en Earn Online. Altijd actueel, altijd gratis.',
+      'hero.cta': 'Bekijk deals', 'hero.oss': 'Open source',
+      'stat.total.label': 'Totaal deals', 'stat.total.sub': 'actieve promoties',
+      'stat.hot.label': 'Hot right now', 'stat.hot.sub': 'uitgelichte deals',
+      'stat.expiring.label': 'Verloopt snel', 'stat.expiring.sub': 'binnen 7 dagen',
+      'stat.always.label': 'Altijd actief', 'stat.always.sub': 'blijvende deals',
+      'deals.title': 'Promoties', 'deals.sub': 'Handgeselecteerd uit de Flying Blue nieuwsbrief',
+      'filter.all': 'Alles', 'filter.flight': '✈ Vluchten', 'filter.hotel': '🏨 Hotels',
+      'filter.car': '🚗 Auto', 'filter.shop': '🛍 Shopping', 'filter.dining': '🍽 Dining', 'filter.finance': '💳 Finance',
+      'sort.newest': 'Nieuwste eerst', 'sort.expiring': 'Verloopt snel', 'sort.miles': 'Meeste miles',
+      'shops.sub': 'Verdien miles bij online winkelen', 'shops.all': 'Alle shops ↗',
+      'trust.title': 'Hoe het werkt', 'trust.sub': 'Transparant en eenvoudig',
+      'trust.1.title': 'Geen login vereist', 'trust.1.body': 'We slaan geen accountgegevens op. Je klikt door naar Flying Blue om te activeren.',
+      'trust.2.title': 'Altijd actueel', 'trust.2.body': 'Data wordt dagelijks automatisch bijgewerkt vanuit officiële Flying Blue bronnen.',
+      'trust.3.title': 'Open source', 'trust.3.body': 'De code staat op GitHub. Volledig transparant, gebouwd door een Flying Blue gebruiker.',
+      'trust.4.title': 'Onafhankelijk', 'trust.4.body': 'Niet gelieerd aan Air France-KLM of Flying Blue. Altijd even verifiëren op flyingblue.com.',
+      'faq.title': 'Veelgestelde vragen',
+      'faq.1.q': 'Wat is Miles Optimizer?', 'faq.1.a': 'Miles Optimizer verzamelt alle actuele Flying Blue deals op één plek: promoties uit de nieuwsbrief, Shop for Miles aanbiedingen en Earn Online partners. Zo mis je nooit meer een deal en kun je je miles optimaal benutten.',
+      'faq.2.q': 'Hoe activeer ik een deal?', 'faq.2.a': 'Klik op een deal, lees de details en klik op "Go to Flying Blue". Je gaat dan direct naar de juiste pagina. Log in met je Flying Blue account en doe je aankoop of boeking via die link — de miles worden automatisch bijgeschreven.',
+      'faq.3.q': 'Hoe vaak worden deals bijgewerkt?', 'faq.3.a': 'Shop for Miles en Earn Online worden 1× per dag automatisch bijgewerkt. Handmatige promoties (vluchten, hotels, speciale acties) worden toegevoegd vanuit de Flying Blue nieuwsbrief zodra ze binnenkomen.',
+      'faq.4.q': 'Wat zijn Flying Blue miles waard?', 'faq.4.a': 'Als vuistregel: 1 mile ≈ €0,01, dus 1.000 miles ≈ €10. Bij premium vluchten of upgrades kan de waarde aanzienlijk hoger liggen — soms tot €0,03–0,05 per mile.',
+      'faq.5.q': 'Is Miles Optimizer officieel van Flying Blue?', 'faq.5.a': 'Nee. Dit is een onafhankelijk project zonder band met Air France-KLM of Flying Blue. Controleer deals altijd op flyingblue.com voor de meest actuele voorwaarden.',
+      'faq.6.q': 'Een deal ontbreekt of klopt niet — wat nu?', 'faq.6.a': 'Stuur een mail naar <a href="mailto:info@milesoptimizer.nl" style="color:var(--accent)">info@milesoptimizer.nl</a> met de details. We kijken er zo snel mogelijk naar.',
+      'footer.brand': 'Alle Flying Blue deals op één plek. Onafhankelijk, altijd actueel en gratis.',
+      'footer.deals.h': 'Deals', 'footer.flights': 'Vluchten', 'footer.hotels': 'Hotels', 'footer.shopping': 'Shopping', 'footer.info.h': 'Info',
+      'footer.bottom': '© 2026 Miles Optimizer — Niet gelieerd aan Flying Blue of Air France-KLM · <a href="#" style="color:var(--muted)">Privacy</a> · <a href="#" style="color:var(--muted)">Disclaimer</a>',
+      'footer.oss': 'Open source op GitHub',
+      'modal.how.title': 'Hoe activeer je deze deal?',
+      'modal.how.1': 'Klik op de knop hieronder', 'modal.how.2': 'Log in met je Flying Blue account',
+      'modal.how.3': 'Doe je aankoop of boeking via de link', 'modal.how.4': 'Miles worden automatisch bijgeschreven',
+      'modal.cta': 'Ga naar Flying Blue',
+      'deal.always': 'Altijd actief', 'deal.expired': 'Verlopen', 'deal.tomorrow': 'Morgen verlopen',
+      'deal.days': 'Nog {n} dagen', 'deal.view': 'Zie deal',
+      'deal.none.title': 'Geen deals gevonden', 'deal.none.body': 'Probeer een andere categorie of kom later terug.',
+      'deal.error.title': 'Kon deals niet laden', 'deal.error.body': 'Er ging iets mis. Controleer je verbinding en probeer het opnieuw.',
+      'deal.retry': 'Opnieuw proberen',
+      'loadmore.btn': 'Meer laden', 'loadmore.count': '{shown} van {total} deals zichtbaar',
+      'nav.updated.prefix': 'Bijgewerkt: ', 'nav.updated.loading': 'Bijgewerkt: laden…',
+    },
+    en: {
+      'search.placeholder': 'Search deals…',
+      'nav.deals': 'Deals', 'nav.extension': 'Extension', 'nav.faq': 'FAQ',
+      'hero.eyebrow': 'For Flying Blue members',
+      'hero.h1': 'Never let your <em>miles</em> expire',
+      'hero.sub': 'All Flying Blue deals in one place — promotions, Shop for Miles and Earn Online. Always up to date, always free.',
+      'hero.cta': 'View deals', 'hero.oss': 'Open source',
+      'stat.total.label': 'Total deals', 'stat.total.sub': 'active promotions',
+      'stat.hot.label': 'Hot right now', 'stat.hot.sub': 'featured deals',
+      'stat.expiring.label': 'Expiring soon', 'stat.expiring.sub': 'within 7 days',
+      'stat.always.label': 'Always active', 'stat.always.sub': 'permanent deals',
+      'deals.title': 'Promotions', 'deals.sub': 'Hand-picked from the Flying Blue newsletter',
+      'filter.all': 'All', 'filter.flight': '✈ Flights', 'filter.hotel': '🏨 Hotels',
+      'filter.car': '🚗 Car', 'filter.shop': '🛍 Shopping', 'filter.dining': '🍽 Dining', 'filter.finance': '💳 Finance',
+      'sort.newest': 'Newest first', 'sort.expiring': 'Expiring soon', 'sort.miles': 'Most miles',
+      'shops.sub': 'Earn miles while shopping online', 'shops.all': 'All shops ↗',
+      'trust.title': 'How it works', 'trust.sub': 'Transparent and simple',
+      'trust.1.title': 'No login required', 'trust.1.body': 'We store no account details. You click through to Flying Blue to activate.',
+      'trust.2.title': 'Always up to date', 'trust.2.body': 'Data is updated daily from official Flying Blue sources.',
+      'trust.3.title': 'Open source', 'trust.3.body': 'The code is on GitHub. Fully transparent, built by a Flying Blue user.',
+      'trust.4.title': 'Independent', 'trust.4.body': 'Not affiliated with Air France-KLM or Flying Blue. Always verify at flyingblue.com.',
+      'faq.title': 'Frequently asked questions',
+      'faq.1.q': 'What is Miles Optimizer?', 'faq.1.a': 'Miles Optimizer collects all current Flying Blue deals in one place: newsletter promotions, Shop for Miles offers and Earn Online partners. Never miss a deal and make the most of your miles.',
+      'faq.2.q': 'How do I activate a deal?', 'faq.2.a': 'Click on a deal, read the details and click "Go to Flying Blue". You\'ll go directly to the right page. Log in with your Flying Blue account and complete your purchase or booking — miles are credited automatically.',
+      'faq.3.q': 'How often are deals updated?', 'faq.3.a': 'Shop for Miles and Earn Online are updated automatically once a day. Manual promotions (flights, hotels, special offers) are added from the Flying Blue newsletter as soon as they arrive.',
+      'faq.4.q': 'What are Flying Blue miles worth?', 'faq.4.a': 'As a rule of thumb: 1 mile ≈ €0.01, so 1,000 miles ≈ €10. For premium flights or upgrades the value can be considerably higher — sometimes up to €0.03–0.05 per mile.',
+      'faq.5.q': 'Is Miles Optimizer official from Flying Blue?', 'faq.5.a': 'No. This is an independent project with no affiliation to Air France-KLM or Flying Blue. Always check deals at flyingblue.com for the latest terms.',
+      'faq.6.q': 'A deal is missing or incorrect — now what?', 'faq.6.a': 'Send an email to <a href="mailto:info@milesoptimizer.nl" style="color:var(--accent)">info@milesoptimizer.nl</a> with the details. We\'ll look into it as soon as possible.',
+      'footer.brand': 'All Flying Blue deals in one place. Independent, always up to date and free.',
+      'footer.deals.h': 'Deals', 'footer.flights': 'Flights', 'footer.hotels': 'Hotels', 'footer.shopping': 'Shopping', 'footer.info.h': 'Info',
+      'footer.bottom': '© 2026 Miles Optimizer — Not affiliated with Flying Blue or Air France-KLM · <a href="#" style="color:var(--muted)">Privacy</a> · <a href="#" style="color:var(--muted)">Disclaimer</a>',
+      'footer.oss': 'Open source on GitHub',
+      'modal.how.title': 'How to activate this deal?',
+      'modal.how.1': 'Click the button below', 'modal.how.2': 'Log in with your Flying Blue account',
+      'modal.how.3': 'Complete your purchase or booking via the link', 'modal.how.4': 'Miles are automatically credited',
+      'modal.cta': 'Go to Flying Blue',
+      'deal.always': 'Always active', 'deal.expired': 'Expired', 'deal.tomorrow': 'Expires tomorrow',
+      'deal.days': '{n} days left', 'deal.view': 'View deal',
+      'deal.none.title': 'No deals found', 'deal.none.body': 'Try a different category or check back later.',
+      'deal.error.title': 'Could not load deals', 'deal.error.body': 'Something went wrong. Check your connection and try again.',
+      'deal.retry': 'Try again',
+      'loadmore.btn': 'Load more', 'loadmore.count': 'Showing {shown} of {total} deals',
+      'nav.updated.prefix': 'Updated: ', 'nav.updated.loading': 'Updated: loading…',
+    }
+  };
+
+  function t(key, vars) {
+    let str = (TR[LANG] || TR.nl)[key] || key;
+    if (vars) Object.keys(vars).forEach(k => { str = str.replace('{' + k + '}', vars[k]); });
+    return str;
+  }
+
+  function updateNavUpdated() {
+    const el = document.getElementById('nav-updated');
+    if (!el) return;
+    if (!lastUpdatedDate) { el.textContent = t('nav.updated.loading'); return; }
+    const locale = LANG === 'en' ? 'en-GB' : 'nl-NL';
+    el.textContent = t('nav.updated.prefix') + lastUpdatedDate.toLocaleString(locale, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function applyLang() {
+    document.querySelectorAll('#lang-toggle button').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === LANG);
+    });
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+    // Update sort option text (option elements don't support textContent via data-i18n loop cleanly in all browsers)
+    document.querySelectorAll('select option[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    updateNavUpdated();
+    if (allDeals.length > 0) {
+      renderDeals(currentFiltered.slice(0, visibleCount));
+      updateLoadMore();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#lang-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        LANG = btn.dataset.lang;
+        localStorage.setItem('mo-lang', LANG);
+        applyLang();
+      });
+    });
+    applyLang();
+  });
 
   /* ── Helpers ───────────────────────────── */
   function daysUntil(dateStr) {
@@ -948,8 +1100,8 @@
       grid.innerHTML = `
         <div class="state-box">
           <div class="state-icon">🔍</div>
-          <h3>Geen deals gevonden</h3>
-          <p>Probeer een andere categorie of kom later terug.</p>
+          <h3>${t('deal.none.title')}</h3>
+          <p>${t('deal.none.body')}</p>
         </div>`;
       return;
     }
@@ -958,10 +1110,10 @@
       const days = daysUntil(d.expires);
       const urgentSoon = days !== null && days <= 7;
       const isHot = d.hot === true || d.hot === 'TRUE';
-      const expiresText = days === null ? 'Altijd actief'
-        : days <= 0 ? 'Verlopen'
-        : days === 1 ? 'Morgen verlopen'
-        : `Nog ${days} dagen`;
+      const expiresText = days === null ? t('deal.always')
+        : days <= 0 ? t('deal.expired')
+        : days === 1 ? t('deal.tomorrow')
+        : t('deal.days', {n: days});
 
       return `
         <div class="deal-card${isHot ? ' hot' : ''}" onclick="openModal(${JSON.stringify(d).replace(/"/g, '&quot;')})">
@@ -980,7 +1132,7 @@
           <div class="deal-desc">${d.description || ''}</div>
           <div class="deal-footer">
             <div class="deal-miles">
-              ${d.miles ? `${milesLabel(d.miles)}<small>miles${d.type ? ' · ' + d.type : ''}</small>` : '<span style="font-size:13px;color:var(--muted)">Zie deal</span>'}
+              ${d.miles ? `${milesLabel(d.miles)}<small>miles${d.type ? ' · ' + d.type : ''}</small>` : `<span style="font-size:13px;color:var(--muted)">${t('deal.view')}</span>`}
             </div>
             <div class="deal-expires${urgentSoon ? ' urgent' : ''}">${expiresText}</div>
           </div>
@@ -1017,7 +1169,7 @@
     const remaining = currentFiltered.length - visibleCount;
     if (remaining > 0) {
       wrap.style.display = 'block';
-      count.textContent = `${visibleCount} van ${currentFiltered.length} deals zichtbaar`;
+      count.textContent = t('loadmore.count', {shown: visibleCount, total: currentFiltered.length});
     } else {
       wrap.style.display = 'none';
     }
@@ -1041,9 +1193,8 @@
 
       // Updated timestamp from API
       if (json.updatedAt) {
-        const d = new Date(json.updatedAt);
-        document.getElementById('nav-updated').textContent =
-          `Bijgewerkt: ${d.toLocaleString('nl-NL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}`;
+        lastUpdatedDate = new Date(json.updatedAt);
+        updateNavUpdated();
       }
 
       await loadShops();
@@ -1054,9 +1205,9 @@
       document.getElementById('deal-grid').innerHTML = `
         <div class="state-box">
           <div class="state-icon">⚠️</div>
-          <h3>Kon deals niet laden</h3>
-          <p>Er ging iets mis. Controleer je verbinding en probeer het opnieuw.</p>
-          <button class="retry-btn" onclick="loadDeals()">Opnieuw proberen</button>
+          <h3>${t('deal.error.title')}</h3>
+          <p>${t('deal.error.body')}</p>
+          <button class="retry-btn" onclick="loadDeals()">${t('deal.retry')}</button>
         </div>`;
     }
   }
@@ -1160,13 +1311,14 @@
     document.getElementById('m-title').textContent = d.title || '';
 
     const days = daysUntil(d.expires);
-    const expiresText = days === null ? 'Altijd actief'
-      : days <= 0 ? 'Verlopen'
-      : `${days} dag${days === 1 ? '' : 'en'} resterend`;
+    const expiresText = days === null ? t('deal.always')
+      : days <= 0 ? t('deal.expired')
+      : days === 1 ? t('deal.tomorrow')
+      : t('deal.days', {n: days});
 
     document.getElementById('m-meta').innerHTML = `
       ${d.miles ? `<div class="meta-item"><div class="meta-label">Miles</div><div class="meta-value green">${d.miles}</div></div>` : ''}
-      ${d.expires ? `<div class="meta-item"><div class="meta-label">Verloopt</div><div class="meta-value${days !== null && days <= 7 ? ' red' : ''}">${expiresText}</div></div>` : ''}
+      ${d.expires ? `<div class="meta-item"><div class="meta-label">${LANG === 'en' ? 'Expires' : 'Verloopt'}</div><div class="meta-value${days !== null && days <= 7 ? ' red' : ''}">${expiresText}</div></div>` : ''}
       ${d.tier ? `<div class="meta-item"><div class="meta-label">Tier</div><div class="meta-value">${d.tier}</div></div>` : ''}
       ${d.type ? `<div class="meta-item"><div class="meta-label">Type</div><div class="meta-value">${d.type}</div></div>` : ''}
     `;
