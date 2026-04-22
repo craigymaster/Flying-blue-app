@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
@@ -589,6 +589,74 @@
     }
     .modal-cta:hover { background: var(--accent2); }
 
+    /* ─── CALCULATOR ──────────────────────────────────────── */
+    .calc-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+    }
+    .calc-title {
+      font-family: var(--font-display);
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.9px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .calc-row {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .calc-label {
+      font-size: 13px; font-weight: 500; color: var(--text);
+      white-space: nowrap;
+    }
+    .calc-input-wrap {
+      display: flex; align-items: stretch;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--surface);
+      overflow: hidden;
+      flex: 1; min-width: 120px;
+    }
+    .calc-prefix {
+      padding: 0 10px;
+      font-size: 13px; color: var(--muted);
+      background: var(--surface2);
+      border-right: 1px solid var(--border);
+      display: flex; align-items: center;
+      user-select: none;
+    }
+    .calc-input {
+      border: none; outline: none; background: none;
+      font: inherit; font-size: 14px; color: var(--text);
+      padding: 8px 10px; width: 100%;
+    }
+    .calc-input::-webkit-inner-spin-button,
+    .calc-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .calc-result {
+      margin-top: 12px; min-height: 40px;
+      display: flex; align-items: center;
+    }
+    .calc-result-empty { font-size: 13px; color: var(--muted); }
+    .calc-result-row { display: flex; flex-direction: column; gap: 3px; }
+    .calc-result-miles {
+      font-family: var(--font-display);
+      font-size: 24px; font-weight: 800;
+      color: var(--green); line-height: 1.25;
+    }
+    .calc-result-sub { font-size: 12px; color: var(--muted); }
+    .calc-values { display: flex; align-items: center; }
+    .calc-val-item { flex: 1; text-align: center; }
+    .calc-val-num {
+      font-family: var(--font-display);
+      font-size: 22px; font-weight: 800;
+      color: var(--text); line-height: 1.25;
+    }
+    .calc-val-num.calc-val-green { color: var(--green); }
+    .calc-val-label { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+    .calc-val-divider { width: 1px; height: 44px; background: var(--border); margin: 0 16px; flex-shrink: 0; }
+
     /* ─── RESPONSIVE ───────────────────────────────────────── */
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
@@ -608,23 +676,6 @@
     .hero h1      { animation: fadeUp .5s ease .1s both; }
     .hero-sub     { animation: fadeUp .5s ease .2s both; }
     .hero-actions { animation: fadeUp .5s ease .3s both; }
-
-    /* ─── BACK TO TOP ──────────────────────────────────────── */
-    .back-to-top {
-      position: fixed; bottom: 28px; right: 28px; z-index: 150;
-      width: 44px; height: 44px;
-      background: var(--text);
-      color: #fff;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-      opacity: 0; pointer-events: none;
-      transform: translateY(8px);
-      transition: opacity .25s, transform .25s;
-      cursor: pointer;
-    }
-    .back-to-top.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
-    .back-to-top:hover { background: var(--accent); box-shadow: 0 4px 16px rgba(0,87,217,0.3); }
   </style>
 </head>
 <body>
@@ -701,13 +752,12 @@
 
   <div class="filters">
     <button class="filter-btn active" data-cat="all">Alles</button>
-    <button class="filter-btn" data-cat="flight">✈ Vluchten</button>
-    <button class="filter-btn" data-cat="hotel">🏨 Hotels</button>
-    <button class="filter-btn" data-cat="car">🚗 Auto</button>
-    <button class="filter-btn" data-cat="shopping">🛍 Shopping</button>
-    <button class="filter-btn" data-cat="dining">🍽 Dining</button>
-    <button class="filter-btn" data-cat="finance">💳 Finance</button>
-    <button class="filter-btn" data-cat="shop">🛒 Earn Online</button>
+    <button class="filter-btn" data-cat="Flights">✈ Vluchten</button>
+    <button class="filter-btn" data-cat="Hotels">🏨 Hotels</button>
+    <button class="filter-btn" data-cat="Car">🚗 Auto</button>
+    <button class="filter-btn" data-cat="Shopping">🛍 Shopping</button>
+    <button class="filter-btn" data-cat="Dining">🍽 Dining</button>
+    <button class="filter-btn" data-cat="Finance">💳 Finance</button>
     <span class="filter-sep"></span>
     <select class="sort-select" id="sort-select">
       <option value="newest">Nieuwste eerst</option>
@@ -818,9 +868,9 @@
   </div>
   <div class="footer-col">
     <h5>Deals</h5>
-    <a href="#" onclick="filterCat('Flights')">Vluchten</a>
-    <a href="#" onclick="filterCat('Hotels')">Hotels</a>
-    <a href="#" onclick="filterCat('Shopping')">Shopping</a>
+    <a href="#" onclick="filterCat('flight')">Vluchten</a>
+    <a href="#" onclick="filterCat('hotel')">Hotels</a>
+    <a href="#" onclick="filterCat('shop')">Shopping</a>
     <a href="#shops">Shop for Miles</a>
   </div>
   <div class="footer-col">
@@ -847,6 +897,7 @@
     <div class="modal-title" id="m-title"></div>
     <div class="modal-meta" id="m-meta"></div>
     <div class="modal-desc" id="m-desc"></div>
+    <div id="m-calc"></div>
     <div class="modal-how">
       <h4>Hoe activeer je deze deal?</h4>
       <ol>
@@ -862,6 +913,11 @@
     </a>
   </div>
 </div>
+
+<!-- ──── BACK TO TOP ──── -->
+<button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Terug naar boven">
+  <svg viewBox="0 0 16 16" fill="none" width="16" height="16"><path d="M8 12V4M4 8l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
 
 <script>
   /* ── State ─────────────────────────────── */
@@ -937,31 +993,11 @@
     }).join('');
   }
 
-  function normalizeCategory(cat) {
-    if (!cat) return '';
-    const s = cat.toLowerCase();
-    // Map earn-online / sheet categories to filter keys
-    if (s.includes('flight') || s.includes('aviation') || s === 'flights') return 'flight';
-    if (s.includes('hotel') || s.includes('travel') || s === 'hotels') return 'hotel';
-    if (s.includes('car') || s.includes('auto') || s === 'car rental') return 'car';
-    if (s.includes('shop') || s.includes('clothes') || s.includes('fashion') ||
-        s.includes('department') || s.includes('children') || s.includes('gifts') ||
-        s.includes('health') || s.includes('beauty') || s.includes('toys') ||
-        s.includes('sport') || s.includes('fitness') || s.includes('electrical') ||
-        s.includes('home') || s.includes('garden') || s.includes('office') ||
-        s.includes('entertainment') || s.includes('leisure') || s.includes('food') ||
-        s.includes('drink') || s === 'shopping') return 'shop';
-    if (s.includes('dining') || s.includes('restaurant')) return 'dining';
-    if (s.includes('finance') || s.includes('bank') || s.includes('insurance')) return 'finance';
-    return s;
-  }
-
   function applyFiltersAndSort() {
     const q = activeSearch.toLowerCase();
     let filtered = allDeals.filter(d => {
-      const normCat = normalizeCategory(d.category);
-      const catMatch = activeCategory === 'all' || normCat === activeCategory;
-      const searchMatch = !q || (d.title || '').toLowerCase().includes(q) || (d.partner || '').toLowerCase().includes(q);
+      const catMatch = activeCategory === 'all' || d.category === activeCategory;
+      const searchMatch = !q || (d.title || '').toLowerCase().includes(q);
       return catMatch && searchMatch;
     });
 
@@ -1121,11 +1157,99 @@
     `;
 
     document.getElementById('m-desc').textContent = d.description || '';
+    renderCalc(d);
     const cta = document.getElementById('m-cta');
     cta.href = d.url || 'https://www.flyingblue.com';
 
     document.getElementById('modal-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
+  }
+
+  /* ── Miles calculator ──────────────────── */
+  function renderCalc(d) {
+    const el = document.getElementById('m-calc');
+    const raw = d.miles ? String(d.miles).trim() : '';
+    if (!raw) { el.innerHTML = ''; return; }
+
+    const isShop = d.source === 'scrape' || d.source === 'earn' || d.category === 'shop';
+    const multMatch = raw.match(/^(\d+(?:\.\d+)?)x$/i);
+    const fixedNum = parseInt(raw);
+    const rateNum = isShop ? (parseFloat(raw) || null) : null;
+
+    if (isShop && rateNum) {
+      // Shop deal: rate in miles per €
+      el.innerHTML = `
+        <div class="calc-box">
+          <div class="calc-title">Miles calculator</div>
+          <div class="calc-row">
+            <span class="calc-label">Jouw aankoop</span>
+            <div class="calc-input-wrap">
+              <span class="calc-prefix">€</span>
+              <input class="calc-input" type="number" id="calc-inp" min="0" step="1" placeholder="100" oninput="calcRate(${rateNum})">
+            </div>
+          </div>
+          <div class="calc-result" id="calc-out"><span class="calc-result-empty">Vul een bedrag in</span></div>
+        </div>`;
+
+    } else if (multMatch) {
+      // Multiplier deal: Nx bonus on base earn
+      const mult = parseFloat(multMatch[1]);
+      el.innerHTML = `
+        <div class="calc-box">
+          <div class="calc-title">Miles calculator &middot; ${raw} bonus</div>
+          <div class="calc-row">
+            <span class="calc-label">Uitgavenbedrag</span>
+            <div class="calc-input-wrap">
+              <span class="calc-prefix">€</span>
+              <input class="calc-input" type="number" id="calc-inp" min="0" step="1" placeholder="200" oninput="calcMult(${mult})">
+            </div>
+          </div>
+          <div class="calc-result" id="calc-out"><span class="calc-result-empty">Vul een bedrag in</span></div>
+        </div>`;
+
+    } else if (!isNaN(fixedNum) && fixedNum > 0) {
+      // Fixed miles promo: show value breakdown immediately
+      el.innerHTML = `
+        <div class="calc-box">
+          <div class="calc-title">Wat zijn deze miles waard?</div>
+          <div class="calc-values">
+            <div class="calc-val-item">
+              <div class="calc-val-num">€${(fixedNum * 0.01).toFixed(2)}</div>
+              <div class="calc-val-label">Basiswaarde<br>@ €0,01 / mile</div>
+            </div>
+            <div class="calc-val-divider"></div>
+            <div class="calc-val-item">
+              <div class="calc-val-num calc-val-green">€${(fixedNum * 0.03).toFixed(2)}</div>
+              <div class="calc-val-label">Premium vlucht<br>@ €0,03 / mile</div>
+            </div>
+          </div>
+        </div>`;
+
+    } else {
+      el.innerHTML = '';
+    }
+  }
+
+  function calcRate(ratePerEuro) {
+    const spend = parseFloat(document.getElementById('calc-inp').value);
+    const out = document.getElementById('calc-out');
+    if (!spend || spend <= 0) { out.innerHTML = '<span class="calc-result-empty">Vul een bedrag in</span>'; return; }
+    const miles = Math.round(spend * ratePerEuro);
+    out.innerHTML = `<div class="calc-result-row">
+      <div class="calc-result-miles">${miles.toLocaleString('nl-NL')} miles</div>
+      <div class="calc-result-sub">≈ €${(miles * 0.01).toFixed(2)} basiswaarde &middot; €${(miles * 0.03).toFixed(2)} premium vlucht</div>
+    </div>`;
+  }
+
+  function calcMult(multiplier) {
+    const spend = parseFloat(document.getElementById('calc-inp').value);
+    const out = document.getElementById('calc-out');
+    if (!spend || spend <= 0) { out.innerHTML = '<span class="calc-result-empty">Vul een bedrag in</span>'; return; }
+    const miles = Math.round(spend * 5 * multiplier); // ~5 base miles/€ Flying Blue average
+    out.innerHTML = `<div class="calc-result-row">
+      <div class="calc-result-miles">~${miles.toLocaleString('nl-NL')} miles</div>
+      <div class="calc-result-sub">Schatting op basis van 5 miles/€ basisverdienste &middot; ≈ €${(miles * 0.01).toFixed(2)}–€${(miles * 0.03).toFixed(2)}</div>
+    </div>`;
   }
 
   function closeModal(e) {
@@ -1138,18 +1262,8 @@
     if (e.key === 'Escape') closeModal({ target: document.getElementById('modal-overlay') });
   });
 
-  /* ── Back to top ───────────────────────── */
-  const bttBtn = document.getElementById('back-to-top');
-  window.addEventListener('scroll', () => {
-    bttBtn.classList.toggle('visible', window.scrollY > 400);
-  });
-
   /* ── Boot ──────────────────────────────── */
   loadDeals();
 </script>
-<!-- ──── BACK TO TOP ──── -->
-<button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Terug naar boven">
-  <svg viewBox="0 0 16 16" fill="none" width="16" height="16"><path d="M8 12V4M4 8l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-</button>
 </body>
 </html>
