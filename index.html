@@ -880,23 +880,20 @@
     try {
       const res = await fetch('/api/promotions');
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      allDeals = data;
+      const json = await res.json();
+      // API returns { promotions: [...], updatedAt: '...' }
+      const promos = (json.promotions || []).map(d => ({ ...d, source: 'promotions' }));
+      allDeals = promos;
 
-      // Stats
-      const hot = data.filter(d => d.hot === 'TRUE').length;
-      const expiring = data.filter(d => { const n = daysUntil(d.expires); return n !== null && n <= 7; }).length;
-      const always = data.filter(d => !d.expires).length;
-      document.getElementById('stat-total').textContent = data.length;
-      document.getElementById('stat-hot').textContent = hot;
-      document.getElementById('stat-expiring').textContent = expiring;
-      document.getElementById('stat-always').textContent = always;
+      // Updated timestamp from API
+      if (json.updatedAt) {
+        const d = new Date(json.updatedAt);
+        document.getElementById('nav-updated').textContent =
+          `Bijgewerkt: ${d.toLocaleString('nl-NL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}`;
+      }
 
-      // Updated timestamp
-      const now = new Date();
-      document.getElementById('nav-updated').textContent =
-        `Bijgewerkt: ${now.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}`;
-
+      await loadShops();
+      updateStats();
       applyFiltersAndSort();
     } catch (err) {
       console.error('Promotions error:', err);
@@ -910,33 +907,59 @@
     }
   }
 
-  /* ── Load shops ────────────────────────── */
+  function updateStats() {
+    const hot      = allDeals.filter(d => d.hot === true || d.hot === 'TRUE').length;
+    const expiring = allDeals.filter(d => { const n = daysUntil(d.expires); return n !== null && n <= 7 && n > 0; }).length;
+    const always   = allDeals.filter(d => d.type === 'always' || !d.expires).length;
+    document.getElementById('stat-total').textContent    = allDeals.length;
+    document.getElementById('stat-hot').textContent      = hot;
+    document.getElementById('stat-expiring').textContent = expiring;
+    document.getElementById('stat-always').textContent   = always;
+  }
+
+  /* ── Load shops (scrape-shops + earn-online) ── */
   async function loadShops() {
     const grid = document.getElementById('shop-grid');
+    const shopDeals = [];
+
     try {
-      const res = await fetch('/api/shops');
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const shops = await res.json();
-
-      if (!shops || shops.length === 0) {
-        grid.innerHTML = `<div class="state-box"><div class="state-icon">🛍</div><h3>Geen shops gevonden</h3><p>Probeer later opnieuw.</p></div>`;
-        return;
+      const r1 = await fetch('/api/scrape-shops');
+      if (r1.ok) {
+        const { shops } = await r1.json();
+        shops.forEach(s => {
+          shopDeals.push({ title: s.name, miles: s.miles, description: `Verdien miles bij ${s.name} via Shop for Miles. ${s.miles} per aankoop.`, partner: s.name, category: 'shop', type: 'always', hot: false, expires: null, tier: 'all', url: s.url, logo: s.logo, source: 'scrape' });
+        });
       }
+    } catch (e) { console.warn('scrape-shops mislukt:', e); }
 
-      const catEmoji = { fashion: '👗', travel: '✈️', electronics: '💻', beauty: '💄', sport: '🏃', food: '🍕', home: '🏠' };
-      grid.innerHTML = shops.slice(0, 12).map(s => `
+    try {
+      const r2 = await fetch('/api/earn-online');
+      if (r2.ok) {
+        const { shops: es } = await r2.json();
+        es.forEach(s => {
+          shopDeals.push({ title: s.name, miles: s.miles, description: s.milesWas ? `Was: ${s.milesWas} — nu ${s.miles} per aankoop.` : `Verdien ${s.miles} bij ${s.name}.`, partner: s.name, category: 'shop', type: s.isOffer ? 'temp' : 'always', hot: s.isOffer || false, expires: null, tier: 'all', url: s.url, logo: s.logo, source: 'earn' });
+        });
+      }
+    } catch (e) { console.warn('earn-online mislukt:', e); }
+
+    // Push shop deals into allDeals for filtering
+    shopDeals.forEach(s => allDeals.push(s));
+
+    // Render shop grid with scraped data
+    const scraped = shopDeals.filter(s => s.source === 'scrape' || s.source === 'earn');
+    if (scraped.length > 0) {
+      grid.innerHTML = scraped.slice(0, 12).map(s => `
         <a class="shop-card" href="${s.url || '#'}" target="_blank" rel="noopener">
           <div style="display:flex;align-items:center;gap:12px">
-            <div class="shop-logo">${s.logo ? `<img src="${s.logo}" style="width:32px;height:32px;object-fit:contain;border-radius:6px" onerror="this.parentElement.textContent='🛍'">` : (catEmoji[s.category] || '🛍')}</div>
+            <div class="shop-logo">${s.logo ? `<img src="${s.logo}" style="width:32px;height:32px;object-fit:contain;border-radius:6px" onerror="this.parentElement.textContent='🛍'">` : '🛍'}</div>
             <div>
-              <div class="shop-cat">${s.category || 'Shop'}</div>
-              <div class="shop-name">${s.name}</div>
+              <div class="shop-cat">${s.source === 'earn' ? 'Earn Online' : 'Shop for Miles'}</div>
+              <div class="shop-name">${s.name || s.title}</div>
             </div>
           </div>
-          <div class="shop-rate">${s.miles}<small> miles per euro</small></div>
+          <div class="shop-rate">${s.miles}<small> miles per €</small></div>
         </a>`).join('');
-    } catch {
-      // Fallback — shops API might not be ready yet
+    } else {
       grid.innerHTML = `
         <div class="state-box">
           <div class="state-icon">🛍</div>
@@ -1009,7 +1032,6 @@
 
   /* ── Boot ──────────────────────────────── */
   loadDeals();
-  loadShops();
 </script>
 </body>
 </html>
