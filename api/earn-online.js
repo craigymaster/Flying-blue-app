@@ -31,7 +31,7 @@ function parseShops($, seen, shops) {
     const isOffer = $(el).find('.ico-offer').length > 0;
     const categoryMatch = href.match(/\/en\/([^/]+)\//);
     const category = categoryMatch ? categoryMatch[1] : 'overig';
-    const url = href ? `https://earnonline.flyingblue.com${href.split('?')[0]}` : '';
+    const url = href ? `https://earnonline.flyingblue.com/${href.replace(/^\/+/, '').split('?')[0]}` : '';
     if (name && milesRaw && !seen.has(name)) {
       seen.add(name);
       shops.push({ name, miles: milesRaw, milesWas: milesWas || null, url, logo, category, isOffer });
