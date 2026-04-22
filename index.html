@@ -12,7 +12,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <style>
     /* ─── RESET & VARS ─────────────────────────────────────── */
@@ -40,8 +40,8 @@
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
       --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
       --radius:    12px;
-      --font-display: 'Plus Jakarta Sans', sans-serif;
-      --font-body:    'Inter', sans-serif;
+      --font-display: 'Syne', sans-serif;
+      --font-body:    'DM Sans', sans-serif;
     }
 
     html { scroll-behavior: smooth; }
@@ -589,74 +589,6 @@
     }
     .modal-cta:hover { background: var(--accent2); }
 
-    /* ─── CALCULATOR ──────────────────────────────────────── */
-    .calc-box {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px 20px;
-      margin-bottom: 20px;
-    }
-    .calc-title {
-      font-family: var(--font-display);
-      font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.9px;
-      color: var(--muted);
-      margin-bottom: 14px;
-    }
-    .calc-row {
-      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-    }
-    .calc-label {
-      font-size: 13px; font-weight: 500; color: var(--text);
-      white-space: nowrap;
-    }
-    .calc-input-wrap {
-      display: flex; align-items: stretch;
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      background: var(--surface);
-      overflow: hidden;
-      flex: 1; min-width: 120px;
-    }
-    .calc-prefix {
-      padding: 0 10px;
-      font-size: 13px; color: var(--muted);
-      background: var(--surface2);
-      border-right: 1px solid var(--border);
-      display: flex; align-items: center;
-      user-select: none;
-    }
-    .calc-input {
-      border: none; outline: none; background: none;
-      font: inherit; font-size: 14px; color: var(--text);
-      padding: 8px 10px; width: 100%;
-    }
-    .calc-input::-webkit-inner-spin-button,
-    .calc-input::-webkit-outer-spin-button { -webkit-appearance: none; }
-    .calc-result {
-      margin-top: 12px; min-height: 40px;
-      display: flex; align-items: center;
-    }
-    .calc-result-empty { font-size: 13px; color: var(--muted); }
-    .calc-result-row { display: flex; flex-direction: column; gap: 3px; }
-    .calc-result-miles {
-      font-family: var(--font-display);
-      font-size: 24px; font-weight: 800;
-      color: var(--green); line-height: 1.25;
-    }
-    .calc-result-sub { font-size: 12px; color: var(--muted); }
-    .calc-values { display: flex; align-items: center; }
-    .calc-val-item { flex: 1; text-align: center; }
-    .calc-val-num {
-      font-family: var(--font-display);
-      font-size: 22px; font-weight: 800;
-      color: var(--text); line-height: 1.25;
-    }
-    .calc-val-num.calc-val-green { color: var(--green); }
-    .calc-val-label { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
-    .calc-val-divider { width: 1px; height: 44px; background: var(--border); margin: 0 16px; flex-shrink: 0; }
-
     /* ─── RESPONSIVE ───────────────────────────────────────── */
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
@@ -752,12 +684,12 @@
 
   <div class="filters">
     <button class="filter-btn active" data-cat="all">Alles</button>
-    <button class="filter-btn" data-cat="flights">✈ Vluchten</button>
-    <button class="filter-btn" data-cat="hotels">🏨 Hotels</button>
-    <button class="filter-btn" data-cat="car">🚗 Auto</button>
-    <button class="filter-btn" data-cat="shopping">🛍 Shopping</button>
-    <button class="filter-btn" data-cat="dining">🍽 Dining</button>
-    <button class="filter-btn" data-cat="finance">💳 Finance</button>
+    <button class="filter-btn" data-cat="Flights">✈ Vluchten</button>
+    <button class="filter-btn" data-cat="Hotels">🏨 Hotels</button>
+    <button class="filter-btn" data-cat="Car">🚗 Auto</button>
+    <button class="filter-btn" data-cat="Shopping">🛍 Shopping</button>
+    <button class="filter-btn" data-cat="Dining">🍽 Dining</button>
+    <button class="filter-btn" data-cat="Finance">💳 Finance</button>
     <span class="filter-sep"></span>
     <select class="sort-select" id="sort-select">
       <option value="newest">Nieuwste eerst</option>
@@ -897,7 +829,6 @@
     <div class="modal-title" id="m-title"></div>
     <div class="modal-meta" id="m-meta"></div>
     <div class="modal-desc" id="m-desc"></div>
-    <div id="m-calc"></div>
     <div class="modal-how">
       <h4>Hoe activeer je deze deal?</h4>
       <ol>
@@ -1157,7 +1088,6 @@
     `;
 
     document.getElementById('m-desc').textContent = d.description || '';
-    renderCalc(d);
     const cta = document.getElementById('m-cta');
     cta.href = d.url || 'https://www.flyingblue.com';
 
@@ -1165,91 +1095,1112 @@
     document.body.style.overflow = 'hidden';
   }
 
-  /* ── Miles calculator ──────────────────── */
-  function renderCalc(d) {
-    const el = document.getElementById('m-calc');
-    const raw = d.miles ? String(d.miles).trim() : '';
-    if (!raw) { el.innerHTML = ''; return; }
+  function closeModal(e) {
+    if (e && e.target !== document.getElementById('modal-overlay') && !e.target.classList.contains('modal-close')) return;
+    document.getElementById('modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
 
-    const isShop = d.source === 'scrape' || d.source === 'earn' || d.category === 'shop';
-    const multMatch = raw.match(/^(\d+(?:\.\d+)?)x$/i);
-    const fixedNum = parseInt(raw);
-    const rateNum = isShop ? (parseFloat(raw) || null) : null;
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal({ target: document.getElementById('modal-overlay') });
+  });
 
-    if (isShop && rateNum) {
-      // Shop deal: rate in miles per €
-      el.innerHTML = `
-        <div class="calc-box">
-          <div class="calc-title">Miles calculator</div>
-          <div class="calc-row">
-            <span class="calc-label">Jouw aankoop</span>
-            <div class="calc-input-wrap">
-              <span class="calc-prefix">€</span>
-              <input class="calc-input" type="number" id="calc-inp" min="0" step="1" placeholder="100" oninput="calcRate(${rateNum})">
+  /* ── Boot ──────────────────────────────── */
+  loadDeals();
+</script>
+</body>
+</html>  function normalizeCategory(cat) {
+    if (!cat) return '';
+    const s = cat.toLowerCase().trim();
+    if (s === 'flights' || s === 'flight') return 'flight';
+    if (s === 'hotels' || s === 'hotel') return 'hotel';
+    if (s === 'car' || s === 'cars') return 'car';
+    if (s === 'shopping') return 'shop';
+    if (s === 'dining') return 'dining';
+    if (s === 'finance') return 'finance';
+    if (s === 'shop') return 'shop';
+    if (s.includes('flight') || s.includes('aviation')) return 'flight';
+    if (s.includes('travel') || s.includes('hotel')) return 'hotel';
+    if (s.includes('dining') || s.includes('restaurant') || s.includes('food') || s.includes('drink')) return 'dining';
+    if (s.includes('finance') || s.includes('bank') || s.includes('insurance')) return 'finance';
+    return 'shop';
+  }
+
+    :root {
+      --bg:        #f7f8fa;
+      --surface:   #ffffff;
+      --surface2:  #f0f2f5;
+      --border:    rgba(0,0,0,0.07);
+      --border-md: rgba(0,0,0,0.11);
+      --text:      #111318;
+      --text-2:    #374151;
+      --muted:     #6b7280;
+      --muted-2:   #9ca3af;
+      --accent:    #0057d9;
+      --accent2:   #003faa;
+      --accent-bg: rgba(0,87,217,0.07);
+      --gold:      #b86e00;
+      --gold-bg:   rgba(184,110,0,0.08);
+      --green:     #0d7e45;
+      --green-bg:  rgba(13,126,69,0.08);
+      --red:       #c81e1e;
+      --red-bg:    rgba(200,30,30,0.07);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+      --radius:    12px;
+      --font-display: 'Syne', sans-serif;
+      --font-body:    'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font: inherit; }
+
+
+    /* ─── NAV ──────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 32px;
+      height: 64px;
+      background: rgba(247,248,250,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-search-wrap {
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-search {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 14px;
+      width: 260px;
+      transition: border-color .2s, width .2s;
+    }
+    .nav-search:focus-within {
+      border-color: var(--accent);
+      width: 320px;
+    }
+    .nav-search svg { flex-shrink: 0; color: var(--muted); }
+    .nav-search input {
+      border: none; outline: none; background: none;
+      font: inherit; font-size: 13px; color: var(--text);
+      width: 100%;
+    }
+    .nav-search input::placeholder { color: var(--muted); }
+    @media (max-width: 768px) {
+      nav { grid-template-columns: 1fr auto; }
+      .nav-search-wrap { display: none; }
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 24px; align-items: center; justify-content: flex-end; }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .nav-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+    .nav-updated { font-size: 12px; color: var(--muted); }
+
+    /* ─── HERO ─────────────────────────────────────────────── */
+    .hero {
+      padding: 140px 32px 80px;
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 24px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block; width: 24px; height: 1px;
+      background: var(--accent);
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5.5vw, 68px);
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -1.5px;
+      max-width: 760px;
+      margin-bottom: 24px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+      display: inline-block;
+      position: relative;
+    }
+    .hero-sub {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 26px;
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 10px;
+      transition: background .2s, transform .2s;
+    }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,87,217,0.28); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 22px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: 10px;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-ghost:hover { border-color: rgba(0,0,0,0.2); color: var(--text); }
+    .btn-ghost svg { width: 14px; height: 14px; }
+
+    /* ─── STATS ROW ────────────────────────────────────────── */
+    .stats {
+      max-width: 1140px; margin: 0 auto;
+      padding: 0 32px 80px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    }
+    @media (max-width: 700px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 36px; font-weight: 800; letter-spacing: -1.5px;
+      line-height: 1.1;
+    }
+    .stat-value.green { color: var(--green); }
+    .stat-value.gold  { color: var(--gold);  }
+    .stat-value.accent { color: var(--accent); }
+    .stat-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* ─── SECTION ──────────────────────────────────────────── */
+    section { max-width: 1140px; margin: 0 auto; padding: 0 32px 80px; }
+    .section-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 28px; flex-wrap: wrap; gap: 16px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 20px; font-weight: 800; letter-spacing: -0.3px;
+      line-height: 1.3;
+      color: var(--text);
+    }
+    .section-title small {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 13px; font-weight: 400;
+      color: var(--muted); margin-top: 3px;
+      letter-spacing: 0;
+    }
+
+    /* ─── FILTERS ──────────────────────────────────────────── */
+    .filters {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px;
+      align-items: center;
+    }
+    .filter-btn {
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 13px; font-weight: 500;
+      color: var(--muted);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+      transition: all .15s;
+    }
+    .filter-btn:hover { color: var(--text); border-color: var(--border-md); }
+    .filter-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,87,217,0.22);
+    }
+    .filter-sep { width: 1px; height: 24px; background: var(--border); }
+    .sort-select {
+      margin-left: auto;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 13px;
+      font-family: var(--font-body);
+      appearance: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ─── DEAL GRID ────────────────────────────────────────── */
+    .deal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 16px;
+    }
+    .deal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px 20px;
+      cursor: pointer;
+      transition: box-shadow .18s, transform .18s, border-color .18s;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+    }
+    .deal-card::after {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 3px; bottom: 0;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity .18s;
+      border-radius: 12px 0 0 12px;
+    }
+    .deal-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+      border-color: var(--border-md);
+    }
+    .deal-card:hover::after { opacity: 1; }
+    .deal-card.hot { border-color: rgba(184,110,0,0.2); }
+    .deal-card.hot::after { background: var(--gold); opacity: 1; }
+
+    .deal-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .deal-partner {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.8px;
+      text-transform: uppercase; color: var(--muted-2);
+    }
+    .deal-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+    .badge {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.3px;
+      text-transform: uppercase;
+      padding: 2px 8px; border-radius: 100px;
+    }
+    .badge-hot  { background: var(--gold-bg);   color: var(--gold);   border: 1px solid rgba(184,110,0,0.18); }
+    .badge-soon { background: var(--red-bg);    color: var(--red);    border: 1px solid rgba(200,30,30,0.15); }
+    .badge-new  { background: var(--accent-bg); color: var(--accent); border: 1px solid rgba(0,87,217,0.15); }
+    .badge-cat  { background: var(--surface2);  color: var(--muted);  border: 1px solid var(--border); }
+
+    .deal-title {
+      font-family: var(--font-display);
+      font-size: 15px; font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1.4;
+      color: var(--text);
+    }
+    .deal-desc {
+      font-size: 13px; color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 16px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex: 1;
+    }
+    .deal-footer {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .deal-miles {
+      font-family: var(--font-display);
+      font-size: 26px; font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+      letter-spacing: -0.5px;
+    }
+    .deal-miles small { font-size: 11px; font-weight: 500; color: var(--muted); display: block; font-family: var(--font-body); margin-top: 4px; letter-spacing: 0; }
+    .deal-miles.high-value { color: var(--green); }
+    .deal-expires { font-size: 11px; color: var(--muted-2); text-align: right; }
+    .deal-expires.urgent { color: var(--red); font-weight: 600; }
+    .deal-logo { width: 36px; height: 36px; border-radius: 8px; object-fit: contain; border: 1px solid var(--border); background: var(--surface2); padding: 4px; flex-shrink: 0; }
+
+    /* ─── EMPTY / LOADING ──────────────────────────────────── */
+    .state-box {
+      grid-column: 1 / -1;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center;
+      padding: 80px 32px;
+      color: var(--muted);
+      text-align: center;
+    }
+    .state-box .state-icon { font-size: 40px; margin-bottom: 16px; }
+    .state-box h3 { font-family: var(--font-display); font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+    .state-box p { font-size: 14px; max-width: 320px; }
+    .retry-btn {
+      margin-top: 20px;
+      padding: 10px 22px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .retry-btn:hover { border-color: rgba(0,0,0,.18); color: var(--text); }
+
+    .skeleton {
+      background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 8px;
+    }
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .skel-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .skel-line { height: 12px; border-radius: 6px; }
+
+    /* ─── SHOP SECTION ─────────────────────────────────────── */
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .shop-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: flex; flex-direction: column; gap: 12px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow .18s, transform .18s, border-color .18s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .shop-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--border-md); }
+    .shop-logo {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: var(--surface2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      border: 1px solid var(--border);
+    }
+    .shop-name { font-family: var(--font-display); font-size: 15px; font-weight: 700; }
+    .shop-rate { font-size: 17px; font-weight: 800; color: var(--text); font-family: var(--font-display); letter-spacing: -0.3px; }
+    .shop-rate small { font-size: 11px; font-weight: 400; color: var(--muted); font-family: var(--font-body); }
+    .shop-cat { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
+
+    /* ─── TRUST SECTION ────────────────────────────────────── */
+    .trust-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .trust-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      display: flex; gap: 14px; align-items: flex-start;
+      box-shadow: var(--shadow-sm);
+    }
+    .trust-icon { font-size: 22px; flex-shrink: 0; }
+    .trust-card h4 { font-family: var(--font-display); font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .trust-card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    /* ─── FAQ ──────────────────────────────────────────────── */
+    .faq-list { display: flex; flex-direction: column; gap: 8px; }
+    details {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    summary {
+      padding: 18px 22px;
+      font-family: var(--font-display);
+      font-size: 15px; font-weight: 700;
+      cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      list-style: none;
+      transition: background .2s;
+    }
+    summary:hover { background: var(--surface2); }
+    summary::after { content: '+'; font-size: 20px; font-weight: 300; color: var(--muted); }
+    details[open] summary::after { content: '−'; }
+    details p {
+      padding: 0 22px 20px;
+      font-size: 14px; color: var(--muted); line-height: 1.7;
+    }
+
+    /* ─── FOOTER ───────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 32px 64px;
+      max-width: 1140px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+    }
+    @media (max-width: 600px) { footer { grid-template-columns: 1fr; } }
+    .footer-brand .nav-logo { font-size: 18px; margin-bottom: 10px; }
+    .footer-brand p { font-size: 13px; color: var(--muted); line-height: 1.7; max-width: 280px; }
+    .footer-col h5 { font-family: var(--font-display); font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; transition: color .2s; }
+    .footer-col a:hover { color: var(--text); }
+    .footer-bottom {
+      max-width: 1140px; margin: 0 auto;
+      padding: 0 32px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { font-size: 12px; color: var(--muted); }
+    .open-source-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600;
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted);
+      transition: border-color .2s, color .2s;
+    }
+    .open-source-badge:hover { border-color: rgba(0,0,0,.2); color: var(--text); }
+
+    /* ─── MODAL ────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border-md);
+      border-radius: 16px;
+      max-width: 520px; width: 100%;
+      max-height: 90vh; overflow-y: auto;
+      padding: 32px;
+      transform: translateY(10px);
+      transition: transform .25s;
+      position: relative;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-close {
+      position: absolute; top: 20px; right: 20px;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%;
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 18px;
+      transition: background .2s;
+    }
+    .modal-close:hover { background: var(--surface2); color: var(--text); }
+    .modal-partner { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    .modal-title { font-family: var(--font-display); font-size: 24px; font-weight: 800; line-height: 1.3; margin-bottom: 20px; }
+    .modal-meta {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .meta-item { display: flex; flex-direction: column; gap: 3px; }
+    .meta-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+    .meta-value { font-size: 15px; font-weight: 600; }
+    .meta-value.green { color: var(--green); }
+    .meta-value.red   { color: var(--red); }
+    .modal-desc { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 24px; }
+    .modal-how { margin-bottom: 28px; }
+    .modal-how h4 { font-family: var(--font-display); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
+    .modal-how ol { padding-left: 18px; display: flex; flex-direction: column; gap: 8px; }
+    .modal-how li { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .modal-cta {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%;
+      padding: 16px;
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 15px; font-weight: 700;
+      border-radius: 10px;
+      transition: background .2s;
+    }
+    .modal-cta:hover { background: var(--accent2); }
+
+    /* ─── RESPONSIVE ───────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links .nav-updated { display: none; }
+      .hero { padding: 110px 20px 60px; }
+      .stats, section { padding-left: 20px; padding-right: 20px; }
+      footer { padding: 40px 20px 60px; }
+      .footer-bottom { padding: 20px; }
+    }
+
+    /* ─── ANIMATIONS ───────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-eyebrow { animation: fadeUp .5s ease both; }
+    .hero h1      { animation: fadeUp .5s ease .1s both; }
+    .hero-sub     { animation: fadeUp .5s ease .2s both; }
+    .hero-actions { animation: fadeUp .5s ease .3s both; }
+  </style>
+</head>
+<body>
+
+<!-- ──── NAV ──── -->
+<nav>
+  <a href="#" class="nav-logo">Miles<span>Optimizer</span></a>
+  <div class="nav-search-wrap">
+    <div class="nav-search">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M10.5 10.5l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <input type="search" id="nav-search-input" placeholder="Zoek deals…" autocomplete="off" />
+    </div>
+  </div>
+  <div class="nav-links">
+    <span class="nav-updated" id="nav-updated">Bijgewerkt: laden…</span>
+    <span class="nav-badge" id="nav-badge">Live</span>
+    <a href="#deals">Deals</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://github.com/craigymaster/Flying-blue-app" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</nav>
+
+<!-- ──── HERO ──── -->
+<div class="hero">
+  <div class="hero-eyebrow">Voor Flying Blue leden</div>
+  <h1>Nooit meer <em>miles</em> laten verlopen</h1>
+  <p class="hero-sub">
+    Alle Flying Blue deals op één plek — promoties, Shop for Miles en Earn Online. Altijd actueel, altijd gratis.
+  </p>
+  <div class="hero-actions">
+    <a href="#deals" class="btn-primary">
+      Bekijk deals
+      <svg viewBox="0 0 16 16" fill="none" style="width:14px;height:14px"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="https://github.com/craigymaster/Flying-blue-app" target="_blank" rel="noopener" class="btn-ghost">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 000 16c4.418 0 8-3.582 8-8a8 8 0 00-8-8zm0 14.5A6.5 6.5 0 018 1.5a6.5 6.5 0 110 13z" opacity=".3"/><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      Open source
+    </a>
+  </div>
+</div>
+
+<!-- ──── STATS ──── -->
+<div class="stats">
+  <div class="stat-card">
+    <div class="stat-label">Totaal deals</div>
+    <div class="stat-value accent" id="stat-total">—</div>
+    <div class="stat-sub">actieve promoties</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Hot right now</div>
+    <div class="stat-value gold" id="stat-hot">—</div>
+    <div class="stat-sub">uitgelichte deals</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Verloopt snel</div>
+    <div class="stat-value" style="color:var(--red)" id="stat-expiring">—</div>
+    <div class="stat-sub">binnen 7 dagen</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Altijd actief</div>
+    <div class="stat-value green" id="stat-always">—</div>
+    <div class="stat-sub">blijvende deals</div>
+  </div>
+</div>
+
+<!-- ──── DEALS ──── -->
+<section id="deals">
+  <div class="section-header">
+    <div class="section-title">
+      Promoties
+      <small>Handgeselecteerd uit de Flying Blue nieuwsbrief</small>
+    </div>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-cat="all">Alles</button>
+    <button class="filter-btn" data-cat="Flights">✈ Vluchten</button>
+    <button class="filter-btn" data-cat="Hotels">🏨 Hotels</button>
+    <button class="filter-btn" data-cat="Car">🚗 Auto</button>
+    <button class="filter-btn" data-cat="Shopping">🛍 Shopping</button>
+    <button class="filter-btn" data-cat="Dining">🍽 Dining</button>
+    <button class="filter-btn" data-cat="Finance">💳 Finance</button>
+    <span class="filter-sep"></span>
+    <select class="sort-select" id="sort-select">
+      <option value="newest">Nieuwste eerst</option>
+      <option value="expiring">Verloopt snel</option>
+      <option value="miles">Meeste miles</option>
+    </select>
+  </div>
+
+  <div class="deal-grid" id="deal-grid">
+    <!-- skeletons -->
+    <div class="skel-card"><div class="skeleton skel-line" style="width:40%"></div><div class="skeleton skel-line" style="width:80%;height:18px;margin-top:4px"></div><div class="skeleton skel-line" style="width:95%;margin-top:4px"></div><div class="skeleton skel-line" style="width:60%;margin-top:4px"></div></div>
+    <div class="skel-card"><div class="skeleton skel-line" style="width:40%"></div><div class="skeleton skel-line" style="width:70%;height:18px;margin-top:4px"></div><div class="skeleton skel-line" style="width:90%;margin-top:4px"></div><div class="skeleton skel-line" style="width:55%;margin-top:4px"></div></div>
+    <div class="skel-card"><div class="skeleton skel-line" style="width:35%"></div><div class="skeleton skel-line" style="width:75%;height:18px;margin-top:4px"></div><div class="skeleton skel-line" style="width:85%;margin-top:4px"></div><div class="skeleton skel-line" style="width:50%;margin-top:4px"></div></div>
+  </div>
+</section>
+
+<!-- ──── SHOP FOR MILES ──── -->
+<section id="shops">
+  <div class="section-header">
+    <div class="section-title">
+      Shop for Miles
+      <small>Verdien miles bij online winkelen</small>
+    </div>
+    <a href="https://www.flyingblue.com/nl/earn/shop-for-miles?country=NL" target="_blank" rel="noopener" class="btn-ghost" style="font-size:12px;padding:10px 18px">Alle shops ↗</a>
+  </div>
+  <div class="shop-grid" id="shop-grid">
+    <div class="skel-card" style="height:140px"></div>
+    <div class="skel-card" style="height:140px"></div>
+    <div class="skel-card" style="height:140px"></div>
+    <div class="skel-card" style="height:140px"></div>
+  </div>
+</section>
+
+<!-- ──── TRUST ──── -->
+<section id="trust">
+  <div class="section-title" style="margin-bottom:24px">
+    Hoe het werkt
+    <small>Transparant en eenvoudig</small>
+  </div>
+  <div class="trust-row">
+    <div class="trust-card">
+      <div class="trust-icon">🔒</div>
+      <div>
+        <h4>Geen login vereist</h4>
+        <p>We slaan geen accountgegevens op. Je klikt door naar Flying Blue om te activeren.</p>
+      </div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-icon">📡</div>
+      <div>
+        <h4>Altijd actueel</h4>
+        <p>Data wordt dagelijks automatisch bijgewerkt vanuit officiële Flying Blue bronnen.</p>
+      </div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-icon">🔓</div>
+      <div>
+        <h4>Open source</h4>
+        <p>De code staat op GitHub. Volledig transparant, gebouwd door een Flying Blue gebruiker.</p>
+      </div>
+    </div>
+    <div class="trust-card">
+      <div class="trust-icon">⚠️</div>
+      <div>
+        <h4>Onafhankelijk</h4>
+        <p>Niet gelieerd aan Air France-KLM of Flying Blue. Altijd even verifiëren op flyingblue.com.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──── FAQ ──── -->
+<section id="faq">
+  <div class="section-title" style="margin-bottom:24px">Veelgestelde vragen</div>
+  <div class="faq-list">
+    <details>
+      <summary>Wat is Miles Optimizer?</summary>
+      <p>Miles Optimizer verzamelt alle actuele Flying Blue deals op één plek: promoties uit de nieuwsbrief, Shop for Miles aanbiedingen en Earn Online partners. Zo mis je nooit meer een deal en kun je je miles optimaal benutten.</p>
+    </details>
+    <details>
+      <summary>Hoe activeer ik een deal?</summary>
+      <p>Klik op een deal, lees de details en klik op "Go to Flying Blue". Je gaat dan direct naar de juiste pagina. Log in met je Flying Blue account en doe je aankoop of boeking via die link — de miles worden automatisch bijgeschreven.</p>
+    </details>
+    <details>
+      <summary>Hoe vaak worden deals bijgewerkt?</summary>
+      <p>Shop for Miles en Earn Online worden 1× per dag automatisch bijgewerkt. Handmatige promoties (vluchten, hotels, speciale acties) worden toegevoegd vanuit de Flying Blue nieuwsbrief zodra ze binnenkomen.</p>
+    </details>
+    <details>
+      <summary>Wat zijn Flying Blue miles waard?</summary>
+      <p>Als vuistregel: 1 mile ≈ €0,01, dus 1.000 miles ≈ €10. Bij premium vluchten of upgrades kan de waarde aanzienlijk hoger liggen — soms tot €0,03–0,05 per mile.</p>
+    </details>
+    <details>
+      <summary>Is Miles Optimizer officieel van Flying Blue?</summary>
+      <p>Nee. Dit is een onafhankelijk project zonder band met Air France-KLM of Flying Blue. Controleer deals altijd op flyingblue.com voor de meest actuele voorwaarden.</p>
+    </details>
+    <details>
+      <summary>Een deal ontbreekt of klopt niet — wat nu?</summary>
+      <p>Stuur een mail naar <a href="mailto:info@milesoptimizer.nl" style="color:var(--accent)">info@milesoptimizer.nl</a> met de details. We kijken er zo snel mogelijk naar.</p>
+    </details>
+  </div>
+</section>
+
+<!-- ──── FOOTER ──── -->
+<footer>
+  <div class="footer-brand">
+    <div class="nav-logo">Miles<span style="color:var(--accent)">Optimizer</span></div>
+    <p>Alle Flying Blue deals op één plek. Onafhankelijk, altijd actueel en gratis.</p>
+  </div>
+  <div class="footer-col">
+    <h5>Deals</h5>
+    <a href="#" onclick="filterCat('flight')">Vluchten</a>
+    <a href="#" onclick="filterCat('hotel')">Hotels</a>
+    <a href="#" onclick="filterCat('shop')">Shopping</a>
+    <a href="#shops">Shop for Miles</a>
+  </div>
+  <div class="footer-col">
+    <h5>Info</h5>
+    <a href="#faq">FAQ</a>
+    <a href="https://www.flyingblue.com" target="_blank" rel="noopener">Flying Blue ↗</a>
+    <a href="https://earnonline.flyingblue.com" target="_blank" rel="noopener">Earn Online ↗</a>
+    <a href="mailto:info@milesoptimizer.nl">Contact</a>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2026 Miles Optimizer — Niet gelieerd aan Flying Blue of Air France-KLM · <a href="#" style="color:var(--muted)">Privacy</a> · <a href="#" style="color:var(--muted)">Disclaimer</a></p>
+  <a href="https://github.com/craigymaster/Flying-blue-app" target="_blank" rel="noopener" class="open-source-badge">
+    <svg viewBox="0 0 16 16" fill="currentColor" style="width:12px;height:12px"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    Open source op GitHub
+  </a>
+</div>
+
+<!-- ──── MODAL ──── -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-partner" id="m-partner"></div>
+    <div class="modal-title" id="m-title"></div>
+    <div class="modal-meta" id="m-meta"></div>
+    <div class="modal-desc" id="m-desc"></div>
+    <div class="modal-how">
+      <h4>Hoe activeer je deze deal?</h4>
+      <ol>
+        <li>Klik op de knop hieronder</li>
+        <li>Log in met je Flying Blue account</li>
+        <li>Doe je aankoop of boeking via de link</li>
+        <li>Miles worden automatisch bijgeschreven</li>
+      </ol>
+    </div>
+    <a class="modal-cta" id="m-cta" href="#" target="_blank" rel="noopener">
+      Go to Flying Blue
+      <svg viewBox="0 0 16 16" fill="none" style="width:14px;height:14px"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</div>
+
+<!-- ──── BACK TO TOP ──── -->
+<button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Terug naar boven">
+  <svg viewBox="0 0 16 16" fill="none" width="16" height="16"><path d="M8 12V4M4 8l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<script>
+  /* ── State ─────────────────────────────── */
+  let allDeals = [];
+  let activeCategory = 'all';
+  let activeSort = 'newest';
+  let activeSearch = '';
+
+  /* ── Helpers ───────────────────────────── */
+  function daysUntil(dateStr) {
+    if (!dateStr) return null;
+    const d = new Date(dateStr);
+    if (isNaN(d)) return null;
+    return Math.ceil((d - Date.now()) / 86400000);
+  }
+
+  function isNew(deal) {
+    // mark as new if no expiry set (fresh) or added recently — heuristic
+    return !deal.expires;
+  }
+
+  function milesLabel(miles) {
+    if (!miles) return null;
+    const n = parseInt(miles);
+    if (isNaN(n)) return miles;
+    return n >= 1000 ? `${(n/1000).toFixed(n%1000===0?0:1)}k` : `${n}`;
+  }
+
+  /* ── Render deals ──────────────────────── */
+  function renderDeals(deals) {
+    const grid = document.getElementById('deal-grid');
+    if (!deals || deals.length === 0) {
+      grid.innerHTML = `
+        <div class="state-box">
+          <div class="state-icon">🔍</div>
+          <h3>Geen deals gevonden</h3>
+          <p>Probeer een andere categorie of kom later terug.</p>
+        </div>`;
+      return;
+    }
+
+    grid.innerHTML = deals.map(d => {
+      const days = daysUntil(d.expires);
+      const urgentSoon = days !== null && days <= 7;
+      const isHot = d.hot === true || d.hot === 'TRUE';
+      const expiresText = days === null ? 'Altijd actief'
+        : days <= 0 ? 'Verlopen'
+        : days === 1 ? 'Morgen verlopen'
+        : `Nog ${days} dagen`;
+
+      return `
+        <div class="deal-card${isHot ? ' hot' : ''}" onclick="openModal(${JSON.stringify(d).replace(/"/g, '&quot;')})">
+          <div class="deal-top">
+            <div style="display:flex;align-items:center;gap:8px;min-width:0">
+              ${d.logo ? `<img class="deal-logo" src="${d.logo}" alt="${d.partner}" onerror="this.style.display='none'">` : ''}
+              <span class="deal-partner" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.partner || ''}</span>
+            </div>
+            <div class="deal-badges" style="flex-shrink:0">
+              ${isHot ? '<span class="badge badge-hot">🔥 Hot</span>' : ''}
+              ${urgentSoon ? '<span class="badge badge-soon">⏰ Snel</span>' : ''}
+              ${d.category === 'shop' ? '<span class="badge badge-cat">Shop</span>' : (d.category ? `<span class="badge badge-cat">${d.category}</span>` : '')}
             </div>
           </div>
-          <div class="calc-result" id="calc-out"><span class="calc-result-empty">Vul een bedrag in</span></div>
-        </div>`;
-
-    } else if (multMatch) {
-      // Multiplier deal: Nx bonus on base earn
-      const mult = parseFloat(multMatch[1]);
-      el.innerHTML = `
-        <div class="calc-box">
-          <div class="calc-title">Miles calculator &middot; ${raw} bonus</div>
-          <div class="calc-row">
-            <span class="calc-label">Uitgavenbedrag</span>
-            <div class="calc-input-wrap">
-              <span class="calc-prefix">€</span>
-              <input class="calc-input" type="number" id="calc-inp" min="0" step="1" placeholder="200" oninput="calcMult(${mult})">
+          <div class="deal-title">${d.title || 'Onbekende deal'}</div>
+          <div class="deal-desc">${d.description || ''}</div>
+          <div class="deal-footer">
+            <div class="deal-miles">
+              ${d.miles ? `${milesLabel(d.miles)}<small>miles${d.type ? ' · ' + d.type : ''}</small>` : '<span style="font-size:13px;color:var(--muted)">Zie deal</span>'}
             </div>
-          </div>
-          <div class="calc-result" id="calc-out"><span class="calc-result-empty">Vul een bedrag in</span></div>
-        </div>`;
-
-    } else if (!isNaN(fixedNum) && fixedNum > 0) {
-      // Fixed miles promo: show value breakdown immediately
-      el.innerHTML = `
-        <div class="calc-box">
-          <div class="calc-title">Wat zijn deze miles waard?</div>
-          <div class="calc-values">
-            <div class="calc-val-item">
-              <div class="calc-val-num">€${(fixedNum * 0.01).toFixed(2)}</div>
-              <div class="calc-val-label">Basiswaarde<br>@ €0,01 / mile</div>
-            </div>
-            <div class="calc-val-divider"></div>
-            <div class="calc-val-item">
-              <div class="calc-val-num calc-val-green">€${(fixedNum * 0.03).toFixed(2)}</div>
-              <div class="calc-val-label">Premium vlucht<br>@ €0,03 / mile</div>
-            </div>
+            <div class="deal-expires${urgentSoon ? ' urgent' : ''}">${expiresText}</div>
           </div>
         </div>`;
+    }).join('');
+  }
 
-    } else {
-      el.innerHTML = '';
+  function applyFiltersAndSort() {
+    const q = activeSearch.toLowerCase();
+    let filtered = allDeals.filter(d => {
+      const catMatch = activeCategory === 'all' || d.category === activeCategory;
+      const searchMatch = !q || (d.title || '').toLowerCase().includes(q);
+      return catMatch && searchMatch;
+    });
+
+    if (activeSort === 'expiring') {
+      filtered.sort((a, b) => {
+        const da = daysUntil(a.expires) ?? 9999;
+        const db = daysUntil(b.expires) ?? 9999;
+        return da - db;
+      });
+    } else if (activeSort === 'miles') {
+      filtered.sort((a, b) => (parseInt(b.miles) || 0) - (parseInt(a.miles) || 0));
+    }
+    // default: server order (newest)
+    renderDeals(filtered);
+  }
+
+  /* ── Load promotions ───────────────────── */
+  async function loadDeals() {
+    try {
+      const res = await fetch('/api/promotions');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      // API returns { promotions: [...], updatedAt: '...' }
+      const promos = (json.promotions || []).map(d => ({ ...d, source: 'promotions' }));
+      allDeals = promos;
+
+      // Updated timestamp from API
+      if (json.updatedAt) {
+        const d = new Date(json.updatedAt);
+        document.getElementById('nav-updated').textContent =
+          `Bijgewerkt: ${d.toLocaleString('nl-NL', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}`;
+      }
+
+      await loadShops();
+      updateStats();
+      applyFiltersAndSort();
+    } catch (err) {
+      console.error('Promotions error:', err);
+      document.getElementById('deal-grid').innerHTML = `
+        <div class="state-box">
+          <div class="state-icon">⚠️</div>
+          <h3>Kon deals niet laden</h3>
+          <p>Er ging iets mis. Controleer je verbinding en probeer het opnieuw.</p>
+          <button class="retry-btn" onclick="loadDeals()">Opnieuw proberen</button>
+        </div>`;
     }
   }
 
-  function calcRate(ratePerEuro) {
-    const spend = parseFloat(document.getElementById('calc-inp').value);
-    const out = document.getElementById('calc-out');
-    if (!spend || spend <= 0) { out.innerHTML = '<span class="calc-result-empty">Vul een bedrag in</span>'; return; }
-    const miles = Math.round(spend * ratePerEuro);
-    out.innerHTML = `<div class="calc-result-row">
-      <div class="calc-result-miles">${miles.toLocaleString('nl-NL')} miles</div>
-      <div class="calc-result-sub">≈ €${(miles * 0.01).toFixed(2)} basiswaarde &middot; €${(miles * 0.03).toFixed(2)} premium vlucht</div>
-    </div>`;
+  function updateStats() {
+    const hot      = allDeals.filter(d => d.hot === true || d.hot === 'TRUE').length;
+    const expiring = allDeals.filter(d => { const n = daysUntil(d.expires); return n !== null && n <= 7 && n > 0; }).length;
+    const always   = allDeals.filter(d => d.type === 'always' || !d.expires).length;
+    document.getElementById('stat-total').textContent    = allDeals.length;
+    document.getElementById('stat-hot').textContent      = hot;
+    document.getElementById('stat-expiring').textContent = expiring;
+    document.getElementById('stat-always').textContent   = always;
   }
 
-  function calcMult(multiplier) {
-    const spend = parseFloat(document.getElementById('calc-inp').value);
-    const out = document.getElementById('calc-out');
-    if (!spend || spend <= 0) { out.innerHTML = '<span class="calc-result-empty">Vul een bedrag in</span>'; return; }
-    const miles = Math.round(spend * 5 * multiplier); // ~5 base miles/€ Flying Blue average
-    out.innerHTML = `<div class="calc-result-row">
-      <div class="calc-result-miles">~${miles.toLocaleString('nl-NL')} miles</div>
-      <div class="calc-result-sub">Schatting op basis van 5 miles/€ basisverdienste &middot; ≈ €${(miles * 0.01).toFixed(2)}–€${(miles * 0.03).toFixed(2)}</div>
-    </div>`;
+  /* ── Load shops (scrape-shops + earn-online) ── */
+  async function loadShops() {
+    const grid = document.getElementById('shop-grid');
+    const shopDeals = [];
+
+    try {
+      const r1 = await fetch('/api/scrape-shops');
+      if (r1.ok) {
+        const { shops } = await r1.json();
+        shops.forEach(s => {
+          shopDeals.push({ title: s.name, miles: s.miles, description: `Verdien miles bij ${s.name} via Shop for Miles. ${s.miles} per aankoop.`, partner: s.name, category: 'shop', type: 'always', hot: false, expires: null, tier: 'all', url: s.url, logo: s.logo, source: 'scrape' });
+        });
+      }
+    } catch (e) { console.warn('scrape-shops mislukt:', e); }
+
+    try {
+      const r2 = await fetch('/api/earn-online');
+      if (r2.ok) {
+        const { shops: es } = await r2.json();
+        es.forEach(s => {
+          shopDeals.push({ title: s.name, miles: s.miles, description: s.milesWas ? `Was: ${s.milesWas} — nu ${s.miles} per aankoop.` : `Verdien ${s.miles} bij ${s.name}.`, partner: s.name, category: 'shop', type: s.isOffer ? 'temp' : 'always', hot: s.isOffer || false, expires: null, tier: 'all', url: s.url, logo: s.logo, source: 'earn' });
+        });
+      }
+    } catch (e) { console.warn('earn-online mislukt:', e); }
+
+    // Push shop deals into allDeals for filtering
+    shopDeals.forEach(s => allDeals.push(s));
+
+    // Render shop grid with scraped data
+    const scraped = shopDeals.filter(s => s.source === 'scrape' || s.source === 'earn');
+    if (scraped.length > 0) {
+      grid.innerHTML = scraped.slice(0, 12).map(s => `
+        <a class="shop-card" href="${s.url || '#'}" target="_blank" rel="noopener">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="shop-logo">${s.logo ? `<img src="${s.logo}" style="width:32px;height:32px;object-fit:contain;border-radius:6px" onerror="this.parentElement.textContent='🛍'">` : '🛍'}</div>
+            <div>
+              <div class="shop-cat">${s.source === 'earn' ? 'Earn Online' : 'Shop for Miles'}</div>
+              <div class="shop-name">${s.name || s.title}</div>
+            </div>
+          </div>
+          <div class="shop-rate">${s.miles}<small> miles per €</small></div>
+        </a>`).join('');
+    } else {
+      grid.innerHTML = `
+        <div class="state-box">
+          <div class="state-icon">🛍</div>
+          <h3>Shops laden binnenkort</h3>
+          <p>Shop for Miles integratie wordt momenteel gebouwd.</p>
+          <a href="https://www.flyingblue.com/nl/earn/shop-for-miles?country=NL" target="_blank" rel="noopener" class="retry-btn" style="display:inline-block;text-align:center;margin-top:16px">Ga naar Flying Blue Shop ↗</a>
+        </div>`;
+    }
+  }
+
+  /* ── Filters / sort ────────────────────── */
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = btn.dataset.cat;
+      applyFiltersAndSort();
+    });
+  });
+
+  document.getElementById('sort-select').addEventListener('change', e => {
+    activeSort = e.target.value;
+    applyFiltersAndSort();
+  });
+
+  document.getElementById('nav-search-input').addEventListener('input', e => {
+    activeSearch = e.target.value.trim();
+    applyFiltersAndSort();
+  });
+
+  function filterCat(cat) {
+    activeCategory = cat;
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.cat === cat);
+    });
+    applyFiltersAndSort();
+    document.getElementById('deals').scrollIntoView({ behavior: 'smooth' });
+    return false;
+  }
+
+  /* ── Modal ─────────────────────────────── */
+  function openModal(d) {
+    document.getElementById('m-partner').textContent = d.partner || '';
+    document.getElementById('m-title').textContent = d.title || '';
+
+    const days = daysUntil(d.expires);
+    const expiresText = days === null ? 'Altijd actief'
+      : days <= 0 ? 'Verlopen'
+      : `${days} dag${days === 1 ? '' : 'en'} resterend`;
+
+    document.getElementById('m-meta').innerHTML = `
+      ${d.miles ? `<div class="meta-item"><div class="meta-label">Miles</div><div class="meta-value green">${d.miles}</div></div>` : ''}
+      ${d.expires ? `<div class="meta-item"><div class="meta-label">Verloopt</div><div class="meta-value${days !== null && days <= 7 ? ' red' : ''}">${expiresText}</div></div>` : ''}
+      ${d.tier ? `<div class="meta-item"><div class="meta-label">Tier</div><div class="meta-value">${d.tier}</div></div>` : ''}
+      ${d.type ? `<div class="meta-item"><div class="meta-label">Type</div><div class="meta-value">${d.type}</div></div>` : ''}
+    `;
+
+    document.getElementById('m-desc').textContent = d.description || '';
+    const cta = document.getElementById('m-cta');
+    cta.href = d.url || 'https://www.flyingblue.com';
+
+    document.getElementById('modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
 
   function closeModal(e) {
