@@ -258,6 +258,17 @@
     .lang-toggle button { padding: 5px 10px; color: var(--muted); transition: background .15s, color .15s; }
     .lang-toggle button.active { background: var(--accent); color: #fff; }
     .lang-toggle button:hover:not(.active) { background: var(--surface2); color: var(--text); }
+
+    /* ── NAV BUTTON ── */
+    .nav-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px;
+      background: var(--accent); color: #fff !important;
+      font-size: 13px; font-weight: 600;
+      border-radius: 8px;
+      transition: background .2s, transform .15s;
+    }
+    .nav-btn:hover { background: var(--accent2) !important; color: #fff !important; transform: translateY(-1px); }
   </style>
 </head>
 <body>
@@ -268,9 +279,9 @@
   <div class="nav-links">
     <a href="/" class="hide-sm">Deals</a>
     <a href="/calculator.html" class="active">Calculator</a>
-    <a href="/extension.html" class="hide-sm">Extensie</a>
+    <a href="/extension.html" class="nav-btn hide-sm"><span>🧩</span><span>Extensie</span></a>
     <a href="/#faq" class="hide-sm">FAQ</a>
-    <a href="https://github.com/craigymaster/Flying-blue-app" target="_blank" rel="noopener" class="hide-sm">GitHub ↗</a>
+    <a href="https://github.com/craigymaster/Flying-blue-app" target="_blank" rel="noopener" class="hide-sm" style="display:inline-flex;align-items:center;gap:3px">GitHub <span style="line-height:1;font-size:11px">↗</span></a>
     <div class="lang-toggle" id="lang-toggle">
       <button data-lang="nl">NL</button>
       <button data-lang="en">EN</button>

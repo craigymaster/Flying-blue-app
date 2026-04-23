@@ -71,6 +71,16 @@
     .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); transition: color .2s; }
     .nav-links a:hover { color: var(--text); }
     .nav-links a.active { color: var(--accent); font-weight: 600; }
+    .nav-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px;
+      background: var(--accent); color: #fff !important;
+      font-size: 13px; font-weight: 600;
+      border-radius: 8px;
+      transition: background .2s, transform .15s;
+    }
+    .nav-btn:hover { background: var(--accent2) !important; color: #fff !important; transform: translateY(-1px); }
+    .nav-btn.active { background: var(--accent2); }
     @media (max-width: 768px) {
       nav { grid-template-columns: 1fr auto; }
       .nav-center { display: none; }
@@ -297,7 +307,8 @@
   <div class="nav-center"></div>
   <div class="nav-links">
     <a href="/" class="hide-mobile" data-i18n="nav.deals">Deals</a>
-    <a href="/extension.html" class="active" data-i18n="nav.extension">Extensie</a>
+    <a href="/calculator.html" class="hide-mobile" data-i18n="nav.calc">Calculator</a>
+    <a href="/extension.html" class="nav-btn active"><span>🧩</span><span data-i18n="nav.extension">Extensie</span></a>
     <a href="/#faq" class="hide-mobile" data-i18n="nav.faq">FAQ</a>
     <a href="https://github.com/craigymaster/Flying-blue-app" target="_blank" rel="noopener">GitHub ↗</a>
     <div class="lang-toggle" id="lang-toggle">
@@ -497,6 +508,7 @@
   const TR = {
     nl: {
       'nav.deals': 'Deals',
+      'nav.calc': 'Calculator',
       'nav.extension': 'Extensie',
       'nav.faq': 'FAQ',
       'ext.eyebrow': 'Chrome Extensie',
@@ -548,6 +560,7 @@
     },
     en: {
       'nav.deals': 'Deals',
+      'nav.calc': 'Calculator',
       'nav.extension': 'Extension',
       'nav.faq': 'FAQ',
       'ext.eyebrow': 'Chrome Extension',
