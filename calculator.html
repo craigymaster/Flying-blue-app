@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Miles Calculator — Miles Optimizer</title>
+  <meta name="description" content="Bereken hoeveel je Flying Blue miles waard zijn en wat de beste manier is om ze te gebruiken." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f7f8fa;
+      --surface:   #ffffff;
+      --surface2:  #f0f2f5;
+      --border:    rgba(0,0,0,0.07);
+      --border-md: rgba(0,0,0,0.11);
+      --text:      #111318;
+      --text-2:    #374151;
+      --muted:     #6b7280;
+      --muted-2:   #9ca3af;
+      --accent:    #0057d9;
+      --accent2:   #003faa;
+      --accent-bg: rgba(0,87,217,0.07);
+      --gold:      #b86e00;
+      --gold-bg:   rgba(184,110,0,0.08);
+      --green:     #0d7e45;
+      --green-bg:  rgba(13,126,69,0.08);
+      --red:       #c81e1e;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+      --radius:    12px;
+      --font-display: 'Plus Jakarta Sans', sans-serif;
+      --font-body:    'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font: inherit; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 64px;
+      background: rgba(247,248,250,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: var(--font-display); font-size: 17px; font-weight: 800; letter-spacing: -0.3px; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 20px; align-items: center; }
+    .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--accent); font-weight: 600; }
+    @media (max-width: 600px) { nav { padding: 0 20px; } .hide-sm { display: none; } }
+
+    /* ── LAYOUT ── */
+    .page { max-width: 1000px; margin: 0 auto; padding: 100px 32px 80px; }
+    @media (max-width: 600px) { .page { padding: 90px 20px 60px; } }
+
+    .page-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+    }
+    .page-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--accent); }
+    .page-title {
+      font-family: var(--font-display); font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 12px;
+    }
+    .page-title em { font-style: normal; color: var(--accent); }
+    .page-sub { font-size: 16px; color: var(--muted); max-width: 520px; line-height: 1.7; margin-bottom: 48px; }
+
+    /* ── CALCULATOR CARD ── */
+    .calc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .calc-header {
+      padding: 24px 28px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; gap: 0;
+    }
+    .calc-tab {
+      padding: 12px 20px;
+      font-family: var(--font-display); font-size: 13px; font-weight: 600;
+      color: var(--muted); border-bottom: 2px solid transparent;
+      transition: color .15s, border-color .15s;
+      cursor: pointer; margin-bottom: -1px;
+    }
+    .calc-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .calc-body { padding: 28px; }
+
+    /* ── INPUT ROW ── */
+    .input-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 560px) { .input-row { grid-template-columns: 1fr; } }
+
+    .field label {
+      display: block; font-size: 12px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      color: var(--muted); margin-bottom: 8px;
+    }
+    .field input, .field select {
+      width: 100%; padding: 11px 14px;
+      border: 1px solid var(--border-md);
+      border-radius: 10px;
+      font-family: var(--font-body); font-size: 15px; color: var(--text);
+      background: var(--surface); outline: none;
+      transition: border-color .15s, box-shadow .15s;
+      -webkit-appearance: none;
+    }
+    .field input:focus, .field select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,87,217,0.1);
+    }
+    .field input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+    .calc-btn {
+      width: 100%; padding: 14px;
+      background: var(--accent); color: #fff;
+      font-family: var(--font-display); font-size: 15px; font-weight: 700;
+      border-radius: 10px;
+      transition: background .2s, transform .15s, box-shadow .15s;
+    }
+    .calc-btn:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,87,217,0.25); }
+
+    /* ── RESULT ── */
+    .result-box {
+      margin-top: 24px;
+      padding: 24px;
+      background: var(--surface2);
+      border-radius: 12px;
+      display: none;
+    }
+    .result-box.show { display: block; }
+    .result-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 6px; }
+    .result-value {
+      font-family: var(--font-display); font-size: 40px; font-weight: 800;
+      letter-spacing: -1.5px; color: var(--green); line-height: 1.1; margin-bottom: 4px;
+    }
+    .result-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+    .result-breakdown { display: flex; flex-direction: column; gap: 8px; }
+    .result-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .result-row-label { font-size: 13px; color: var(--text-2); }
+    .result-row-val { font-family: var(--font-display); font-size: 14px; font-weight: 700; }
+    .result-row-val.good { color: var(--green); }
+    .result-row-val.ok   { color: var(--gold); }
+    .result-row-val.bad  { color: var(--muted); }
+
+    /* ── TABS CONTENT ── */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── INFO CARDS ── */
+    .info-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      margin-bottom: 48px;
+    }
+    @media (max-width: 700px) { .info-grid { grid-template-columns: 1fr; } }
+
+    .info-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+    .info-card-icon { font-size: 24px; margin-bottom: 12px; }
+    .info-card h3 { font-family: var(--font-display); font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .info-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .info-card .val { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--accent); margin-bottom: 4px; }
+
+    /* ── TABLE ── */
+    .value-table {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      box-shadow: var(--shadow-sm); margin-bottom: 48px;
+    }
+    .value-table-header {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-display); font-size: 15px; font-weight: 700;
+    }
+    .value-table table { width: 100%; border-collapse: collapse; }
+    .value-table th {
+      padding: 10px 22px; text-align: left;
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.8px; color: var(--muted);
+      background: var(--surface2); border-bottom: 1px solid var(--border);
+    }
+    .value-table td {
+      padding: 13px 22px; font-size: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .value-table tr:last-child td { border-bottom: none; }
+    .value-table tr:hover td { background: var(--surface2); }
+    .pill {
+      display: inline-block; padding: 2px 10px; border-radius: 100px;
+      font-size: 11px; font-weight: 600;
+    }
+    .pill-green { background: var(--green-bg); color: var(--green); }
+    .pill-gold  { background: var(--gold-bg);  color: var(--gold); }
+    .pill-muted { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-family: var(--font-display); font-size: 20px; font-weight: 800;
+      letter-spacing: -0.3px; margin-bottom: 20px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px;
+      max-width: 1000px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    footer p { font-size: 12px; color: var(--muted); }
+    footer a { font-size: 13px; color: var(--muted); transition: color .2s; }
+    footer a:hover { color: var(--text); }
+    @media (max-width: 600px) { footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; gap: 16px; } }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .page-eyebrow { animation: fadeUp .4s ease both; }
+    .page-title   { animation: fadeUp .4s ease .08s both; }
+    .page-sub     { animation: fadeUp .4s ease .16s both; }
+
+    /* ── LANG TOGGLE ── */
+    .lang-toggle {
+      display: flex; align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 8px; overflow: hidden;
+      font-size: 12px; font-weight: 600;
+      margin-left: 4px; flex-shrink: 0;
+    }
+    .lang-toggle button { padding: 5px 10px; color: var(--muted); transition: background .15s, color .15s; }
+    .lang-toggle button.active { background: var(--accent); color: #fff; }
+    .lang-toggle button:hover:not(.active) { background: var(--surface2); color: var(--text); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">Miles<span>Optimizer</span></a>
+  <div class="nav-links">
+    <a href="/" class="hide-sm">Deals</a>
+    <a href="/calculator.html" class="active">Calculator</a>
+    <a href="/extension.html" class="hide-sm">Extensie</a>
+    <a href="/#faq" class="hide-sm">FAQ</a>
+    <a href="https://github.com/craigymaster/Flying-blue-app" target="_blank" rel="noopener" class="hide-sm">GitHub ↗</a>
+    <div class="lang-toggle" id="lang-toggle">
+      <button data-lang="nl">NL</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="page-eyebrow" data-i18n="eyebrow">Miles Calculator</div>
+  <h1 class="page-title" data-i18n-html="title">Hoeveel zijn jouw <em>miles</em> waard?</h1>
+  <p class="page-sub" data-i18n="sub">Bereken de waarde van je Flying Blue miles en ontdek hoe je ze het slimst kunt inzetten — bij vluchten, upgrades of shopping.</p>
+
+  <!-- CALCULATOR CARD -->
+  <div class="calc-card">
+    <div class="calc-header">
+      <button class="calc-tab active" data-tab="value" data-i18n="tab.value">Miles → Euro</button>
+      <button class="calc-tab" data-tab="earn" data-i18n="tab.earn">Euro → Miles</button>
+      <button class="calc-tab" data-tab="flight" data-i18n="tab.flight">Vlucht inschatten</button>
+    </div>
+
+    <!-- TAB 1: Miles → Euro -->
+    <div class="calc-body">
+      <div class="tab-content active" id="tab-value">
+        <div class="input-row">
+          <div class="field">
+            <label data-i18n="label.miles">Aantal miles</label>
+            <input type="number" id="v-miles" placeholder="bijv. 50000" min="0" />
+          </div>
+          <div class="field">
+            <label data-i18n="label.type">Gebruikstype</label>
+            <select id="v-type">
+              <option value="economy" data-i18n="type.economy">Economy vlucht (saver)</option>
+              <option value="business" data-i18n="type.business">Business class vlucht</option>
+              <option value="upgrade" data-i18n="type.upgrade">Upgrade naar business</option>
+              <option value="shopping" data-i18n="type.shopping">Shopping / Earn Online</option>
+              <option value="hotel" data-i18n="type.hotel">Hotel</option>
+            </select>
+          </div>
+        </div>
+        <button class="calc-btn" data-i18n="btn.calc" onclick="calcValue()">Bereken waarde</button>
+        <div class="result-box" id="result-value">
+          <div class="result-label" data-i18n-label="result.value.label">Geschatte waarde</div>
+          <div class="result-value" id="rv-amount"></div>
+          <div class="result-sub" id="rv-sub"></div>
+          <div class="result-breakdown" id="rv-breakdown"></div>
+        </div>
+      </div>
+
+      <!-- TAB 2: Euro → Miles -->
+      <div class="tab-content" id="tab-earn">
+        <div class="input-row">
+          <div class="field">
+            <label data-i18n="label.amount">Bedrag (€)</label>
+            <input type="number" id="e-amount" placeholder="bijv. 200" min="0" />
+          </div>
+          <div class="field">
+            <label data-i18n="label.partner">Partner type</label>
+            <select id="e-type">
+              <option value="earn_standard" data-i18n="earn.standard">Earn Online (standaard, ~22 miles/€10)</option>
+              <option value="earn_hot" data-i18n="earn.hot">Earn Online (hot deal, ~50 miles/€10)</option>
+              <option value="shop" data-i18n="earn.shop">Shop for Miles (~15 miles/€10)</option>
+              <option value="flight_economy" data-i18n="earn.fleco">Vlucht economy (basis)</option>
+              <option value="flight_business" data-i18n="earn.flbus">Vlucht business</option>
+            </select>
+          </div>
+        </div>
+        <button class="calc-btn" data-i18n="btn.earn" onclick="calcEarn()">Bereken miles</button>
+        <div class="result-box" id="result-earn">
+          <div class="result-label" data-i18n-label="result.earn.label">Te verdienen miles</div>
+          <div class="result-value" id="re-amount"></div>
+          <div class="result-sub" id="re-sub"></div>
+          <div class="result-breakdown" id="re-breakdown"></div>
+        </div>
+      </div>
+
+      <!-- TAB 3: Vlucht inschatten -->
+      <div class="tab-content" id="tab-flight">
+        <div class="input-row">
+          <div class="field">
+            <label data-i18n="label.flightmiles">Vluchtnummer miles</label>
+            <input type="number" id="f-miles" placeholder="bijv. 30000" min="0" />
+          </div>
+          <div class="field">
+            <label data-i18n="label.class">Klasse</label>
+            <select id="f-class">
+              <option value="economy" data-i18n="class.economy">Economy</option>
+              <option value="premium" data-i18n="class.premium">Premium Economy</option>
+              <option value="business" data-i18n="class.business">Business</option>
+              <option value="first" data-i18n="class.first">First Class</option>
+            </select>
+          </div>
+        </div>
+        <button class="calc-btn" data-i18n="btn.flight" onclick="calcFlight()">Bereken</button>
+        <div class="result-box" id="result-flight">
+          <div class="result-label" data-i18n-label="result.flight.label">Geschatte cashwaarde</div>
+          <div class="result-value" id="rf-amount"></div>
+          <div class="result-sub" id="rf-sub"></div>
+          <div class="result-breakdown" id="rf-breakdown"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFO CARDS -->
+  <div class="section-title" data-i18n="section.rules">Vuistregels</div>
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-icon">✈️</div>
+      <div class="val" id="info-eco-val">€0,01–0,02</div>
+      <h3 id="info-eco-title">Economy vlucht</h3>
+      <p id="info-eco-body">Bij saver awards op economy vluchten is de waarde per mile gemiddeld €0,01 tot €0,02.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">💼</div>
+      <div class="val" id="info-bus-val">€0,02–0,05</div>
+      <h3 id="info-bus-title">Business class</h3>
+      <p id="info-bus-body">Business class en upgrades geven de beste waarde — soms tot €0,05 per mile op lange vluchten.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">🛍️</div>
+      <div class="val" id="info-shop-val">~€0,01</div>
+      <h3 id="info-shop-title">Shopping & hotels</h3>
+      <p id="info-shop-body">Miles inzetten voor shopping of hotels geeft doorgaans de laagste waarde — ca. €0,01 per mile.</p>
+    </div>
+  </div>
+
+  <!-- VALUE TABLE -->
+  <div class="section-title" data-i18n="section.table">Waardoverzicht per gebruik</div>
+  <div class="value-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Gebruik</th>
+          <th>Waarde per mile</th>
+          <th>10.000 miles =</th>
+          <th>Aanbevolen?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Business class (long haul)</td>
+          <td>€0,03 – €0,05</td>
+          <td>€300 – €500</td>
+          <td><span class="pill pill-green">Beste waarde</span></td>
+        </tr>
+        <tr>
+          <td>Business class (short haul)</td>
+          <td>€0,02 – €0,03</td>
+          <td>€200 – €300</td>
+          <td><span class="pill pill-green">Goed</span></td>
+        </tr>
+        <tr>
+          <td>Economy (long haul)</td>
+          <td>€0,015 – €0,02</td>
+          <td>€150 – €200</td>
+          <td><span class="pill pill-gold">Redelijk</span></td>
+        </tr>
+        <tr>
+          <td>Economy (short haul)</td>
+          <td>€0,01 – €0,015</td>
+          <td>€100 – €150</td>
+          <td><span class="pill pill-gold">Gemiddeld</span></td>
+        </tr>
+        <tr>
+          <td>Upgrade naar business</td>
+          <td>€0,02 – €0,04</td>
+          <td>€200 – €400</td>
+          <td><span class="pill pill-green">Goed</span></td>
+        </tr>
+        <tr>
+          <td>Hotel</td>
+          <td>~€0,01</td>
+          <td>~€100</td>
+          <td><span class="pill pill-muted">Matig</span></td>
+        </tr>
+        <tr>
+          <td>Shopping / cadeaukaarten</td>
+          <td>€0,005 – €0,01</td>
+          <td>€50 – €100</td>
+          <td><span class="pill pill-muted">Laag</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p id="footer-copy">© 2026 Miles Optimizer — Berekeningen zijn schattingen, geen garanties</p>
+  <div style="display:flex;gap:20px">
+    <a href="/">Deals</a>
+    <a href="/calculator.html">Calculator</a>
+    <a href="/extension.html">Extensie</a>
+    <a href="/#faq">FAQ</a>
+    <a href="mailto:info@milesoptimizer.nl">Contact</a>
+  </div>
+</footer>
+
+<script>
+  /* ── i18n ── */
+  let LANG = localStorage.getItem('mo-lang') || 'nl';
+
+  const TR = {
+    nl: {
+      'eyebrow': 'Miles Calculator',
+      'title': 'Hoeveel zijn jouw <em>miles</em> waard?',
+      'sub': 'Bereken de waarde van je Flying Blue miles en ontdek hoe je ze het slimst kunt inzetten — bij vluchten, upgrades of shopping.',
+      'tab.value': 'Miles → Euro',
+      'tab.earn': 'Euro → Miles',
+      'tab.flight': 'Vlucht inschatten',
+      'label.miles': 'Aantal miles',
+      'label.type': 'Gebruikstype',
+      'label.amount': 'Bedrag (€)',
+      'label.partner': 'Partner type',
+      'label.flightmiles': 'Vluchtnummer miles',
+      'label.class': 'Klasse',
+      'btn.calc': 'Bereken waarde',
+      'btn.earn': 'Bereken miles',
+      'btn.flight': 'Bereken',
+      'result.value.label': 'Geschatte waarde',
+      'result.earn.label': 'Te verdienen miles',
+      'result.flight.label': 'Geschatte cashwaarde',
+      'section.rules': 'Vuistregels',
+      'section.table': 'Waardoverzicht per gebruik',
+      'footer.copy': '© 2026 Miles Optimizer — Berekeningen zijn schattingen, geen garanties',
+      'nav.deals': 'Deals', 'nav.calc': 'Calculator', 'nav.ext': 'Extensie', 'nav.faq': 'FAQ',
+      'type.economy': 'Economy vlucht (saver)',
+      'type.business': 'Business class vlucht',
+      'type.upgrade': 'Upgrade naar business',
+      'type.shopping': 'Shopping / Earn Online',
+      'type.hotel': 'Hotel',
+      'earn.standard': 'Earn Online (standaard, ~22 miles/€10)',
+      'earn.hot': 'Earn Online (hot deal, ~50 miles/€10)',
+      'earn.shop': 'Shop for Miles (~15 miles/€10)',
+      'earn.fleco': 'Vlucht economy (basis)',
+      'earn.flbus': 'Vlucht business',
+      'class.economy': 'Economy',
+      'class.premium': 'Premium Economy',
+      'class.business': 'Business',
+      'class.first': 'First Class',
+      'rb.min': 'Minimale waarde', 'rb.avg': 'Gemiddelde waarde', 'rb.max': 'Maximale waarde', 'rb.ppm': 'Waarde per mile',
+      're.ppm': 'Miles per €10', 're.total': 'Totaal miles', 're.eco': 'Waarde als Economy vlucht', 're.bus': 'Waarde als Business vlucht',
+      'rf.min': 'Minimale cashwaarde', 'rf.max': 'Maximale cashwaarde', 'rf.ppm': 'Waarde per mile',
+      'info.eco.val': '€0,01–0,02', 'info.eco.title': 'Economy vlucht', 'info.eco.body': 'Bij saver awards op economy vluchten is de waarde per mile gemiddeld €0,01 tot €0,02.',
+      'info.bus.val': '€0,02–0,05', 'info.bus.title': 'Business class', 'info.bus.body': 'Business class en upgrades geven de beste waarde — soms tot €0,05 per mile op lange vluchten.',
+      'info.shop.val': '~€0,01', 'info.shop.title': 'Shopping & hotels', 'info.shop.body': 'Miles inzetten voor shopping of hotels geeft doorgaans de laagste waarde — ca. €0,01 per mile.',
+    },
+    en: {
+      'eyebrow': 'Miles Calculator',
+      'title': 'How much are your <em>miles</em> worth?',
+      'sub': 'Calculate the value of your Flying Blue miles and find the smartest way to use them — on flights, upgrades or shopping.',
+      'tab.value': 'Miles → Euros',
+      'tab.earn': 'Euros → Miles',
+      'tab.flight': 'Estimate a flight',
+      'label.miles': 'Number of miles',
+      'label.type': 'Usage type',
+      'label.amount': 'Amount (€)',
+      'label.partner': 'Partner type',
+      'label.flightmiles': 'Flight miles cost',
+      'label.class': 'Cabin class',
+      'btn.calc': 'Calculate value',
+      'btn.earn': 'Calculate miles',
+      'btn.flight': 'Calculate',
+      'result.value.label': 'Estimated value',
+      'result.earn.label': 'Miles to earn',
+      'result.flight.label': 'Estimated cash value',
+      'section.rules': 'Rules of thumb',
+      'section.table': 'Value overview by usage',
+      'footer.copy': '© 2026 Miles Optimizer — Calculations are estimates, not guarantees',
+      'nav.deals': 'Deals', 'nav.calc': 'Calculator', 'nav.ext': 'Extension', 'nav.faq': 'FAQ',
+      'type.economy': 'Economy flight (saver)',
+      'type.business': 'Business class flight',
+      'type.upgrade': 'Upgrade to business',
+      'type.shopping': 'Shopping / Earn Online',
+      'type.hotel': 'Hotel',
+      'earn.standard': 'Earn Online (standard, ~22 miles/€10)',
+      'earn.hot': 'Earn Online (hot deal, ~50 miles/€10)',
+      'earn.shop': 'Shop for Miles (~15 miles/€10)',
+      'earn.fleco': 'Flight economy (base)',
+      'earn.flbus': 'Flight business',
+      'class.economy': 'Economy',
+      'class.premium': 'Premium Economy',
+      'class.business': 'Business',
+      'class.first': 'First Class',
+      'rb.min': 'Minimum value', 'rb.avg': 'Average value', 'rb.max': 'Maximum value', 'rb.ppm': 'Value per mile',
+      're.ppm': 'Miles per €10', 're.total': 'Total miles', 're.eco': 'Value as economy flight', 're.bus': 'Value as business flight',
+      'rf.min': 'Minimum cash value', 'rf.max': 'Maximum cash value', 'rf.ppm': 'Value per mile',
+      'info.eco.val': '€0.01–0.02', 'info.eco.title': 'Economy flight', 'info.eco.body': 'For saver awards on economy flights the value per mile averages €0.01 to €0.02.',
+      'info.bus.val': '€0.02–0.05', 'info.bus.title': 'Business class', 'info.bus.body': 'Business class and upgrades give the best value — sometimes up to €0.05 per mile on long-haul.',
+      'info.shop.val': '~€0.01', 'info.shop.title': 'Shopping & hotels', 'info.shop.body': 'Redeeming miles for shopping or hotels typically gives the lowest value — around €0.01 per mile.',
+    }
+  };
+
+  function t(key) { return (TR[LANG] || TR.nl)[key] || key; }
+
+  function applyLang() {
+    document.querySelectorAll('#lang-toggle button').forEach(b => b.classList.toggle('active', b.dataset.lang === LANG));
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+    // select options
+    document.querySelectorAll('select option[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    // calc buttons
+    document.querySelectorAll('.calc-tab[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('.calc-btn[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    // result labels
+    document.querySelectorAll('[data-i18n-label]').forEach(el => { el.textContent = t(el.dataset.i18nLabel); });
+    // footer
+    const fc = document.getElementById('footer-copy');
+    if (fc) fc.textContent = t('footer.copy');
+    // info cards
+    ['eco','bus','shop'].forEach(k => {
+      const v = document.getElementById('info-'+k+'-val');
+      const ti = document.getElementById('info-'+k+'-title');
+      const bo = document.getElementById('info-'+k+'-body');
+      if (v) v.textContent = t('info.'+k+'.val');
+      if (ti) ti.textContent = t('info.'+k+'.title');
+      if (bo) bo.textContent = t('info.'+k+'.body');
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#lang-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        LANG = btn.dataset.lang;
+        localStorage.setItem('mo-lang', LANG);
+        applyLang();
+      });
+    });
+    applyLang();
+  });
+
+  /* ── TAB SWITCHING ── */
+  document.querySelectorAll('.calc-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.calc-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  function fmt(n) {
+    return new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
+  }
+  function fmtMiles(n) {
+    return new Intl.NumberFormat('nl-NL').format(Math.round(n));
+  }
+
+  /* ── TAB 1: Miles → Euro ── */
+  function calcValue() {
+    const miles = parseFloat(document.getElementById('v-miles').value);
+    const type  = document.getElementById('v-type').value;
+    if (!miles || miles <= 0) return;
+
+    const rates = {
+      economy:  { low: 0.010, mid: 0.015, high: 0.020, label: 'Economy vlucht (saver)' },
+      business: { low: 0.020, mid: 0.035, high: 0.050, label: 'Business class vlucht' },
+      upgrade:  { low: 0.015, mid: 0.030, high: 0.040, label: 'Upgrade naar business' },
+      shopping: { low: 0.005, mid: 0.008, high: 0.010, label: 'Shopping / Earn Online' },
+      hotel:    { low: 0.007, mid: 0.010, high: 0.012, label: 'Hotel' },
+    };
+    const r = rates[type];
+    const mid = miles * r.mid;
+
+    document.getElementById('rv-amount').textContent = fmt(mid);
+    document.getElementById('rv-sub').textContent = `Gebaseerd op ${fmtMiles(miles)} miles bij ${r.label}`;
+    document.getElementById('rv-breakdown').innerHTML = `
+      <div class="result-row"><span class="result-row-label">Minimale waarde</span><span class="result-row-val ok">${fmt(miles * r.low)}</span></div>
+      <div class="result-row"><span class="result-row-label">${t('rb.avg')}</span><span class="result-row-val good">${fmt(mid)}</span></div>
+      <div class="result-row"><span class="result-row-label">${t('rb.max')}</span><span class="result-row-val good">${fmt(miles * r.high)}</span></div>
+      <div class="result-row"><span class="result-row-label">${t('rb.ppm')}</span><span class="result-row-val">€${r.mid.toFixed(3)}</span></div>
+    `;
+    document.getElementById('result-value').classList.add('show');
+  }
+
+  /* ── TAB 2: Euro → Miles ── */
+  function calcEarn() {
+    const amount = parseFloat(document.getElementById('e-amount').value);
+    const type   = document.getElementById('e-type').value;
+    if (!amount || amount <= 0) return;
+
+    const rates = {
+      earn_standard: { rate: 22, per: 10, label: 'Earn Online standaard' },
+      earn_hot:      { rate: 50, per: 10, label: 'Earn Online hot deal' },
+      shop:          { rate: 15, per: 10, label: 'Shop for Miles' },
+      flight_economy:  { rate: 500, per: 100, label: 'Vlucht economy (basis XP)' },
+      flight_business: { rate: 1500, per: 100, label: 'Vlucht business' },
+    };
+    const r = rates[type];
+    const miles = (amount / r.per) * r.rate;
+    const euroValue = miles * 0.01;
+
+    document.getElementById('re-amount').textContent = fmtMiles(miles) + ' miles';
+    document.getElementById('re-sub').textContent = `${fmt(amount)} besteed via ${r.label}`;
+    document.getElementById('re-breakdown').innerHTML = `
+      <div class="result-row"><span class="result-row-label">${t('re.ppm')}</span><span class="result-row-val">${r.rate}</span></div>
+      <div class="result-row"><span class="result-row-label">${t('re.total')}</span><span class="result-row-val good">${fmtMiles(miles)}</span></div>
+      <div class="result-row"><span class="result-row-label">${t('re.eco')}</span><span class="result-row-val ok">${fmt(euroValue)}</span></div>
+      <div class="result-row"><span class="result-row-label">${t('re.bus')}</span><span class="result-row-val good">${fmt(miles * 0.035)}</span></div>
+    `;
+    document.getElementById('result-earn').classList.add('show');
+  }
+
+  /* ── TAB 3: Vlucht inschatten ── */
+  function calcFlight() {
+    const miles = parseFloat(document.getElementById('f-miles').value);
+    const cls   = document.getElementById('f-class').value;
+    if (!miles || miles <= 0) return;
+
+    const rates = {
+      economy:  { low: 0.010, high: 0.020, tip: 'Economy saver awards zijn het minst waardevol. Overweeg of er geen goedkopere cash optie is.' },
+      premium:  { low: 0.015, high: 0.025, tip: 'Premium Economy geeft een redelijke waarde, vooral op lange vluchten.' },
+      business: { low: 0.025, high: 0.050, tip: 'Business class is de sweet spot voor Flying Blue miles — hier haal je de meeste waarde uit.' },
+      first:    { low: 0.030, high: 0.060, tip: 'First class geeft de hoogste waarde per mile, als beschikbaar.' },
+    };
+    const r = rates[cls];
+    const mid = miles * ((r.low + r.high) / 2);
+
+    document.getElementById('rf-amount').textContent = fmt(mid);
+    document.getElementById('rf-sub').textContent = r.tip;
+    document.getElementById('rf-breakdown').innerHTML = `
+      <div class="result-row"><span class="result-row-label">${t('rf.min')}</span><span class="result-row-val ok">${fmt(miles * r.low)}</span></div>
+      <div class="result-row"><span class="result-row-label">${t('rf.max')}</span><span class="result-row-val good">${fmt(miles * r.high)}</span></div>
+      <div class="result-row"><span class="result-row-label">${t('rf.ppm')}</span><span class="result-row-val">€${((r.low + r.high) / 2).toFixed(3)}</span></div>
+    `;
+    document.getElementById('result-flight').classList.add('show');
+  }
+
+  /* ── Enter key support ── */
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const active = document.querySelector('.tab-content.active');
+    if (active.id === 'tab-value') calcValue();
+    else if (active.id === 'tab-earn') calcEarn();
+    else if (active.id === 'tab-flight') calcFlight();
+  });
+</script>
+</body>
+</html>
