@@ -744,7 +744,7 @@
     </div>
   </div>
 
-  <div class="filters">
+  <div class="filters" id="status-filters">
     <button class="filter-btn active" data-filter="all" data-i18n="filter.all">Alles</button>
     <button class="filter-btn" data-filter="hot" data-i18n="filter.hot">🔥 Hot</button>
     <button class="filter-btn" data-filter="expiring" data-i18n="filter.expiring">⏰ Verloopt snel</button>
@@ -755,6 +755,8 @@
       <option value="expiring" data-i18n="sort.expiring">Verloopt snel</option>
       <option value="miles" data-i18n="sort.miles">Meeste miles</option>
     </select>
+  </div>
+  <div class="filters" id="cat-filters" style="display:none; margin-top:-16px;">
   </div>
 
   <div class="deal-grid" id="deal-grid">
@@ -1040,6 +1042,7 @@
     document.querySelectorAll('select option[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
     updateNavUpdated();
     if (allDeals.length > 0) {
+      renderCategoryFilters();
       renderDeals(currentFiltered.slice(0, visibleCount));
       updateLoadMore();
     }
@@ -1069,15 +1072,42 @@
     return !deal.expires;
   }
 
+  const CATEGORY_META = {
+    flight:      { icon: '✈️', nl: 'Vluchten',    en: 'Flights' },
+    hotel:       { icon: '🏨', nl: 'Hotels',       en: 'Hotels' },
+    travel:      { icon: '🌍', nl: 'Reizen',       en: 'Travel' },
+    car:         { icon: '🚗', nl: 'Auto',         en: 'Car rental' },
+    shop:        { icon: '🛍️', nl: 'Shopping',     en: 'Shopping' },
+    dining:      { icon: '🍽️', nl: 'Dining',       en: 'Dining' },
+    finance:     { icon: '💳', nl: 'Financieel',   en: 'Finance' },
+    clothing:    { icon: '👕', nl: 'Kleding',      en: 'Clothing' },
+    home:        { icon: '🏠', nl: 'Wonen',        en: 'Home' },
+    appliance:   { icon: '🔌', nl: 'Witgoed',      en: 'Appliances' },
+    electronics: { icon: '💻', nl: 'Elektronica',  en: 'Electronics' },
+    beauty:      { icon: '💄', nl: 'Beauty',       en: 'Beauty' },
+    sport:       { icon: '⚽', nl: 'Sport',        en: 'Sport' },
+    kids:        { icon: '👶', nl: 'Kinderen',     en: 'Kids' },
+    food:        { icon: '🍎', nl: 'Eten',         en: 'Food' },
+  };
+
   function normalizeCategory(cat) {
     if (!cat) return '';
     const s = cat.toLowerCase().trim();
-    if (s === 'flights' || s === 'flight' || s.includes('aviation')) return 'flight';
-    if (s === 'hotels' || s === 'hotel' || s.includes('travel') || s.includes('hotel')) return 'hotel';
-    if (s === 'car' || s === 'cars') return 'car';
-    if (s === 'shopping' || s === 'shop') return 'shop';
-    if (s === 'dining' || s.includes('restaurant') || s.includes('food') || s.includes('drink')) return 'dining';
-    if (s === 'finance' || s.includes('bank') || s.includes('insurance')) return 'finance';
+    if (['flights','flight','luchtvaart'].includes(s) || s.includes('aviation')) return 'flight';
+    if (['hotels','hotel','accommodation','lodging'].includes(s)) return 'hotel';
+    if (['travel','reizen'].includes(s)) return 'travel';
+    if (['car','cars','auto','rental','car rental'].includes(s) || s.includes('rental')) return 'car';
+    if (['shopping','shop'].includes(s)) return 'shop';
+    if (['dining','restaurant','eten','drinken'].includes(s) || s.includes('restaurant') || s.includes('dining')) return 'dining';
+    if (['finance','financieel','banking'].includes(s) || s.includes('bank') || s.includes('insurance')) return 'finance';
+    if (['clothing','kleding','fashion','mode','apparel'].includes(s)) return 'clothing';
+    if (['home','wonen','household','interieur','interior'].includes(s)) return 'home';
+    if (['appliance','appliances','witgoed','home appliance','home appliances'].includes(s) || s.includes('appliance')) return 'appliance';
+    if (['electronics','elektronica','tech','technology'].includes(s)) return 'electronics';
+    if (['beauty','cosmetica','cosmetics'].includes(s)) return 'beauty';
+    if (['sport','sports','fitness','gym'].includes(s)) return 'sport';
+    if (['kids','kinderen','children','baby'].includes(s)) return 'kids';
+    if (['food','grocery','groceries','supermarkt','supermarket'].includes(s)) return 'food';
     return s;
   }
 
@@ -1147,6 +1177,8 @@
         filterMatch = days !== null && days <= 7 && days > 0;
       } else if (activeFilter === 'always') {
         filterMatch = !d.expires || d.type === 'always';
+      } else if (activeFilter.startsWith('cat:')) {
+        filterMatch = d.category === activeFilter.slice(4);
       }
       const searchMatch = !q || (d.title || '').toLowerCase().includes(q)
         || (d.partner || '').toLowerCase().includes(q)
@@ -1203,6 +1235,7 @@
       }
 
       await loadShops();
+      renderCategoryFilters();
       updateStats();
       applyFiltersAndSort();
     } catch (err) {
@@ -1225,6 +1258,34 @@
     document.getElementById('stat-hot').textContent      = hot;
     document.getElementById('stat-expiring').textContent = expiring;
     document.getElementById('stat-always').textContent   = always;
+  }
+
+  function renderCategoryFilters() {
+    const seen = new Set();
+    const categories = allDeals.map(d => d.category).filter(c => {
+      if (!c || seen.has(c)) return false;
+      seen.add(c); return true;
+    });
+    const container = document.getElementById('cat-filters');
+    if (categories.length === 0) { container.style.display = 'none'; return; }
+
+    container.style.display = 'flex';
+    container.innerHTML = categories.map(cat => {
+      const meta = CATEGORY_META[cat];
+      const icon = meta ? meta.icon : '📦';
+      const label = meta ? (meta[LANG] || meta.nl) : (cat.charAt(0).toUpperCase() + cat.slice(1));
+      const isActive = activeFilter === 'cat:' + cat;
+      return `<button class="filter-btn${isActive ? ' active' : ''}" data-filter="cat:${cat}">${icon} ${label}</button>`;
+    }).join('');
+
+    container.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.filter;
+        applyFiltersAndSort();
+      });
+    });
   }
 
   /* ── Load shops (scrape-shops + earn-online) ── */
