@@ -744,13 +744,10 @@
   </div>
 
   <div class="filters">
-    <button class="filter-btn active" data-cat="all" data-i18n="filter.all">Alles</button>
-    <button class="filter-btn" data-cat="flight" data-i18n="filter.flight">✈ Vluchten</button>
-    <button class="filter-btn" data-cat="hotel" data-i18n="filter.hotel">🏨 Hotels</button>
-    <button class="filter-btn" data-cat="car" data-i18n="filter.car">🚗 Auto</button>
-    <button class="filter-btn" data-cat="shop" data-i18n="filter.shop">🛍 Shopping</button>
-    <button class="filter-btn" data-cat="dining" data-i18n="filter.dining">🍽 Dining</button>
-    <button class="filter-btn" data-cat="finance" data-i18n="filter.finance">💳 Finance</button>
+    <button class="filter-btn active" data-filter="all" data-i18n="filter.all">Alles</button>
+    <button class="filter-btn" data-filter="hot" data-i18n="filter.hot">🔥 Hot</button>
+    <button class="filter-btn" data-filter="expiring" data-i18n="filter.expiring">⏰ Verloopt snel</button>
+    <button class="filter-btn" data-filter="always" data-i18n="filter.always">♾ Altijd actief</button>
     <span class="filter-sep"></span>
     <select class="sort-select" id="sort-select">
       <option value="newest" data-i18n="sort.newest">Nieuwste eerst</option>
@@ -865,9 +862,9 @@
   </div>
   <div class="footer-col">
     <h5 data-i18n="footer.deals.h">Deals</h5>
-    <a href="#" onclick="filterCat('flight')" data-i18n="footer.flights">Vluchten</a>
-    <a href="#" onclick="filterCat('hotel')" data-i18n="footer.hotels">Hotels</a>
-    <a href="#" onclick="filterCat('shop')" data-i18n="footer.shopping">Shopping</a>
+    <a href="#deals" onclick="filterDeals('hot')" data-i18n="filter.hot">🔥 Hot</a>
+    <a href="#deals" onclick="filterDeals('expiring')" data-i18n="filter.expiring">⏰ Verloopt snel</a>
+    <a href="#deals" onclick="filterDeals('always')" data-i18n="filter.always">♾ Altijd actief</a>
     <a href="#shops">Shop for Miles</a>
   </div>
   <div class="footer-col">
@@ -920,7 +917,7 @@
   let allDeals = [];
   let currentFiltered = [];
   let visibleCount = 35;
-  let activeCategory = 'all';
+  let activeFilter = 'all';
   let activeSort = 'newest';
   let activeSearch = '';
   let lastUpdatedDate = null;
@@ -941,8 +938,7 @@
       'stat.expiring.label': 'Verloopt snel', 'stat.expiring.sub': 'binnen 7 dagen',
       'stat.always.label': 'Altijd actief', 'stat.always.sub': 'blijvende deals',
       'deals.title': 'Promoties', 'deals.sub': 'Handgeselecteerd uit de Flying Blue nieuwsbrief',
-      'filter.all': 'Alles', 'filter.flight': '✈ Vluchten', 'filter.hotel': '🏨 Hotels',
-      'filter.car': '🚗 Auto', 'filter.shop': '🛍 Shopping', 'filter.dining': '🍽 Dining', 'filter.finance': '💳 Finance',
+      'filter.all': 'Alles', 'filter.hot': '🔥 Hot', 'filter.expiring': '⏰ Verloopt snel', 'filter.always': '♾ Altijd actief',
       'sort.newest': 'Nieuwste eerst', 'sort.expiring': 'Verloopt snel', 'sort.miles': 'Meeste miles',
       'shops.sub': 'Verdien miles bij online winkelen', 'shops.all': 'Alle shops ↗',
       'trust.title': 'Hoe het werkt', 'trust.sub': 'Transparant en eenvoudig',
@@ -958,7 +954,7 @@
       'faq.5.q': 'Is Miles Optimizer officieel van Flying Blue?', 'faq.5.a': 'Nee. Dit is een onafhankelijk project zonder band met Air France-KLM of Flying Blue. Controleer deals altijd op flyingblue.com voor de meest actuele voorwaarden.',
       'faq.6.q': 'Een deal ontbreekt of klopt niet — wat nu?', 'faq.6.a': 'Stuur een mail naar <a href="mailto:info@milesoptimizer.nl" style="color:var(--accent)">info@milesoptimizer.nl</a> met de details. We kijken er zo snel mogelijk naar.',
       'footer.brand': 'Alle Flying Blue deals op één plek. Onafhankelijk, altijd actueel en gratis.',
-      'footer.deals.h': 'Deals', 'footer.flights': 'Vluchten', 'footer.hotels': 'Hotels', 'footer.shopping': 'Shopping', 'footer.info.h': 'Info',
+      'footer.deals.h': 'Deals', 'footer.info.h': 'Info',
       'footer.bottom': '© 2026 Miles Optimizer — Niet gelieerd aan Flying Blue of Air France-KLM · <a href="#" style="color:var(--muted)">Privacy</a> · <a href="#" style="color:var(--muted)">Disclaimer</a>',
       'footer.oss': 'Open source op GitHub',
       'modal.how.title': 'Hoe activeer je deze deal?',
@@ -967,7 +963,7 @@
       'modal.cta': 'Ga naar Flying Blue',
       'deal.always': 'Altijd actief', 'deal.expired': 'Verlopen', 'deal.tomorrow': 'Morgen verlopen',
       'deal.days': 'Nog {n} dagen', 'deal.view': 'Zie deal',
-      'deal.none.title': 'Geen deals gevonden', 'deal.none.body': 'Probeer een andere categorie of kom later terug.',
+      'deal.none.title': 'Geen deals gevonden', 'deal.none.body': 'Probeer een ander filter of kom later terug.',
       'deal.error.title': 'Kon deals niet laden', 'deal.error.body': 'Er ging iets mis. Controleer je verbinding en probeer het opnieuw.',
       'deal.retry': 'Opnieuw proberen',
       'loadmore.btn': 'Meer laden', 'loadmore.count': '{shown} van {total} deals zichtbaar',
@@ -985,8 +981,7 @@
       'stat.expiring.label': 'Expiring soon', 'stat.expiring.sub': 'within 7 days',
       'stat.always.label': 'Always active', 'stat.always.sub': 'permanent deals',
       'deals.title': 'Promotions', 'deals.sub': 'Hand-picked from the Flying Blue newsletter',
-      'filter.all': 'All', 'filter.flight': '✈ Flights', 'filter.hotel': '🏨 Hotels',
-      'filter.car': '🚗 Car', 'filter.shop': '🛍 Shopping', 'filter.dining': '🍽 Dining', 'filter.finance': '💳 Finance',
+      'filter.all': 'All', 'filter.hot': '🔥 Hot', 'filter.expiring': '⏰ Expiring soon', 'filter.always': '♾ Always active',
       'sort.newest': 'Newest first', 'sort.expiring': 'Expiring soon', 'sort.miles': 'Most miles',
       'shops.sub': 'Earn miles while shopping online', 'shops.all': 'All shops ↗',
       'trust.title': 'How it works', 'trust.sub': 'Transparent and simple',
@@ -1002,7 +997,7 @@
       'faq.5.q': 'Is Miles Optimizer official from Flying Blue?', 'faq.5.a': 'No. This is an independent project with no affiliation to Air France-KLM or Flying Blue. Always check deals at flyingblue.com for the latest terms.',
       'faq.6.q': 'A deal is missing or incorrect — now what?', 'faq.6.a': 'Send an email to <a href="mailto:info@milesoptimizer.nl" style="color:var(--accent)">info@milesoptimizer.nl</a> with the details. We\'ll look into it as soon as possible.',
       'footer.brand': 'All Flying Blue deals in one place. Independent, always up to date and free.',
-      'footer.deals.h': 'Deals', 'footer.flights': 'Flights', 'footer.hotels': 'Hotels', 'footer.shopping': 'Shopping', 'footer.info.h': 'Info',
+      'footer.deals.h': 'Deals', 'footer.info.h': 'Info',
       'footer.bottom': '© 2026 Miles Optimizer — Not affiliated with Flying Blue or Air France-KLM · <a href="#" style="color:var(--muted)">Privacy</a> · <a href="#" style="color:var(--muted)">Disclaimer</a>',
       'footer.oss': 'Open source on GitHub',
       'modal.how.title': 'How to activate this deal?',
@@ -1011,7 +1006,7 @@
       'modal.cta': 'Go to Flying Blue',
       'deal.always': 'Always active', 'deal.expired': 'Expired', 'deal.tomorrow': 'Expires tomorrow',
       'deal.days': '{n} days left', 'deal.view': 'View deal',
-      'deal.none.title': 'No deals found', 'deal.none.body': 'Try a different category or check back later.',
+      'deal.none.title': 'No deals found', 'deal.none.body': 'Try a different filter or check back later.',
       'deal.error.title': 'Could not load deals', 'deal.error.body': 'Something went wrong. Check your connection and try again.',
       'deal.retry': 'Try again',
       'loadmore.btn': 'Load more', 'loadmore.count': 'Showing {shown} of {total} deals',
@@ -1143,9 +1138,19 @@
     visibleCount = 35;
     const q = activeSearch.toLowerCase();
     currentFiltered = allDeals.filter(d => {
-      const catMatch = activeCategory === 'all' || d.category === activeCategory;
-      const searchMatch = !q || (d.title || '').toLowerCase().includes(q);
-      return catMatch && searchMatch;
+      const days = daysUntil(d.expires);
+      let filterMatch = true;
+      if (activeFilter === 'hot') {
+        filterMatch = d.hot === true || d.hot === 'TRUE';
+      } else if (activeFilter === 'expiring') {
+        filterMatch = days !== null && days <= 7 && days > 0;
+      } else if (activeFilter === 'always') {
+        filterMatch = !d.expires || d.type === 'always';
+      }
+      const searchMatch = !q || (d.title || '').toLowerCase().includes(q)
+        || (d.partner || '').toLowerCase().includes(q)
+        || (d.description || '').toLowerCase().includes(q);
+      return filterMatch && searchMatch;
     });
 
     if (activeSort === 'expiring') {
@@ -1279,7 +1284,7 @@
     btn.addEventListener('click', () => {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      activeCategory = btn.dataset.cat;
+      activeFilter = btn.dataset.filter;
       applyFiltersAndSort();
     });
   });
@@ -1294,10 +1299,10 @@
     applyFiltersAndSort();
   });
 
-  function filterCat(cat) {
-    activeCategory = cat;
+  function filterDeals(filter) {
+    activeFilter = filter;
     document.querySelectorAll('.filter-btn').forEach(b => {
-      b.classList.toggle('active', b.dataset.cat === cat);
+      b.classList.toggle('active', b.dataset.filter === filter);
     });
     applyFiltersAndSort();
     document.getElementById('deals').scrollIntoView({ behavior: 'smooth' });
