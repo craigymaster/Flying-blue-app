@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Miles Optimizer</title>
+  <meta name="description" content="Privacybeleid van Miles Optimizer. Geen tracking, geen advertenties, geen persoonlijke gegevens." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f7f8fa;
+      --surface:   #ffffff;
+      --surface2:  #f0f2f5;
+      --border:    rgba(0,0,0,0.07);
+      --border-md: rgba(0,0,0,0.11);
+      --text:      #111318;
+      --text-2:    #374151;
+      --muted:     #6b7280;
+      --accent:    #0057d9;
+      --accent2:   #003faa;
+      --accent-bg: rgba(0,87,217,0.07);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+      --radius:    12px;
+      --font-display: 'Plus Jakarta Sans', sans-serif;
+      --font-body:    'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font: inherit; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 64px;
+      background: rgba(247,248,250,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: var(--font-display); font-size: 17px; font-weight: 800; letter-spacing: -0.3px; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 20px; align-items: center; }
+    .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px;
+      background: var(--accent); color: #fff !important;
+      font-size: 13px; font-weight: 600; line-height: 1;
+      border-radius: 8px;
+      transition: background .2s, transform .15s;
+    }
+    .nav-btn:hover { background: var(--accent2) !important; color: #fff !important; transform: translateY(-1px); }
+    .lang-toggle {
+      display: flex; align-items: center;
+      border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+      font-size: 12px; font-weight: 600; margin-left: 4px; flex-shrink: 0;
+    }
+    .lang-toggle button { padding: 5px 10px; color: var(--muted); transition: background .15s, color .15s; }
+    .lang-toggle button.active { background: var(--accent); color: #fff; }
+    .lang-toggle button:hover:not(.active) { background: var(--surface2); color: var(--text); }
+    @media (max-width: 600px) { nav { padding: 0 20px; } .hide-sm { display: none; } }
+
+    /* ── LAYOUT ── */
+    .page { max-width: 720px; margin: 0 auto; padding: 100px 32px 80px; }
+    @media (max-width: 600px) { .page { padding: 90px 20px 60px; } }
+
+    /* ── PAGE HEADER ── */
+    .page-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+    }
+    .page-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--accent); }
+    .page-title {
+      font-family: var(--font-display); font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800; letter-spacing: -1px; line-height: 1.15; margin-bottom: 8px;
+    }
+    .page-updated { font-size: 13px; color: var(--muted); margin-bottom: 40px; }
+
+    /* ── SUMMARY BOX ── */
+    .summary-box {
+      background: var(--accent-bg);
+      border: 1px solid rgba(0,87,217,0.15);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 48px;
+      font-size: 14px; color: var(--text-2); line-height: 1.7;
+    }
+    .summary-box strong { color: var(--accent); font-weight: 600; }
+
+    /* ── CONTENT ── */
+    .privacy-section { margin-bottom: 40px; }
+    .privacy-section h2 {
+      font-family: var(--font-display); font-size: 17px; font-weight: 700;
+      margin-bottom: 12px; color: var(--text);
+    }
+    .privacy-section p { color: var(--muted); margin-bottom: 10px; line-height: 1.75; }
+    .privacy-section p strong { color: var(--text-2); font-weight: 600; }
+    .privacy-section ul { list-style: none; margin: 10px 0 10px 0; display: flex; flex-direction: column; gap: 6px; }
+    .privacy-section ul li {
+      color: var(--muted); padding-left: 18px; position: relative; font-size: 14px; line-height: 1.65;
+    }
+    .privacy-section ul li::before {
+      content: '—'; position: absolute; left: 0;
+      color: var(--accent); font-size: 12px;
+    }
+    .privacy-section a { color: var(--accent); }
+    .privacy-section a:hover { text-decoration: underline; }
+    .privacy-section code {
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 12px; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 4px;
+      padding: 1px 6px; color: var(--text-2);
+    }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px;
+      max-width: 1000px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    footer p { font-size: 12px; color: var(--muted); }
+    footer a { font-size: 13px; color: var(--muted); transition: color .2s; }
+    footer a:hover { color: var(--text); }
+    @media (max-width: 600px) { footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; gap: 16px; } }
+
+    /* ── BACK BUTTON ── */
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 500; color: var(--muted);
+      margin-bottom: 28px;
+      transition: color .2s;
+      cursor: pointer; background: none; border: none; padding: 0; font-family: var(--font-body);
+    }
+    .back-btn:hover { color: var(--text); }
+    .back-btn svg { transition: transform .2s; }
+    .back-btn:hover svg { transform: translateX(-3px); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-logo">Miles<span>Optimizer</span></a>
+  <div class="nav-links">
+    <a href="/" class="hide-sm">Deals</a>
+    <a href="/calculator.html" class="hide-sm">Calculator</a>
+    <a href="/extension.html" class="nav-btn hide-sm"><span>🧩</span><span>Extensie</span></a>
+    <a href="/#faq" class="hide-sm">FAQ</a>
+    <div class="lang-toggle" id="lang-toggle">
+      <button data-lang="nl" class="active">NL</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+
+  <button class="back-btn" id="back-btn" onclick="history.length > 1 ? history.back() : window.location.href='/'">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span id="back-label">Terug</span>
+  </button>
+
+  <div class="page-eyebrow" id="eyebrow">Juridisch</div>
+  <h1 class="page-title">Privacy Policy</h1>
+  <p class="page-updated" id="updated">Laatst bijgewerkt: april 2026</p>
+
+  <div class="summary-box" id="summary">
+    <strong>Korte versie:</strong> De Miles Optimizer extensie verzamelt geen persoonlijke gegevens, stuurt niets naar servers, en slaat alleen partner-data lokaal op in je browser. Geen tracking, geen accounts, geen advertenties.
+  </div>
+
+  <div class="privacy-section">
+    <h2 id="s1-title">1. Wie zijn wij</h2>
+    <p id="s1-p1">Miles Optimizer is een onafhankelijk open source project, niet gelieerd aan Flying Blue, Air France of KLM. De extensie is ontwikkeld om Flying Blue-gebruikers te helpen miles te verdienen bij online aankopen.</p>
+    <p>Contact: <a href="mailto:info@milesoptimizer.nl">info@milesoptimizer.nl</a></p>
+  </div>
+
+  <div class="privacy-section">
+    <h2 id="s2-title">2. Welke gegevens verzamelen wij</h2>
+    <p id="s2-p1">De Miles Optimizer extensie verzamelt <strong>geen persoonlijke gegevens</strong>. Specifiek:</p>
+    <ul>
+      <li id="s2-li1">We registreren geen browsergeschiedenis of bezochte websites</li>
+      <li id="s2-li2">We slaan geen Flying Blue inloggegevens op en vragen er ook niet om</li>
+      <li id="s2-li3">We verzamelen geen namen, e-mailadressen of andere identificerende informatie</li>
+      <li id="s2-li4">We gebruiken geen analytics of tracking tools</li>
+      <li id="s2-li5">We plaatsen geen cookies</li>
+    </ul>
+  </div>
+
+  <div class="privacy-section">
+    <h2 id="s3-title">3. Wat slaan wij lokaal op</h2>
+    <p id="s3-p1">De extensie slaat één ding op in je browser via <code>chrome.storage.local</code>:</p>
+    <ul>
+      <li id="s3-li1">Een gecachte lijst van Flying Blue partner-domeinen en hun miles-tarieven (maximaal 24 uur bewaard)</li>
+    </ul>
+    <p id="s3-p2">Deze data is uitsluitend zichtbaar voor de extensie zelf en wordt nooit verstuurd naar externe servers. Je kunt deze cache op elk moment wissen via de vernieuw-knop in de extensie popup.</p>
+  </div>
+
+  <div class="privacy-section">
+    <h2 id="s4-title">4. Welke externe diensten worden gebruikt</h2>
+    <p id="s4-p1">De extensie haalt partner-data op van onze eigen API:</p>
+    <ul>
+      <li><strong>flying-blue-app.vercel.app/api/scrape-shops</strong> — publieke miles-data van Flying Blue</li>
+      <li><strong>flying-blue-app.vercel.app/api/earn-online</strong> — publieke partner-data van Earn Online</li>
+    </ul>
+    <p id="s4-p2">Bij deze requests wordt geen persoonlijke informatie meegestuurd. De requests bevatten alleen een standaard HTTP User-Agent header.</p>
+  </div>
+
+  <div class="privacy-section">
+    <h2 id="s5-title">5. Toestemmingen</h2>
+    <p id="s5-p1">De extensie vraagt de volgende Chrome-toestemmingen:</p>
+    <ul>
+      <li id="s5-li1"><strong>storage</strong> — om partner-data lokaal te cachen (zie punt 3)</li>
+      <li id="s5-li2"><strong>activeTab</strong> — om het domein van de huidige pagina te lezen en te vergelijken met de partnerlijst</li>
+    </ul>
+    <p id="s5-p2">De extensie leest nooit de inhoud van webpagina's, formulieren, wachtwoorden of andere gevoelige data.</p>
+  </div>
+
+  <div class="privacy-section">
+    <h2 id="s6-title">6. Kinderen</h2>
+    <p id="s6-p1">De extensie is niet gericht op kinderen onder de 13 jaar en verzamelt bewust geen gegevens van minderjarigen.</p>
+  </div>
+
+  <div class="privacy-section">
+    <h2 id="s7-title">7. Wijzigingen</h2>
+    <p id="s7-p1">Als we deze privacy policy wijzigen, passen we de datum bovenaan de pagina aan. Significante wijzigingen communiceren we via de extensie zelf.</p>
+  </div>
+
+  <div class="privacy-section">
+    <h2 id="s8-title">8. Contact</h2>
+    <p id="s8-p1">Vragen over deze privacy policy? Mail naar <a href="mailto:info@milesoptimizer.nl">info@milesoptimizer.nl</a>.</p>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Miles Optimizer — Onafhankelijk project, niet gelieerd aan Flying Blue of Air France-KLM</p>
+  <div style="display:flex;gap:20px">
+    <a href="/">Deals</a>
+    <a href="/calculator.html">Calculator</a>
+    <a href="/extension.html">Extensie</a>
+    <a href="/#faq">FAQ</a>
+    <a href="mailto:info@milesoptimizer.nl">Contact</a>
+  </div>
+</footer>
+
+<script>
+  let LANG = localStorage.getItem('mo-lang') || 'nl';
+
+  const TR = {
+    nl: {
+      'back-label': 'Terug', eyebrow: 'Juridisch', updated: 'Laatst bijgewerkt: april 2026',
+      summary: '<strong>Korte versie:</strong> De Miles Optimizer extensie verzamelt geen persoonlijke gegevens, stuurt niets naar servers, en slaat alleen partner-data lokaal op in je browser. Geen tracking, geen accounts, geen advertenties.',
+      's1-title': '1. Wie zijn wij',
+      's1-p1': 'Miles Optimizer is een onafhankelijk open source project, niet gelieerd aan Flying Blue, Air France of KLM. De extensie is ontwikkeld om Flying Blue-gebruikers te helpen miles te verdienen bij online aankopen.',
+      's2-title': '2. Welke gegevens verzamelen wij',
+      's2-p1': 'De Miles Optimizer extensie verzamelt <strong>geen persoonlijke gegevens</strong>. Specifiek:',
+      's2-li1': 'We registreren geen browsergeschiedenis of bezochte websites',
+      's2-li2': 'We slaan geen Flying Blue inloggegevens op en vragen er ook niet om',
+      's2-li3': 'We verzamelen geen namen, e-mailadressen of andere identificerende informatie',
+      's2-li4': 'We gebruiken geen analytics of tracking tools',
+      's2-li5': 'We plaatsen geen cookies',
+      's3-title': '3. Wat slaan wij lokaal op',
+      's3-p1': 'De extensie slaat één ding op in je browser via <code>chrome.storage.local</code>:',
+      's3-li1': 'Een gecachte lijst van Flying Blue partner-domeinen en hun miles-tarieven (maximaal 24 uur bewaard)',
+      's3-p2': 'Deze data is uitsluitend zichtbaar voor de extensie zelf en wordt nooit verstuurd naar externe servers. Je kunt deze cache op elk moment wissen via de vernieuw-knop in de extensie popup.',
+      's4-title': '4. Welke externe diensten worden gebruikt',
+      's4-p1': 'De extensie haalt partner-data op van onze eigen API:',
+      's4-p2': 'Bij deze requests wordt geen persoonlijke informatie meegestuurd. De requests bevatten alleen een standaard HTTP User-Agent header.',
+      's5-title': '5. Toestemmingen',
+      's5-p1': 'De extensie vraagt de volgende Chrome-toestemmingen:',
+      's5-li1': '<strong>storage</strong> — om partner-data lokaal te cachen (zie punt 3)',
+      's5-li2': '<strong>activeTab</strong> — om het domein van de huidige pagina te lezen en te vergelijken met de partnerlijst',
+      's5-p2': "De extensie leest nooit de inhoud van webpagina's, formulieren, wachtwoorden of andere gevoelige data.",
+      's6-title': '6. Kinderen',
+      's6-p1': 'De extensie is niet gericht op kinderen onder de 13 jaar en verzamelt bewust geen gegevens van minderjarigen.',
+      's7-title': '7. Wijzigingen',
+      's7-p1': 'Als we deze privacy policy wijzigen, passen we de datum bovenaan de pagina aan. Significante wijzigingen communiceren we via de extensie zelf.',
+      's8-title': '8. Contact',
+      's8-p1': 'Vragen over deze privacy policy? Mail naar <a href="mailto:info@milesoptimizer.nl">info@milesoptimizer.nl</a>.',
+    },
+    en: {
+      'back-label': 'Back', eyebrow: 'Legal', updated: 'Last updated: April 2026',
+      summary: '<strong>Short version:</strong> The Miles Optimizer extension collects no personal data, sends nothing to servers, and only stores partner data locally in your browser. No tracking, no accounts, no ads.',
+      's1-title': '1. Who we are',
+      's1-p1': 'Miles Optimizer is an independent open source project, not affiliated with Flying Blue, Air France or KLM. The extension was built to help Flying Blue users earn miles on online purchases.',
+      's2-title': '2. What data we collect',
+      's2-p1': 'The Miles Optimizer extension collects <strong>no personal data</strong>. Specifically:',
+      's2-li1': 'We do not log your browsing history or visited websites',
+      's2-li2': 'We do not store or request your Flying Blue login credentials',
+      's2-li3': 'We do not collect names, email addresses or other identifying information',
+      's2-li4': 'We do not use analytics or tracking tools',
+      's2-li5': 'We do not place cookies',
+      's3-title': '3. What we store locally',
+      's3-p1': 'The extension stores one thing in your browser via <code>chrome.storage.local</code>:',
+      's3-li1': 'A cached list of Flying Blue partner domains and their miles rates (kept for up to 24 hours)',
+      's3-p2': 'This data is only visible to the extension itself and is never sent to external servers. You can clear this cache at any time via the refresh button in the extension popup.',
+      's4-title': '4. Third-party services used',
+      's4-p1': 'The extension fetches partner data from our own API:',
+      's4-p2': 'No personal information is included in these requests. They only carry a standard HTTP User-Agent header.',
+      's5-title': '5. Permissions',
+      's5-p1': 'The extension requests the following Chrome permissions:',
+      's5-li1': '<strong>storage</strong> — to cache partner data locally (see section 3)',
+      's5-li2': '<strong>activeTab</strong> — to read the domain of the current page and compare it against the partner list',
+      's5-p2': 'The extension never reads the content of web pages, forms, passwords or other sensitive data.',
+      's6-title': '6. Children',
+      's6-p1': 'The extension is not directed at children under 13 and does not knowingly collect data from minors.',
+      's7-title': '7. Changes',
+      's7-p1': 'If we update this privacy policy, we will adjust the date at the top of the page. Significant changes will be communicated through the extension itself.',
+      's8-title': '8. Contact',
+      's8-p1': 'Questions about this privacy policy? Email <a href="mailto:info@milesoptimizer.nl">info@milesoptimizer.nl</a>.',
+    }
+  };
+
+  function applyLang() {
+    document.querySelectorAll('#lang-toggle button').forEach(b => b.classList.toggle('active', b.dataset.lang === LANG));
+    const t = TR[LANG] || TR.nl;
+    Object.keys(t).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = t[id];
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#lang-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        LANG = btn.dataset.lang;
+        localStorage.setItem('mo-lang', LANG);
+        applyLang();
+      });
+    });
+    applyLang();
+  });
+</script>
+</body>
+</html>
